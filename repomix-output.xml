@@ -1,0 +1,2350 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+app/
+  globals.css
+  layout.tsx
+  page.tsx
+components/
+  ui/
+    badge.tsx
+    button.tsx
+    card.tsx
+lib/
+  db/
+    index.ts
+    schema.ts
+  utils.ts
+.env.example
+.gitignore
+.repomixignore
+CLAUDE.md
+components.json
+drizzle.config.ts
+middleware.ts
+next-upgrade.md
+next.config.js
+package.json
+postcss.config.js
+repo.md
+tailwind.config.ts
+tsconfig.json
+vercel.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="app/globals.css">
+@import "tailwindcss";
+
+@theme {
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(240 10% 3.9%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(240 10% 3.9%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(240 10% 3.9%);
+  --color-primary: hsl(240 5.9% 10%);
+  --color-primary-foreground: hsl(0 0% 98%);
+  --color-secondary: hsl(240 4.8% 95.9%);
+  --color-secondary-foreground: hsl(240 5.9% 10%);
+  --color-muted: hsl(240 4.8% 95.9%);
+  --color-muted-foreground: hsl(240 3.8% 46.1%);
+  --color-accent: hsl(240 4.8% 95.9%);
+  --color-accent-foreground: hsl(240 5.9% 10%);
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-border: hsl(240 5.9% 90%);
+  --color-input: hsl(240 5.9% 90%);
+  --color-ring: hsl(240 5.9% 10%);
+  --radius: 0.5rem;
+  --color-chart-1: hsl(12 76% 61%);
+  --color-chart-2: hsl(173 58% 39%);
+  --color-chart-3: hsl(197 37% 24%);
+  --color-chart-4: hsl(43 74% 66%);
+  --color-chart-5: hsl(27 87% 67%);
+  --color-brand-gold: hsl(44 94% 49%);
+  --color-brand-blue: hsl(210 88% 50%);
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-background: hsl(240 10% 3.9%);
+    --color-foreground: hsl(0 0% 98%);
+    --color-card: hsl(240 10% 3.9%);
+    --color-card-foreground: hsl(0 0% 98%);
+    --color-popover: hsl(240 10% 3.9%);
+    --color-popover-foreground: hsl(0 0% 98%);
+    --color-primary: hsl(0 0% 98%);
+    --color-primary-foreground: hsl(240 5.9% 10%);
+    --color-secondary: hsl(240 3.7% 15.9%);
+    --color-secondary-foreground: hsl(0 0% 98%);
+    --color-muted: hsl(240 3.7% 15.9%);
+    --color-muted-foreground: hsl(240 5% 64.9%);
+    --color-accent: hsl(240 3.7% 15.9%);
+    --color-accent-foreground: hsl(0 0% 98%);
+    --color-destructive: hsl(0 62.8% 30.6%);
+    --color-destructive-foreground: hsl(0 0% 98%);
+    --color-border: hsl(240 3.7% 15.9%);
+    --color-input: hsl(240 3.7% 15.9%);
+    --color-ring: hsl(240 4.9% 83.9%);
+    --color-chart-1: hsl(220 70% 50%);
+    --color-chart-2: hsl(160 60% 45%);
+    --color-chart-3: hsl(30 80% 55%);
+    --color-chart-4: hsl(280 65% 60%);
+    --color-chart-5: hsl(340 75% 55%);
+    --color-brand-gold: hsl(44 94% 49%);
+    --color-brand-blue: hsl(210 88% 50%);
+  }
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* Style Clerk footer to match dark shadcn theme */
+.cl-footer,
+.cl-userButtonPopoverFooter
+{
+  opacity: 1 !important;
+  background-color: hsl(240 10% 3.9%) !important;
+  background-image: none !important;
+}
+
+.cl-footer * {
+  opacity: 1 !important;
+}
+
+.cl-footerAction {
+  background: hsl(240 10% 3.9%) !important;
+  background-image: none !important;
+}
+
+.cl-footerActionText {
+  color: hsl(240 5% 64.9%) !important;
+}
+
+.cl-footerActionLink {
+  color: hsl(0 0% 98%) !important;
+}
+
+.cl-footerActionLink:hover {
+  color: hsl(0 0% 85%) !important;
+}
+
+/* Style "Secured by" section */
+.cl-footerPages,
+.cl-footerPagesLink {
+  color: hsl(240 5% 64.9%) !important;
+}
+
+/* Remove repeating linear gradient background from "Secured by" badge */
+.cl-footer div[class*="cl-internal-"],
+.cl-navbar div[class*="cl-internal-"],
+.cl-userButtonPopoverFooter div[class*="cl-internal-"] 
+{
+  background: none !important;
+  background-image: none !important;
+}
+</file>
+
+<file path="app/layout.tsx">
+import type { Metadata } from "next";
+import Link from "next/link";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
+import { Button } from "@/components/ui/button";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "Supra English",
+  description: "Private English Tutor",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorBackground: "hsl(240 10% 3.9%)",
+          colorInputBackground: "hsl(240 10% 3.9%)",
+          colorInputText: "hsl(0 0% 98%)",
+          colorPrimary: "hsl(0 0% 98%)",
+          colorText: "hsl(0 0% 98%)",
+          colorTextSecondary: "hsl(240 5% 64.9%)",
+          colorDanger: "hsl(0 62.8% 30.6%)",
+          borderRadius: "0.5rem",
+        },
+        elements: {
+          card: "bg-card border-border shadow-lg",
+          headerTitle: "text-foreground",
+          headerSubtitle: "text-muted-foreground",
+          socialButtonsBlockButton:
+            "bg-secondary text-secondary-foreground border-border hover:bg-secondary/80",
+          formButtonPrimary:
+            "bg-primary text-primary-foreground hover:bg-primary/90",
+          formFieldInput:
+            "bg-background border-input text-foreground ring-offset-background focus-visible:ring-ring",
+          footer: "bg-background",
+          footerAction: "bg-background",
+          footerActionText: "text-muted-foreground",
+          footerActionLink: "text-primary hover:text-primary/80",
+          footerPages: "text-muted-foreground",
+          footerPagesLink: "text-muted-foreground hover:text-foreground",
+          identityPreviewText: "text-foreground",
+          identityPreviewEditButton: "text-muted-foreground hover:text-foreground",
+          formFieldLabel: "text-foreground",
+          formFieldLabelRow: "text-foreground",
+          otpCodeFieldInput:
+            "bg-background border-input text-foreground ring-offset-background focus-visible:ring-ring",
+          formResendCodeLink: "text-primary hover:text-primary/80",
+          dividerLine: "bg-border",
+          dividerText: "text-muted-foreground",
+        },
+      }}
+    >
+      <html lang="en">
+        <body className="min-h-screen bg-background text-foreground">
+          <header className="border-b">
+            <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+              <Link href="/">
+                <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-lg font-bold tracking-tight text-transparent">
+                  Supra English
+                </span>
+              </Link>
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <SignedOut>
+                    <div className="flex items-center gap-2">
+                      <SignInButton mode="modal">
+                        <Button variant="outline">Sign In</Button>
+                      </SignInButton>
+                      <SignUpButton mode="modal">
+                        <Button>Sign Up</Button>
+                      </SignUpButton>
+                    </div>
+                  </SignedOut>
+                  <SignedIn>
+                    <UserButton />
+                  </SignedIn>
+                </div>
+              </div>
+            </div>
+          </header>
+          <main className="mx-auto flex max-w-5xl flex-1 flex-col px-6 py-12">
+            {children}
+          </main>
+        </body>
+      </html>
+    </ClerkProvider>
+  );
+}
+</file>
+
+<file path="app/page.tsx">
+import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Users,
+  Baby,
+  GraduationCap,
+  FileText,
+  Newspaper,
+  BookOpen,
+  Mic,
+  Plane,
+  CheckCircle,
+  Calendar,
+  Play,
+  Facebook,
+  Youtube
+} from "lucide-react";
+import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+// ============================================
+// TYPE DEFINITIONS
+// ============================================
+
+interface PricingPackage {
+  id: string;
+  name: string;
+  duration: string;
+  price: number;
+  sessionsPerWeek: number;
+  popular?: boolean;
+}
+
+interface Course {
+  id: string;
+  name: string;
+  description: string;
+  icon: LucideIcon;
+}
+
+interface Tutor {
+  id: string;
+  name: string;
+  initials: string;
+  bio: string;
+  specializations: string[];
+}
+
+interface HowItWorksStep {
+  id: string;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+}
+
+// ============================================
+// DATA CONSTANTS
+// ============================================
+
+const PRICING_PACKAGES: PricingPackage[] = [
+  {
+    id: "starter",
+    name: "Starter",
+    duration: "30 min",
+    price: 6,
+    sessionsPerWeek: 1,
+  },
+  {
+    id: "growth",
+    name: "Growth",
+    duration: "30 min",
+    price: 15,
+    sessionsPerWeek: 3,
+    popular: true,
+  },
+  {
+    id: "intensive",
+    name: "Intensive",
+    duration: "30 min",
+    price: 30,
+    sessionsPerWeek: 5,
+  },
+];
+
+const COURSES: Course[] = [
+  {
+    id: "adults",
+    name: "Adults",
+    description: "Business & everyday English for professionals",
+    icon: Users,
+  },
+  {
+    id: "kids",
+    name: "Kids",
+    description: "Fun, engaging lessons for young learners",
+    icon: Baby,
+  },
+  {
+    id: "ielts",
+    name: "IELTS",
+    description: "Score higher on your IELTS exam",
+    icon: GraduationCap,
+  },
+  {
+    id: "toefl",
+    name: "TOEFL",
+    description: "Master TOEFL with proven strategies",
+    icon: FileText,
+  },
+  {
+    id: "daily-news",
+    name: "Daily News",
+    description: "Learn English through current events",
+    icon: Newspaper,
+  },
+  {
+    id: "grammar",
+    name: "Grammar",
+    description: "Build a strong grammar foundation",
+    icon: BookOpen,
+  },
+  {
+    id: "pronunciation",
+    name: "Pronunciation",
+    description: "Speak clearly and confidently",
+    icon: Mic,
+  },
+  {
+    id: "travel",
+    name: "Travel",
+    description: "Essential English for travelers",
+    icon: Plane,
+  },
+];
+
+const TUTORS: Tutor[] = [
+  {
+    id: "tutor-1",
+    name: "Sarah Johnson",
+    initials: "SJ",
+    bio: "10+ years teaching business English. CELTA certified with expertise in corporate communication.",
+    specializations: ["Business English", "IELTS", "Adults"],
+  },
+  {
+    id: "tutor-2",
+    name: "Michael Chen",
+    initials: "MC",
+    bio: "Native speaker specializing in exam preparation. 5000+ successful TOEFL students.",
+    specializations: ["TOEFL", "Grammar", "Pronunciation"],
+  },
+  {
+    id: "tutor-3",
+    name: "Emma Williams",
+    initials: "EW",
+    bio: "Passionate about teaching kids. Creates fun, interactive lessons that children love.",
+    specializations: ["Kids", "Pronunciation", "Travel"],
+  },
+  {
+    id: "tutor-4",
+    name: "David Park",
+    initials: "DP",
+    bio: "Former journalist turned English teacher. Expert at teaching through current events.",
+    specializations: ["Daily News", "Adults", "Grammar"],
+  },
+];
+
+const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
+  {
+    id: "step-1",
+    title: "Choose Your Program",
+    description: "Select from 8 specialized courses tailored to your goals",
+    icon: CheckCircle,
+  },
+  {
+    id: "step-2",
+    title: "Schedule Your Class",
+    description: "Book at times that work for your busy schedule",
+    icon: Calendar,
+  },
+  {
+    id: "step-3",
+    title: "Start Learning",
+    description: "Meet your tutor and begin your English journey",
+    icon: Play,
+  },
+];
+
+// ============================================
+// PAGE COMPONENT
+// ============================================
+
+export default function Page() {
+  return (
+    <div className="flex flex-col">
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-8 md:py-12">
+        <div className="mx-auto max-w-4xl text-center">
+          <Badge className="mb-4" variant="secondary">
+            Private 1-on-1 Tutoring
+          </Badge>
+          <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+            Advance Your{" "}
+            <span className="md:text-6xl lg:text-7xl bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-lg font-bold tracking-tight text-transparent">English</span>
+          </h1>
+          <p className="mb-12 text-lg text-muted-foreground md:text-xl">
+            Private 1-on-1 tutoring with expert teachers. Flexible scheduling,
+            personalized curriculum, real results.
+          </p>
+
+          {/* Pricing Cards */}
+          <div className="mb-10 grid gap-4 sm:grid-cols-3">
+            {PRICING_PACKAGES.map((pkg) => (
+              <Card
+                key={pkg.id}
+                className={cn(
+                  "relative",
+                  pkg.popular && "border-[hsl(44_94%_49%)] border-2"
+                )}
+              >
+                {pkg.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-[hsl(44_94%_49%)] text-black">
+                      Most Popular
+                    </Badge>
+                  </div>
+                )}
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">{pkg.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="mb-1">
+                    <span className="text-3xl font-bold">${pkg.price}</span>
+                    <span className="text-muted-foreground">/{pkg.duration}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {pkg.sessionsPerWeek}x per week
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <SignedOut>
+              <SignUpButton mode="modal">
+                <Button
+                  size="lg"
+                  className="w-full bg-[hsl(44_94%_49%)] text-black hover:bg-[hsl(44_94%_45%)] sm:w-auto"
+                >
+                  Book Your Free Trial
+                </Button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <Link href="/dashboard">
+                <Button
+                  size="lg"
+                  className="w-full bg-[hsl(44_94%_49%)] text-black hover:bg-[hsl(44_94%_45%)] sm:w-auto"
+                >
+                  Go to Dashboard
+                </Button>
+              </Link>
+            </SignedIn>
+          </div>
+        </div>
+      </section>
+
+      {/* Courses Section - Phase 03 */}
+      <section className="container mx-auto px-4 py-20">
+        <p className="text-center text-muted-foreground">Courses Section (Phase 03)</p>
+      </section>
+
+      {/* Tutors Section - Phase 04 */}
+      <section className="container mx-auto px-4 py-20">
+        <p className="text-center text-muted-foreground">Tutors Section (Phase 04)</p>
+      </section>
+
+      {/* How It Works Section - Phase 05 */}
+      <section className="container mx-auto px-4 py-20">
+        <p className="text-center text-muted-foreground">How It Works (Phase 05)</p>
+      </section>
+
+      {/* Footer - Phase 06 */}
+      <footer className="border-t border-border/40">
+        <p className="text-center text-muted-foreground py-8">Footer (Phase 06)</p>
+      </footer>
+    </div>
+  );
+}
+</file>
+
+<file path="components/ui/badge.tsx">
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const badgeVariants = cva(
+  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+        secondary:
+          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive:
+          "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
+        outline: "text-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
+
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof badgeVariants> {}
+
+function Badge({ className, variant, ...props }: BadgeProps) {
+  return (
+    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+  )
+}
+
+export { Badge, badgeVariants }
+</file>
+
+<file path="components/ui/button.tsx">
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        outline:
+          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2",
+        sm: "h-8 rounded-md px-3 text-xs",
+        lg: "h-10 rounded-md px-8",
+        icon: "h-9 w-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }
+</file>
+
+<file path="components/ui/card.tsx">
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-xl border bg-card text-card-foreground shadow",
+      className
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
+
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
+
+const CardTitle = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("font-semibold leading-none tracking-tight", className)}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
+
+const CardDescription = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+</file>
+
+<file path="lib/db/index.ts">
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
+import * as schema from './schema';
+
+const sql = neon(process.env.DATABASE_URL!);
+export const db = drizzle({ client: sql, schema });
+</file>
+
+<file path="lib/db/schema.ts">
+import { pgTable, serial, text, integer, timestamp } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
+</file>
+
+<file path="lib/utils.ts">
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+</file>
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+.env
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+
+# clerk configuration (can include secrets)
+/.clerk/
+/.zencoder
+/.cursor
+/.idea
+</file>
+
+<file path=".repomixignore">
+docs/*
+plans/*
+assets/*
+dist/*
+coverage/*
+build/*
+ios/*
+android/*
+tests/*
+__tests__/*
+__pycache__/*
+node_modules/*
+
+.opencode/*
+.claude/*
+.serena/*
+.pnpm-store/*
+.github/*
+.dart_tool/*
+.idea/*
+.husky/*
+.venv/*
+</file>
+
+<file path="CLAUDE.md">
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+SupraEnglish is a Next.js 16 application using the App Router and React 19. It's an AI-powered flashcard application with authentication powered by Clerk and UI components built with shadcn/ui and Tailwind CSS.
+
+## Commands
+
+### Development
+```bash
+npm run dev        # Start Next.js development server
+npm run build      # Build for production (includes TypeScript type checking)
+npm run start      # Start production server
+npm run lint       # Run ESLint
+```
+
+### shadcn/ui Components
+```bash
+npx shadcn@latest init              # Initialize shadcn/ui (already done)
+npx shadcn@latest add <component>   # Add a new UI component
+```
+
+Example: `npx shadcn@latest add button`
+
+## Architecture
+
+### Tech Stack
+- **Framework**: Next.js 16 (App Router)
+- **UI Library**: React 19
+- **Styling**: Tailwind CSS v4 with shadcn/ui components
+- **Authentication**: Clerk (`@clerk/nextjs`)
+- **Database**: Drizzle ORM + Neon (Postgres) - planned but not yet fully wired
+- **Icons**: lucide-react
+- **Variants**: class-variance-authority (cva)
+
+### Project Structure
+
+```
+app/
+├── layout.tsx           # Root layout with ClerkProvider and global header
+├── page.tsx            # Homepage
+├── globals.css         # Global styles and Tailwind directives
+└── actions/            # Server Actions (planned location)
+    └── *.ts           # Server-side operations requiring auth/DB access
+
+components/
+└── ui/                # shadcn/ui components
+    └── button.tsx     # Example: canonical component structure
+
+lib/
+└── utils.ts           # Helper utilities (cn function for class merging)
+
+plans/                 # Feature implementation plans
+└── PLAN_TEMPLATE.md  # Template for new plans
+```
+
+### Key Files
+
+- **app/layout.tsx**: Global layout with ClerkProvider configured with dark theme customization. Header includes authentication buttons (Sign In/Sign Up) and UserButton.
+- **components/ui/button.tsx**: Example of canonical component structure using cva for variants, Radix Slot for asChild pattern, and cn utility for class merging.
+- **lib/utils.ts**: Contains the `cn()` helper that combines clsx and tailwind-merge for safe class composition.
+- **components.json**: shadcn/ui configuration (style: "new-york", using TypeScript/TSX, path aliases configured).
+
+### Path Aliases
+
+TypeScript path mappings (configured in tsconfig.json):
+- `@/*` maps to project root
+- Import UI components: `@/components/ui/button`
+- Import utilities: `@/lib/utils`
+
+### Authentication Pattern
+
+Clerk is configured in `app/layout.tsx` with:
+- Dark theme customization matching project design tokens
+- Modal-based sign in/sign up flow
+- Global header with SignedIn/SignedOut components
+
+For Server Actions requiring authentication:
+```typescript
+"use server";
+import { auth } from "@clerk/nextjs/server";
+
+export async function yourServerAction(input: YourInput) {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+  // Perform user-scoped operation
+}
+```
+
+### Component Pattern
+
+All UI components follow this pattern (see `components/ui/button.tsx`):
+1. Use `class-variance-authority` for variant management
+2. Use Radix `Slot` component for `asChild` prop support
+3. Use `cn()` utility from `@/lib/utils` for class merging
+4. Forward refs properly
+5. Export both component and variants
+
+### Styling Approach
+
+- **Tailwind CSS only** - no CSS modules or styled-components
+- Use `cn()` helper for dynamic class composition
+- Tailwind v4 is configured with postcss
+- CSS custom properties defined in `app/globals.css` for theming
+- Dark theme is default
+
+### Database (Planned)
+
+- **ORM**: Drizzle
+- **Provider**: Neon (Postgres)
+- **Schema location**: `lib/db/schema.ts` (when implemented)
+- **Migrations**: Not yet set up - check with repo owner before adding
+
+### Code Quality Checklist
+
+Before considering work complete:
+- Run `npm run lint` - must pass
+- Run `npm run build` - must pass (includes type checking)
+- Test authentication flows if modified
+- Verify responsive design on mobile/desktop
+
+### Server Actions
+
+Location: `app/actions/<feature>.ts`
+
+Pattern:
+```typescript
+"use server";
+import { auth } from "@clerk/nextjs/server";
+
+export async function actionName(input: InputType) {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  // Validate input
+  // Perform operation
+  // Return result
+}
+```
+
+### Adding New UI Components
+
+Always use shadcn/ui:
+1. Check if component exists in `components/ui/`
+2. If not, run: `npx shadcn@latest add <component-name>`
+3. Import using `@/components/ui/<component>`
+4. Follow existing patterns (cva + cn + Slot)
+
+### TypeScript Guidelines
+
+- **Strict mode** is enabled
+- Avoid `any` unless unavoidable
+- Define interfaces for props and data structures
+- Use type inference where appropriate
+
+## Important Patterns
+
+### Class Name Merging
+
+Always use the `cn()` utility for dynamic classes:
+```typescript
+import { cn } from "@/lib/utils"
+
+<div className={cn("base-classes", condition && "conditional-classes", className)} />
+```
+
+### Variant Components
+
+Use class-variance-authority pattern:
+```typescript
+const variants = cva("base-classes", {
+  variants: {
+    variant: { default: "...", destructive: "..." },
+    size: { default: "...", sm: "..." }
+  },
+  defaultVariants: { variant: "default", size: "default" }
+})
+```
+
+### Composition with asChild
+
+Support component composition using Radix Slot:
+```typescript
+const Comp = asChild ? Slot : "button"
+return <Comp {...props} />
+```
+
+## Known Limitations
+
+- No test harness configured - don't assume test scripts exist
+- Database migrations not yet set up - coordinate with repo owner
+- Environment variables for Clerk required but not documented here (see .env.local)
+
+## Git Workflow
+
+- Main branch: `main`
+- Create feature branches for all work
+- Keep commits focused and atomic
+- Run lint and build before pushing
+- Include manual verification steps in PR descriptions
+- Feature branch format: `feature/*`
+</file>
+
+<file path="components.json">
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.ts",
+    "css": "app/globals.css",
+    "baseColor": "zinc",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "iconLibrary": "lucide"
+}
+</file>
+
+<file path="drizzle.config.ts">
+import { defineConfig } from 'drizzle-kit';
+
+export default defineConfig({
+  schema: './lib/db/schema.ts',
+  out: './drizzle',
+  dialect: 'postgresql',
+  dbCredentials: {
+    url: process.env.DATABASE_URL!
+  }
+});
+</file>
+
+<file path="middleware.ts">
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+
+const isProtectedRoute = createRouteMatcher([
+  "/dashboard(.*)",
+  "/decks(.*)",
+  "/study(.*)",
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) {
+    await auth.protect();
+  }
+});
+
+export const config = {
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
+  ],
+};
+</file>
+
+<file path="next-upgrade.md">
+# Next.js 13 to 16 Upgrade Guide
+
+## Table of Contents
+1. [Overview](#overview)
+2. [Version Requirements](#version-requirements)
+3. [Breaking Changes by Version](#breaking-changes-by-version)
+   - [Next.js 13 → 14](#nextjs-13--14)
+   - [Next.js 14 → 15](#nextjs-14--15)
+   - [Next.js 15 → 16](#nextjs-15--16)
+4. [Migration Tools](#migration-tools)
+
+---
+
+## Overview
+
+This document provides a comprehensive guide for upgrading from Next.js 13 to Next.js 16, covering all breaking changes with before/after code examples.
+
+---
+
+## Version Requirements
+
+### Next.js 13
+- **Node.js**: 16.14.0+ (minimum)
+- **React**: 18.2.0+ (minimum)
+- **TypeScript**: 4.5+ (if using TypeScript)
+
+### Next.js 14
+- **Node.js**: 18.17.0+
+- **React**: 18.2.0+
+- **TypeScript**: 5.0+ (recommended)
+
+### Next.js 15
+- **Node.js**: 18.18.0+
+- **React**: 19.0.0+ (RC or stable)
+- **TypeScript**: 5.0+
+
+### Next.js 16
+- **Node.js**: 18.18.0+
+- **React**: 19.0.0+
+- **TypeScript**: 5.0+
+
+---
+
+## Breaking Changes by Version
+
+## Next.js 13 → 14
+
+### 1. Metadata Viewport Export Separation
+
+**Breaking Change**: Viewport-related metadata properties have been separated into their own export.
+
+#### Before (Next.js 13)
+```typescript
+// app/layout.tsx
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'My App',
+  themeColor: '#000000',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+  },
+}
+```
+
+#### After (Next.js 14)
+```typescript
+// app/layout.tsx
+import type { Metadata, Viewport } from 'next'
+
+export const metadata: Metadata = {
+  title: 'My App',
+}
+
+export const viewport: Viewport = {
+  themeColor: '#000000',
+  width: 'device-width',
+  initialScale: 1,
+}
+```
+
+**Migration**: Run the codemod
+```bash
+npx @next/codemod@latest metadata-to-viewport-export .
+```
+
+---
+
+### 2. Image Import Changes
+
+**Breaking Change**: The `next/image` import structure was reorganized.
+
+#### Before (Next.js 13 and earlier)
+```typescript
+// Using the old Image component
+import Image from 'next/image'
+
+export default function Page() {
+  return (
+    <Image
+      src="/photo.jpg"
+      alt="Photo"
+      width={500}
+      height={500}
+    />
+  )
+}
+```
+
+#### After (Next.js 14)
+```typescript
+// next/image is now the new optimized component
+import Image from 'next/image'
+
+export default function Page() {
+  return (
+    <Image
+      src="/photo.jpg"
+      alt="Photo"
+      width={500}
+      height={500}
+    />
+  )
+}
+
+// If you need the legacy behavior:
+import Image from 'next/legacy/image'
+```
+
+---
+
+### 3. SWC Minifier Default
+
+**Breaking Change**: `swcMinify` is now `true` by default.
+
+#### Before (Next.js 13)
+```javascript
+// next.config.js
+module.exports = {
+  swcMinify: false, // Terser was default
+}
+```
+
+#### After (Next.js 14)
+```javascript
+// next.config.js
+module.exports = {
+  // swcMinify: true is now default
+  // Explicitly set to false only if you need Terser
+  swcMinify: false, // Only if you have specific Terser requirements
+}
+```
+
+---
+
+### 4. Target Configuration Removed
+
+**Breaking Change**: The `target` config option has been removed in favor of Output File Tracing.
+
+#### Before (Next.js 13)
+```javascript
+// next.config.js
+module.exports = {
+  target: 'server', // or 'serverless'
+}
+```
+
+#### After (Next.js 14)
+```javascript
+// next.config.js
+module.exports = {
+  // 'target' is removed
+  // Use 'output' instead for deployment targets
+  output: 'standalone', // for containerized deployments
+  // or remove entirely for default behavior
+}
+```
+
+---
+
+## Next.js 14 → 15
+
+### 1. Async Request APIs - cookies(), headers(), draftMode()
+
+**Breaking Change**: Request APIs now return Promises and must be awaited (with backward compatibility in v15, but enforced in v16).
+
+#### Before (Next.js 14)
+```typescript
+// app/page.tsx
+import { cookies, headers, draftMode } from 'next/headers'
+
+export default function Page() {
+  // Synchronous access
+  const cookieStore = cookies()
+  const token = cookieStore.get('auth-token')
+
+  const headersList = headers()
+  const userAgent = headersList.get('user-agent')
+
+  const { isEnabled } = draftMode()
+
+  return <div>User Agent: {userAgent}</div>
+}
+```
+
+#### After (Next.js 15+)
+```typescript
+// app/page.tsx
+import { cookies, headers, draftMode } from 'next/headers'
+
+export default async function Page() {
+  // Async access with await
+  const cookieStore = await cookies()
+  const token = cookieStore.get('auth-token')
+
+  const headersList = await headers()
+  const userAgent = headersList.get('user-agent')
+
+  const { isEnabled } = await draftMode()
+
+  return <div>User Agent: {userAgent}</div>
+}
+```
+
+#### Route Handlers
+
+##### Before (Next.js 14)
+```typescript
+// app/api/user/route.ts
+import { cookies, headers } from 'next/headers'
+import { NextResponse } from 'next/server'
+
+export function GET() {
+  const cookieStore = cookies()
+  const session = cookieStore.get('session')
+
+  const headersList = headers()
+  const authorization = headersList.get('authorization')
+
+  return NextResponse.json({ session: session?.value })
+}
+```
+
+##### After (Next.js 15+)
+```typescript
+// app/api/user/route.ts
+import { cookies, headers } from 'next/headers'
+import { NextResponse } from 'next/server'
+
+export async function GET() {
+  const cookieStore = await cookies()
+  const session = cookieStore.get('session')
+
+  const headersList = await headers()
+  const authorization = headersList.get('authorization')
+
+  return NextResponse.json({ session: session?.value })
+}
+```
+
+**Migration**: Run the codemod
+```bash
+npx @next/codemod@latest next-async-request-api .
+```
+
+#### Temporary Synchronous Access (v15 only, removed in v16)
+```typescript
+// app/page.tsx
+import { cookies, type UnsafeUnwrappedCookies } from 'next/headers'
+
+export default function Page() {
+  // This will show a warning in development
+  const cookieStore = cookies() as unknown as UnsafeUnwrappedCookies
+  const token = cookieStore.get('token')
+
+  return <div>Token: {token?.value}</div>
+}
+```
+
+---
+
+### 2. Async params and searchParams
+
+**Breaking Change**: `params` and `searchParams` props are now Promises (with backward compatibility in v15, enforced in v16).
+
+#### Page Components
+
+##### Before (Next.js 14)
+```typescript
+// app/blog/[slug]/page.tsx
+type Params = { slug: string }
+type SearchParams = { [key: string]: string | string[] | undefined }
+
+export default function Page({
+  params,
+  searchParams,
+}: {
+  params: Params
+  searchParams: SearchParams
+}) {
+  const { slug } = params
+  const { query } = searchParams
+
+  return <h1>Post: {slug}</h1>
+}
+
+export function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Params
+  searchParams: SearchParams
+}) {
+  const { slug } = params
+  return {
+    title: `Blog - ${slug}`,
+  }
+}
+```
+
+##### After (Next.js 15+)
+```typescript
+// app/blog/[slug]/page.tsx
+type Params = Promise<{ slug: string }>
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Params
+  searchParams: SearchParams
+}) {
+  const { slug } = await params
+  const { query } = await searchParams
+
+  return <h1>Post: {slug}</h1>
+}
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Params
+  searchParams: SearchParams
+}) {
+  const { slug } = await params
+  return {
+    title: `Blog - ${slug}`,
+  }
+}
+```
+
+##### Using PageProps Helper (Recommended in Next.js 15.5+)
+```typescript
+// app/blog/[slug]/page.tsx
+import type { PageProps } from '@/.next/types/app/blog/[slug]/page'
+// Or manually: type PageProps = { params: Promise<{ slug: string }>, searchParams: Promise<{...}> }
+
+export default async function Page(props: PageProps<'/blog/[slug]'>) {
+  const { slug } = await props.params
+  const query = await props.searchParams
+
+  return <h1>Post: {slug}</h1>
+}
+```
+
+Generate types with:
+```bash
+npx next typegen
+```
+
+#### Layout Components
+
+##### Before (Next.js 14)
+```typescript
+// app/dashboard/[team]/layout.tsx
+export default function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: { team: string }
+}) {
+  const { team } = params
+
+  return (
+    <section>
+      <h1>Welcome to {team}'s Dashboard</h1>
+      {children}
+    </section>
+  )
+}
+```
+
+##### After (Next.js 15+)
+```typescript
+// app/dashboard/[team]/layout.tsx
+export default async function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: Promise<{ team: string }>
+}) {
+  const { team } = await params
+
+  return (
+    <section>
+      <h1>Welcome to {team}'s Dashboard</h1>
+      {children}
+    </section>
+  )
+}
+```
+
+#### Route Handlers
+
+##### Before (Next.js 14)
+```typescript
+// app/api/posts/[id]/route.ts
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params
+  const post = await fetchPost(id)
+
+  return Response.json(post)
+}
+```
+
+##### After (Next.js 15+)
+```typescript
+// app/api/posts/[id]/route.ts
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
+  const post = await fetchPost(id)
+
+  return Response.json(post)
+}
+```
+
+#### Client Components
+
+##### Before (Next.js 14)
+```typescript
+'use client'
+
+export default function ClientPage({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
+  const { slug } = params
+  return <div>{slug}</div>
+}
+```
+
+##### After (Next.js 15+)
+```typescript
+'use client'
+
+import { use } from 'react'
+
+export default function ClientPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const { slug } = use(params)
+  const { query } = use(searchParams)
+
+  return <div>{slug}</div>
+}
+```
+
+---
+
+### 3. React 19 Breaking Changes
+
+**Breaking Change**: React 19 introduces new hook APIs.
+
+#### useFormState → useActionState
+
+##### Before (Next.js 14 with React 18)
+```typescript
+'use client'
+
+import { useFormState } from 'react-dom'
+
+export default function Form() {
+  const [state, formAction] = useFormState(submitAction, { message: '' })
+
+  return (
+    <form action={formAction}>
+      <input type="text" name="email" />
+      <button type="submit">Submit</button>
+      {state.message && <p>{state.message}</p>}
+    </form>
+  )
+}
+```
+
+##### After (Next.js 15 with React 19)
+```typescript
+'use client'
+
+import { useActionState } from 'react'
+
+export default function Form() {
+  const [state, formAction, isPending] = useActionState(
+    submitAction,
+    { message: '' }
+  )
+
+  return (
+    <form action={formAction}>
+      <input type="text" name="email" />
+      <button type="submit" disabled={isPending}>
+        Submit
+      </button>
+      {state.message && <p>{state.message}</p>}
+    </form>
+  )
+}
+```
+
+#### useFormStatus Enhancements
+
+##### Before (Next.js 14 with React 18)
+```typescript
+'use client'
+
+import { useFormStatus } from 'react-dom'
+
+export function SubmitButton() {
+  const { pending } = useFormStatus()
+
+  return (
+    <button type="submit" disabled={pending}>
+      {pending ? 'Submitting...' : 'Submit'}
+    </button>
+  )
+}
+```
+
+##### After (Next.js 15 with React 19)
+```typescript
+'use client'
+
+import { useFormStatus } from 'react-dom'
+
+export function SubmitButton() {
+  const { pending, data, method, action } = useFormStatus()
+
+  return (
+    <button type="submit" disabled={pending}>
+      {pending ? 'Submitting...' : 'Submit'}
+    </button>
+  )
+}
+```
+
+---
+
+### 4. Configuration Changes
+
+#### bundlePagesExternals → bundlePagesRouterDependencies
+
+##### Before (Next.js 14)
+```javascript
+// next.config.js
+module.exports = {
+  experimental: {
+    bundlePagesExternals: true,
+  },
+}
+```
+
+##### After (Next.js 15)
+```javascript
+// next.config.js
+module.exports = {
+  bundlePagesRouterDependencies: true,
+}
+```
+
+---
+
+### 5. Runtime Configuration
+
+**Breaking Change**: `experimental-edge` runtime value is deprecated.
+
+#### Before (Next.js 14)
+```typescript
+// app/api/route.ts
+export const runtime = 'experimental-edge'
+
+export async function GET() {
+  return Response.json({ message: 'Hello' })
+}
+```
+
+#### After (Next.js 15)
+```typescript
+// app/api/route.ts
+export const runtime = 'edge'
+
+export async function GET() {
+  return Response.json({ message: 'Hello' })
+}
+```
+
+---
+
+## Next.js 15 → 16
+
+### 1. Async Request APIs (Enforcement)
+
+**Breaking Change**: Synchronous access to request APIs is completely removed. No more `UnsafeUnwrapped` types.
+
+#### Before (Next.js 15 - temporary compatibility)
+```typescript
+import { cookies, type UnsafeUnwrappedCookies } from 'next/headers'
+
+export default function Page() {
+  // This worked in v15 with a warning
+  const cookieStore = cookies() as unknown as UnsafeUnwrappedCookies
+  const token = cookieStore.get('token')
+
+  return <div>Token: {token?.value}</div>
+}
+```
+
+#### After (Next.js 16 - async only)
+```typescript
+import { cookies } from 'next/headers'
+
+export default async function Page() {
+  // Must use await - synchronous access throws error
+  const cookieStore = await cookies()
+  const token = cookieStore.get('token')
+
+  return <div>Token: {token?.value}</div>
+}
+```
+
+**All request APIs affected**:
+- `cookies()` from `next/headers`
+- `headers()` from `next/headers`
+- `draftMode()` from `next/headers`
+- `params` in layouts, pages, routes
+- `searchParams` in pages
+
+---
+
+### 2. Async params and searchParams (Enforcement)
+
+**Breaking Change**: Synchronous access is no longer supported.
+
+#### Before (Next.js 15 - synchronous still worked)
+```typescript
+// app/blog/[slug]/page.tsx
+export default function Page({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
+  // Synchronous access worked in v15
+  const { slug } = params
+  return <h1>{slug}</h1>
+}
+```
+
+#### After (Next.js 16 - must be async)
+```typescript
+// app/blog/[slug]/page.tsx
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  // Must await
+  const { slug } = await params
+  return <h1>{slug}</h1>
+}
+```
+
+---
+
+### 3. Middleware to Proxy Migration
+
+**Breaking Change**: `middleware.ts` convention is deprecated in favor of `proxy.ts`.
+
+#### Before (Next.js 15)
+```typescript
+// middleware.ts
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function middleware(request: NextRequest) {
+  const response = NextResponse.next()
+  response.headers.set('x-custom-header', 'value')
+  return response
+}
+
+export const config = {
+  matcher: '/api/:path*',
+}
+```
+
+#### After (Next.js 16)
+```typescript
+// proxy.ts
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function proxy(request: NextRequest) {
+  const response = NextResponse.next()
+  response.headers.set('x-custom-header', 'value')
+  return response
+}
+
+export const config = {
+  matcher: '/api/:path*',
+}
+```
+
+**Migration**: Run the codemod
+```bash
+npx @next/codemod@canary middleware-to-proxy .
+```
+
+---
+
+### 4. Turbopack Configuration
+
+**Breaking Change**: Turbopack configuration format has been updated.
+
+#### Before (Next.js 15)
+```javascript
+// next.config.js
+module.exports = {
+  experimental: {
+    turbo: {
+      // Turbopack config
+    },
+  },
+}
+```
+
+#### After (Next.js 16)
+```javascript
+// next.config.js
+module.exports = {
+  turbopack: {
+    // Turbopack config (moved from experimental)
+  },
+}
+```
+
+**Migration**: The upgrade codemod handles this automatically.
+
+---
+
+### 5. Stabilized APIs - Remove unstable_ Prefix
+
+**Breaking Change**: Several experimental APIs have been stabilized.
+
+#### Before (Next.js 15)
+```typescript
+// app/actions.ts
+'use server'
+
+import { unstable_cache } from 'next/cache'
+import { unstable_after } from 'next/server'
+
+export const getData = unstable_cache(
+  async () => {
+    const data = await fetch('https://api.example.com/data')
+    return data.json()
+  },
+  ['data-cache'],
+  { revalidate: 3600 }
+)
+
+export async function logAction() {
+  unstable_after(() => {
+    console.log('Action logged')
+  })
+}
+```
+
+#### After (Next.js 16)
+```typescript
+// app/actions.ts
+'use server'
+
+import { cache } from 'next/cache'
+import { after } from 'next/server'
+
+export const getData = cache(
+  async () => {
+    const data = await fetch('https://api.example.com/data')
+    return data.json()
+  },
+  ['data-cache'],
+  { revalidate: 3600 }
+)
+
+export async function logAction() {
+  after(() => {
+    console.log('Action logged')
+  })
+}
+```
+
+---
+
+### 6. Remove experimental_ppr
+
+**Breaking Change**: PPR (Partial Prerendering) configuration has changed.
+
+#### Before (Next.js 15)
+```typescript
+// app/page.tsx
+export const experimental_ppr = true
+
+export default function Page() {
+  return <div>My Page</div>
+}
+```
+
+#### After (Next.js 16)
+```typescript
+// app/page.tsx
+// Remove experimental_ppr from individual pages
+
+// Instead, configure globally in next.config.js
+```
+
+```javascript
+// next.config.js
+module.exports = {
+  experimental: {
+    ppr: true, // Enable for entire app
+  },
+}
+```
+
+---
+
+### 7. ESLint CLI Migration
+
+**Breaking Change**: `next lint` is migrating to the standard ESLint CLI.
+
+#### Before (Next.js 15)
+```json
+{
+  "scripts": {
+    "lint": "next lint"
+  }
+}
+```
+
+#### After (Next.js 16)
+```json
+{
+  "scripts": {
+    "lint": "eslint ."
+  }
+}
+```
+
+```javascript
+// eslint.config.js (flat config)
+const { FlatCompat } = require('@eslint/eslintrc')
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+})
+
+module.exports = [
+  ...compat.extends('next/core-web-vitals'),
+  // Your custom rules
+]
+```
+
+---
+
+## Migration Tools
+
+### Automated Upgrade
+
+Use the Next.js upgrade codemod to automate most changes:
+
+```bash
+# Upgrade to Next.js 16
+npx @next/codemod@latest upgrade latest
+```
+
+This will:
+- Update package versions
+- Run all applicable codemods
+- Update configuration files
+- Migrate middleware to proxy
+- Remove unstable_ prefixes
+- Update Turbopack configuration
+
+### Individual Codemods
+
+Run specific codemods if needed:
+
+```bash
+# Async request APIs
+npx @next/codemod@latest next-async-request-api .
+
+# Metadata to viewport
+npx @next/codemod@latest metadata-to-viewport-export .
+
+# Middleware to proxy
+npx @next/codemod@canary middleware-to-proxy .
+```
+
+### Manual Steps
+
+1. **Update Dependencies**
+```bash
+npm install next@latest react@latest react-dom@latest
+npm install --save-dev @types/react@latest @types/react-dom@latest
+```
+
+2. **Run Type Generation** (Next.js 15.5+)
+```bash
+npx next typegen
+```
+
+3. **Test Your Application**
+- Run `npm run lint`
+- Run `npm run build`
+- Test all pages and routes
+- Verify authentication flows
+- Check API routes
+
+4. **Update Environment Variables**
+- Review any deprecated environment variables
+- Update Clerk configuration if needed
+
+### Migration Checklist
+
+- [ ] Update Node.js to 18.18.0+
+- [ ] Update React to 19.0.0+
+- [ ] Update Next.js to 16.x
+- [ ] Update TypeScript types
+- [ ] Run upgrade codemod
+- [ ] Convert request APIs to async
+- [ ] Convert params/searchParams to async
+- [ ] Update React 19 hooks (useActionState)
+- [ ] Migrate middleware to proxy
+- [ ] Update configuration files
+- [ ] Remove unstable_ prefixes
+- [ ] Generate types with `next typegen`
+- [ ] Run `npm run lint` - must pass
+- [ ] Run `npm run build` - must pass
+- [ ] Test all routes and functionality
+- [ ] Test authentication flows
+- [ ] Verify responsive design
+
+---
+
+## Common Patterns
+
+### Server Component with All Async APIs
+
+```typescript
+// app/dashboard/[team]/page.tsx
+import { cookies, headers } from 'next/headers'
+import type { PageProps } from '@/.next/types/app/dashboard/[team]/page'
+
+export default async function DashboardPage(props: PageProps<'/dashboard/[team]'>) {
+  // Await all async APIs
+  const [cookieStore, headersList, params, searchParams] = await Promise.all([
+    cookies(),
+    headers(),
+    props.params,
+    props.searchParams,
+  ])
+
+  const { team } = params
+  const token = cookieStore.get('auth-token')
+  const userAgent = headersList.get('user-agent')
+  const { filter } = searchParams
+
+  return (
+    <div>
+      <h1>Team: {team}</h1>
+      <p>Filter: {filter}</p>
+    </div>
+  )
+}
+```
+
+### Route Handler with Async APIs
+
+```typescript
+// app/api/user/[id]/route.ts
+import { cookies, headers } from 'next/headers'
+import { NextResponse } from 'next/server'
+
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const [cookieStore, headersList, { id }] = await Promise.all([
+    cookies(),
+    headers(),
+    params,
+  ])
+
+  const session = cookieStore.get('session')
+  const authorization = headersList.get('authorization')
+
+  if (!session?.value || !authorization) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const user = await fetchUser(id)
+  return NextResponse.json(user)
+}
+```
+
+### Server Action with Async APIs
+
+```typescript
+// app/actions/user.ts
+'use server'
+
+import { cookies, headers } from 'next/headers'
+import { redirect } from 'next/navigation'
+
+export async function updateUser(formData: FormData) {
+  const [cookieStore, headersList] = await Promise.all([
+    cookies(),
+    headers(),
+  ])
+
+  const session = cookieStore.get('session')
+
+  if (!session) {
+    redirect('/login')
+  }
+
+  // Update user logic
+  const name = formData.get('name') as string
+  await updateUserInDB(session.value, name)
+
+  return { success: true }
+}
+```
+
+---
+
+## Resources
+
+- [Next.js 16 Upgrade Guide](https://nextjs.org/docs/app/guides/upgrading/version-16)
+- [Next.js 15 Upgrade Guide](https://nextjs.org/docs/app/guides/upgrading/version-15)
+- [Next.js 14 Upgrade Guide](https://nextjs.org/docs/app/guides/upgrading/version-14)
+- [Next.js 13 Upgrade Guide](https://nextjs.org/docs/pages/guides/upgrading/version-13)
+- [React 19 Upgrade Guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)
+- [Next.js Codemods](https://nextjs.org/docs/app/guides/upgrading/codemods)
+</file>
+
+<file path="next.config.js">
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
+
+module.exports = nextConfig;
+</file>
+
+<file path="package.json">
+{
+  "name": "supraenglish",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@clerk/nextjs": "^6.35.5",
+    "@clerk/themes": "^2.4.40",
+    "@neondatabase/serverless": "^1.0.2",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-slot": "^1.2.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.0",
+    "lucide-react": "^0.555.0",
+    "next": "^16.0.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "autoprefixer": "^10.4.22",
+    "baseline-browser-mapping": "^2.9.4",
+    "drizzle-kit": "^0.31.8",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3"
+  }
+}
+</file>
+
+<file path="postcss.config.js">
+module.exports = {
+  plugins: {
+    '@tailwindcss/postcss': {},
+  },
+};
+</file>
+
+<file path="tailwind.config.ts">
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  plugins: [],
+};
+
+export default config;
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+</file>
+
+<file path="vercel.json">
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "npm install"
+}
+</file>
+
+</files>
