@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Image from "next/image";
 
 const gifts = [
     {
@@ -116,7 +117,15 @@ export function GiftGallery() {
 
                                 {/* Value */}
                                 <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r ${gift.color}`}>
-                                    <span className="text-xs font-medium">{gift.coins} 🪙</span>
+                                    <span className="text-xs font-medium">{gift.coins}</span>
+                                    <div className="relative w-3.5 h-3.5">
+                                        <Image
+                                            src="/coin.svg"
+                                            alt="coin"
+                                            fill
+                                            className="object-contain"
+                                        />
+                                    </div>
                                 </div>
 
                                 {/* Real Value */}
@@ -134,9 +143,18 @@ export function GiftGallery() {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.5 }}
-                    className="text-center text-sm text-muted-foreground mt-10"
+                    className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground mt-10"
                 >
-                    💡 100 coins = $1.00 • Withdraw earnings anytime with zero fees
+                    <span>💡 100</span>
+                    <span className="relative w-3.5 h-3.5">
+                        <Image
+                            src="/coin.svg"
+                            alt="coin"
+                            fill
+                            className="object-contain"
+                        />
+                    </span>
+                    <span>= $1.00 • Withdraw earnings anytime with zero fees</span>
                 </motion.p>
             </div>
         </section>

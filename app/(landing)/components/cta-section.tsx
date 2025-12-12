@@ -79,13 +79,6 @@ export function CTASection() {
                             Create Free Account
                             <ArrowRight className="ml-2 h-5 w-5" />
                         </Button>
-                        <Button
-                            size="lg"
-                            variant="outline"
-                            className="h-14 px-8 text-lg border-pink-500/50 hover:bg-pink-500/10"
-                        >
-                            Schedule a Demo
-                        </Button>
                     </div>
 
                     {/* Trust line */}
