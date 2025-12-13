@@ -1,7 +1,12 @@
-
-import { birthdayLives } from "@/lib/data";
+import { birthdayLives, upcomingEvents, finishedEvents, famousPeople } from "@/lib/data";
 import { LiveSection } from "./components/live-section";
+import { UpcomingSection } from "./components/upcoming-section";
+import { FinishedSection } from "./components/finished-section";
+import { FamousSection } from "./components/famous-section";
+import { AdsBanner } from "./components/ads-banner";
 import { BackgroundBlobs } from "@/components/ui/background-blobs";
+import { Suspense } from "react";
+
 
 
 export default async function HomePage({
@@ -40,12 +45,23 @@ export default async function HomePage({
 
 
     return (
-        <div className="flex flex-col min-h-screen bg-background relative overflow-hidden">
+        <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
             <BackgroundBlobs />
-
-            <div className="p-4 md:p-8 space-y-12 max-w-[2000px] mx-auto w-full relative z-10 pb-20">
+            <div className="p-4 md:p-6 space-y-16 max-w-[2000px] mx-auto w-full relative z-10 pb-20">
                 {/* Live Section */}
                 <LiveSection lives={filteredLives} title={sectionTitle} />
+
+                {/* Upcoming Events Section */}
+                <UpcomingSection events={upcomingEvents} />
+
+                {/* Ads Banner */}
+                <AdsBanner />
+
+                {/* Just Finished Section */}
+                <FinishedSection events={finishedEvents} />
+
+                {/* Famous People Section */}
+                <FamousSection people={famousPeople} />
             </div>
         </div>
     );

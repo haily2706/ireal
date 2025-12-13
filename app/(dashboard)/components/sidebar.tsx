@@ -2,18 +2,13 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import Image from "next/image";
 import {
     Settings,
-
     LogOut,
-    LogIn,
     Menu,
     Wallet,
-    Calendar,
-    Compass,
-    Clapperboard,
-    MessageCircle,
+    CircleGauge,
+    Users,
     Zap,
     Sparkles,
     Crown
@@ -24,7 +19,7 @@ import { useAuthModal } from "@/app/components/auth/use-auth-modal";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useSidebar } from "@/app/(home)/components/provider";
+import { useSidebar } from "./provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -62,6 +57,7 @@ export function Sidebar() {
 
     const handleSignOut = async () => {
         await supabase.auth.signOut();
+        router.push("/");
     };
 
     return (
@@ -151,33 +147,6 @@ export function Sidebar() {
                                                 {user.user_metadata?.full_name || user.email?.split('@')[0] || "User"}
                                             </h2>
                                         </div>
-                                        <div className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-muted/50 border border-border backdrop-blur-sm max-w-full">
-                                            <span className="text-xs font-medium text-muted-foreground truncate max-w-[150px]">
-                                                {user.user_metadata?.handle ?? ''}
-                                            </span>
-                                        </div>
-
-                                        {/* Premium Balance Card */}
-                                        <div
-                                            onClick={() => router.push("/settings/wallet")}
-                                            className="mt-6 p-4 rounded-2xl bg-linear-to-b from-muted/50 to-transparent border border-border backdrop-blur-md shadow-2xl relative overflow-hidden group cursor-pointer hover:border-purple-500/50 transition-all duration-300"
-                                        >
-                                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-foreground/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
-
-                                            <div className="flex items-center justify-between mb-2">
-                                                <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
-                                                    <div className="p-1 rounded-md bg-muted/50">
-                                                        <Wallet className="w-3 h-3 text-yellow-600 dark:text-yellow-500" />
-                                                    </div>
-                                                    Balance
-                                                </div>
-                                            </div>
-
-                                            <div className="text-xl font-bold text-foreground tracking-tighter text-left">
-                                                <span className="text-sm text-muted-foreground align-top mr-1">$</span>
-                                                98,890
-                                            </div>
-                                        </div>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -188,15 +157,13 @@ export function Sidebar() {
                 {/* Main Links */}
                 <div className="flex-1 space-y-2">
                     {!isCollapsed && (
-                        <h3 className="px-2 text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3 pl-4">Discover</h3>
+                        <h3 className="px-2 text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3 pl-4">Menu</h3>
                     )}
                     <div className="space-y-2" onMouseLeave={() => setHoveredLink(null)}>
                         {[
-                            { icon: Compass, label: "Explore", href: "/home", color: "text-blue-400" },
-                            // { icon: Clapperboard, label: "Shorts", href: "/shorts", color: "text-red-400" },
-                            { icon: MessageCircle, label: "Messages", href: "/messages", color: "text-green-400" },
-                            { icon: Calendar, label: "Schedules", href: "/schedules", color: "text-purple-400" },
-                            { icon: Settings, label: "Settings", href: "/settings", color: "text-gray-400" }
+                            { icon: CircleGauge, label: "Dashboard", href: "/dashboard", color: "text-blue-400" },
+                            { icon: Users, label: "Users", href: "/dashboard/users", color: "text-pink-400" },
+                            { icon: Settings, label: "Settings", href: "/dashboard/settings", color: "text-gray-400" }
                         ].map((link) => (
                             <SidebarLink
                                 key={link.href}
@@ -222,7 +189,7 @@ export function Sidebar() {
                     </Button>
                 ) : (
                     <Button variant="ghost" size="icon" onClick={() => onOpen("sign_in")} className="text-muted-foreground hover:text-blue-500 hover:bg-blue-500/10 rounded-xl transition-all">
-                        <LogIn className="h-5 w-5" />
+                        <Menu className="h-5 w-5" />
                     </Button>
                 )}
             </div>
@@ -310,7 +277,8 @@ function SidebarLink({
 }
 
 function isActive(pathname: string, href: string) {
+    if (href === "/dashboard") {
+        return pathname === href;
+    }
     return pathname === href || pathname?.startsWith(`${href}/`);
 }
-
-

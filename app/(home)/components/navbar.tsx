@@ -12,11 +12,12 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuthModal } from "@/app/components/auth/use-auth-modal";
 
 import { currentUser } from "@/lib/data";
 
-import { ModeToggle } from "@/app/components/mode-toggle";
-import { NotificationDropdown } from "./notification-dropdown";
+import { ModeToggle } from "@/app/components/theme/mode-toggle";
+import { NotiDropdown } from "./noti-dropdown";
 
 const appLinks = [
     { name: "Home", href: "/home" },
@@ -26,10 +27,39 @@ const appLinks = [
     { name: "Schedules", href: "/schedules" },
 ];
 
-export function Navbar() {
+import { useAuthStore } from "@/app/components/auth/use-auth-store";
+
+import { UserMenu } from "@/app/components/auth/user-menu";
+
+export const categories = [
+    "All",
+    "Live",
+    "Gaming",
+    "Sing"
+];
+
+interface NavbarProps { }
+
+export function Navbar({ }: NavbarProps) {
     const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isSearchFocused, setIsSearchFocused] = useState(false);
+    const { onOpen } = useAuthModal();
+    const { user } = useAuthStore();
+
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const selectedCategory = searchParams.get("category") || "All";
+
+    const handleSelect = (category: string) => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (category === "All") {
+            params.delete("category");
+        } else {
+            params.set("category", category);
+        }
+        router.push(`?${params.toString()}`);
+    };
 
     // Prevent body scroll when menu is open
     useEffect(() => {
@@ -48,53 +78,137 @@ export function Navbar() {
                 className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/80"
             >
                 <div className="flex h-16 items-center justify-between px-4 relative z-10 gap-4">
+                    <Link href="/">
+                        <Image
+                            src="/logo.svg"
+                            alt="iReal Logo"
+                            width={120}
+                            height={30}
+                            className="h-12 w-auto"
+                        />
+                    </Link>
 
-                    <Suspense fallback={null}>
-                        <CategoryPills />
-                    </Suspense>
-                    <div className="hidden md:flex flex-1 max-w-[850px] items-center justify-center bg-transparent">
-
-                        <motion.div
-                            className={`flex flex-1 items-center relative max-w-[600px] transition-all duration-300 ${isSearchFocused ? "scale-105" : ""}`}
-                            onFocus={() => setIsSearchFocused(true)}
-                            onBlur={() => setIsSearchFocused(false)}
-                        >
-                            <div className="relative w-full group">
-                                <div className="relative flex items-center bg-background/60 dark:bg-background/40 backdrop-blur-md rounded-full border border-border overflow-hidden">
-                                    <div className="pl-4 text-muted-foreground">
-                                        <Search className={`h-5 w-5 transition-colors ${isSearchFocused ? "text-blue-500 dark:text-blue-400" : ""}`} />
+                    {/* Center Section - Toggle between Pills and Search */}
+                    <div className="hidden md:flex flex-1 max-w-[850px] items-center justify-center bg-transparent relative">
+                        <AnimatePresence mode="popLayout">
+                            {isSearchFocused ? (
+                                <motion.div
+                                    key="search-bar"
+                                    initial={{ opacity: 0, scale: 0.9, width: "50%" }}
+                                    animate={{ opacity: 1, scale: 1, width: "100%" }}
+                                    exit={{ opacity: 0, scale: 0.9, width: "50%" }}
+                                    className="flex flex-1 items-center relative max-w-[600px] w-full"
+                                >
+                                    <div className="relative w-full group">
+                                        <div className="relative flex items-center bg-background/60 dark:bg-background/40 backdrop-blur-md rounded-full border border-border overflow-hidden shadow-lg">
+                                            <div className="pl-4 text-muted-foreground">
+                                                <Search className="h-5 w-5 text-blue-500" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                autoFocus
+                                                placeholder="Search..."
+                                                onBlur={() => {
+                                                    // Optional: close on blur if empty ? 
+                                                    // For now, let's keep it manual toggle via X button to avoid annoyance
+                                                }}
+                                                className="w-full h-10 px-4 bg-transparent border-none text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-0"
+                                            />
+                                            <Button
+                                                size="icon"
+                                                variant="ghost"
+                                                onClick={() => setIsSearchFocused(false)}
+                                                className="h-9 w-9 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-all mr-1"
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <input
-                                        type="text"
-                                        placeholder="Search..."
-                                        className="w-full h-10 px-4 bg-transparent border-none text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-0"
-                                    />
-                                    <Button
-                                        size="icon"
-                                        className="h-9 w-12 rounded-r-full bg-muted/50 hover:bg-muted border-l border-border text-muted-foreground hover:text-foreground transition-all mr-0.5"
+                                    <motion.button
+                                        initial={{ opacity: 0, scale: 0 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        className="ml-4 p-2.5 rounded-full bg-background/60 dark:bg-background/40 border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors backdrop-blur-md"
                                     >
-                                        <Search className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                            </div>
-
-                            <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="ml-4 p-2.5 rounded-full bg-background/60 dark:bg-background/40 border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors backdrop-blur-md"
-                            >
-                                <Mic className="h-5 w-5" />
-                            </motion.button>
-                        </motion.div>
+                                        <Mic className="h-5 w-5" />
+                                    </motion.button>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="category-pills"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="flex items-center gap-2"
+                                >
+                                    {categories.map((category) => {
+                                        const isSelected = selectedCategory === category;
+                                        return (
+                                            <Button
+                                                key={category}
+                                                variant={isSelected ? "default" : "secondary"}
+                                                onClick={() => handleSelect(category)}
+                                                className={cn(
+                                                    "whitespace-nowrap rounded-full text-xs font-medium transition-all duration-300 h-8 px-4",
+                                                    isSelected
+                                                        ? "bg-foreground text-background hover:bg-foreground/90 shadow-[0_0_15px_rgba(var(--foreground),0.3)]"
+                                                        : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border"
+                                                )}
+                                            >
+                                                {category}
+                                            </Button>
+                                        );
+                                    })}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <NotificationDropdown />
+                        {/* Desktop Search Trigger */}
+                        {!isSearchFocused && (
+                            <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                className="hidden md:block"
+                            >
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="text-muted-foreground hover:text-foreground rounded-full"
+                                    onClick={() => setIsSearchFocused(true)}
+                                >
+                                    <Search className="h-5 w-5" />
+                                </Button>
+                            </motion.div>
+                        )}
+
+                        <NotiDropdown />
 
                         <div className="scale-90">
                             <ModeToggle />
                         </div>
 
+                        {user ? (
+                            <UserMenu email={user.email} />
+                        ) : (
+                            <>
+                                <Button
+                                    variant="ghost"
+                                    className="hover:text-pink-500 hover:bg-pink-500/10 active:scale-95 transition-all"
+                                    onClick={() => onOpen("sign_in")}
+                                >
+                                    Sign In
+                                </Button>
+                                <Button
+                                    className="bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-pink-500/20 active:scale-95 transition-all"
+                                    onClick={() => onOpen("sign_up")}
+                                >
+                                    Sign Up
+                                </Button>
+                            </>
+                        )}
                         <div className="md:hidden">
                             <Button
                                 variant="ghost"
@@ -106,102 +220,66 @@ export function Navbar() {
                         </div>
                     </div>
                 </div>
-            </motion.header>
-
+            </motion.header >
 
             {/* Mobile Search - Visible only on mobile */}
             <AnimatePresence>
-                {isMobileMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="md:hidden flex flex-col fixed inset-0 z-50 bg-background/95 backdrop-blur-3xl p-4"
-                    >
-                        <div className="flex items-center justify-between mb-6">
-                            <Image
-                                src="/logo.svg"
-                                alt="iReal Logo"
-                                width={120}
-                                height={30}
-                                className="h-8 w-auto"
-                            />
-                            <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
-                                <X className="h-6 w-6" />
-                            </Button>
-                        </div>
+                {
+                    isMobileMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
 
-                        <div className="relative group mb-6">
-                            <div className="relative flex items-center bg-background rounded-lg border border-border px-4 py-3">
-                                <Search className="h-5 w-5 text-muted-foreground mr-3" />
-                                <input
-                                    className="flex-1 bg-transparent border-none focus:outline-none text-foreground placeholder:text-muted-foreground"
-                                    placeholder="Search..."
-                                    autoFocus
-                                />
-                                <Mic className="h-5 w-5 text-muted-foreground" />
-                            </div>
-                        </div>
 
-                        <nav className="flex flex-col gap-4">
-                            {appLinks.map((link) => (
-                                <Link
-                                    key={link.name}
-                                    href={link.href}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-lg font-medium p-4 rounded-xl hover:bg-muted transition-colors flex items-center gap-4"
-                                >
-                                    {link.name}
+                            className="md:hidden flex flex-col fixed inset-0 z-50 bg-background/95 backdrop-blur-3xl p-4"
+                        >
+                            <div className="flex items-center justify-between mb-6">
+                                <Link href="/">
+                                    <Image
+                                        src="/logo.svg"
+                                        alt="iReal Logo"
+                                        width={120}
+                                        height={30}
+                                        className="h-8 w-auto"
+                                    />
                                 </Link>
-                            ))}
-                        </nav>
+                                <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <X className="h-6 w-6" />
+                                </Button>
+                            </div>
 
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                            <div className="relative group mb-6">
+                                <div className="relative flex items-center bg-background rounded-lg border border-border px-4 py-3">
+                                    <Search className="h-5 w-5 text-muted-foreground mr-3" />
+                                    <input
+                                        className="flex-1 bg-transparent border-none focus:outline-none text-foreground placeholder:text-muted-foreground"
+                                        placeholder="Search..."
+                                        autoFocus
+                                    />
+                                    <Mic className="h-5 w-5 text-muted-foreground" />
+                                </div>
+                            </div>
+
+                            <nav className="flex flex-col gap-4">
+                                {appLinks.map((link) => (
+                                    <Link
+                                        key={link.name}
+                                        href={link.href}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="text-lg font-medium p-4 rounded-xl hover:bg-muted transition-colors flex items-center gap-4"
+                                    >
+                                        {link.name}
+                                    </Link>
+                                ))}
+                            </nav>
+
+                        </motion.div>
+                    )
+                }
+            </AnimatePresence >
         </>
     );
 }
 
-const categories = [
-    "All",
-    "Live",
-    "Gaming",
-    "Sing"
-];
 
-function CategoryPills() {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const selectedCategory = searchParams.get("category") || "All";
-
-    const handleSelect = (category: string) => {
-        const params = new URLSearchParams(searchParams.toString());
-        if (category === "All") {
-            params.delete("category");
-        } else {
-            params.set("category", category);
-        }
-        router.push(`?${params.toString()}`);
-    };
-
-    return (
-        <div className="flex items-center gap-2 mr-4 shrink-0">
-            {categories.map((category) => (
-                <Button
-                    key={category}
-                    variant={selectedCategory === category ? "default" : "secondary"}
-                    onClick={() => handleSelect(category)}
-                    className={cn(
-                        "whitespace-nowrap rounded-full text-xs font-medium transition-all duration-300 h-8 px-4",
-                        selectedCategory === category
-                            ? "bg-foreground text-background hover:bg-foreground/90 shadow-[0_0_15px_rgba(var(--foreground),0.3)]"
-                            : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border"
-                    )}
-                >
-                    {category}
-                </Button>
-            ))}
-        </div>
-    );
-}

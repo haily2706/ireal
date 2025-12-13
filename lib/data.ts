@@ -115,6 +115,20 @@ export interface Short {
     views: string;
 }
 
+export interface UpcomingEvent extends LiveStream {
+    scheduledFor: string;
+}
+
+export interface FinishedEvent extends Video {
+    endedAt: string;
+}
+
+export interface FamousPerson extends User {
+    followerCount: string;
+    description: string;
+    coverImage: string;
+}
+
 export interface LiveStream {
     id: string;
     title: string;
@@ -288,3 +302,113 @@ export const birthdayLives: LiveStream[] = [
         isBirthday: false,
     }
 ];
+
+export const upcomingEvents: UpcomingEvent[] = [
+    {
+        id: "ue1",
+        title: "Anniversary Special Stream",
+        thumbnail: "https://images.unsplash.com/photo-1514525253440-b39333979034?q=80&w=2574&auto=format&fit=crop",
+        channel: followers[0],
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Tomorrow, 8:00 PM"
+    },
+    {
+        id: "ue2",
+        title: "Q&A with Fans",
+        thumbnail: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?q=80&w=2574&auto=format&fit=crop",
+        channel: followers[1],
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Sat, 10:00 AM"
+    },
+    {
+        id: "ue3",
+        title: "New Game Release Party",
+        thumbnail: "https://images.unsplash.com/photo-1592564630984-255d49cc4556?q=80&w=2574&auto=format&fit=crop",
+        channel: followers[2],
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Sun, 2:00 PM"
+    },
+    {
+        id: "ue4",
+        title: "Cooking Class Live",
+        thumbnail: "https://images.unsplash.com/photo-1556910103-1c02745a30bf?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[3],
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Mon, 6:00 PM"
+    }
+];
+
+export const finishedEvents: FinishedEvent[] = [
+    {
+        id: "fe1",
+        title: "Marathon 24h Stream",
+        thumbnail: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[3],
+        views: "1.5M",
+        postedAt: "Yesterday",
+        duration: "24:00:00",
+        endedAt: "1 day ago"
+    },
+    {
+        id: "fe2",
+        title: "Charity Fundraiser Event",
+        thumbnail: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[1],
+        views: "850K",
+        postedAt: "2 days ago",
+        duration: "05:30:00",
+        endedAt: "2 days ago"
+    },
+    {
+        id: "fe3",
+        title: "Live Concert (Acoustic)",
+        thumbnail: "https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[2],
+        views: "2.1M",
+        postedAt: "3 days ago",
+        duration: "02:15:00",
+        endedAt: "3 days ago"
+    },
+    {
+        id: "fe4",
+        title: "Tech Talk: AI Future",
+        thumbnail: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[0],
+        views: "120K",
+        postedAt: "3 days ago",
+        duration: "01:00:00",
+        endedAt: "3 days ago"
+    }
+];
+
+export const famousPeople: FamousPerson[] = [
+    {
+        ...followers[0],
+        followerCount: "2.5M",
+        description: "Official tech reviewer & lifestyle vlogger. Bringing you the latest gadgets and daily vibes.",
+        coverImage: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+        ...followers[1],
+        followerCount: "1.8M",
+        description: "Pro gamer and variety streamer. Catch me live every day!",
+        coverImage: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+        ...followers[2],
+        followerCount: "3.2M",
+        description: "Musician & songwriter. Sharing my journey one song at a time.",
+        coverImage: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+        ...followers[3],
+        followerCount: "900K",
+        description: "Outdoor explorer and adventure photographer. Let's see the world together.",
+        coverImage: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2621&auto=format&fit=crop"
+    }
+];
+

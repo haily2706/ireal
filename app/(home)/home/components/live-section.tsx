@@ -19,7 +19,7 @@ export function LiveSection({ lives, title = "Birthday Live" }: LiveSectionProps
         <div className="space-y-6">
             <div className="flex items-center justify-between px-1">
                 <div className="space-y-1">
-                    <h2 className="text-2xl font-bold tracking-tight text-foreground">{title}</h2>
+                    <h2 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-pink-500 to-purple-500 w-fit">{title}</h2>
                     <p className="text-sm text-muted-foreground">Catch the latest streaming events</p>
                 </div>
             </div>

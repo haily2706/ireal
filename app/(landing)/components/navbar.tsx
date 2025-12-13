@@ -7,7 +7,10 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/app/components/mode-toggle";
+import { ModeToggle } from "@/app/components/theme/mode-toggle";
+import { useAuthModal } from "@/app/components/auth/use-auth-modal";
+import { useAuthStore } from "@/app/components/auth/use-auth-store";
+import { UserMenu } from "@/app/components/auth/user-menu";
 
 const navLinks = [
     { name: "How it Works", href: "/#how-it-works" }, // Absolute paths for cross-page nav
@@ -16,6 +19,7 @@ const navLinks = [
     { name: "Gifts", href: "/#gifts" },
     { name: "Stories", href: "/#testimonials" },
     { name: "Pricing", href: "/#pricing" },
+    { name: "Investors", href: "/investors" },
 ];
 
 export function Navbar() {
@@ -24,6 +28,8 @@ export function Navbar() {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState("");
+    const { onOpen } = useAuthModal();
+    const { user } = useAuthStore();
 
     // Prevent body scroll when menu is open
     useEffect(() => {
@@ -115,15 +121,45 @@ export function Navbar() {
                     {/* Desktop Right Side */}
                     <div className="hidden md:flex items-center gap-4">
                         <ModeToggle />
-                        <Button
-                            variant="ghost"
-                            className="hover:text-pink-500 hover:bg-pink-500/10 active:scale-95 transition-all"
-                        >
-                            Sign In
-                        </Button>
-                        <Button className="bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-pink-500/20 active:scale-95 transition-all">
-                            Sign Up
-                        </Button>
+                        {user ? (
+                            <>
+                                <Link href="/home">
+                                    <Button
+                                        variant="ghost"
+                                        className="hover:text-pink-500 hover:bg-pink-500/10 active:scale-95 transition-all"
+                                    >
+                                        Home
+                                    </Button>
+                                </Link>
+                                {(user?.app_metadata?.role === 'Admin' || user?.app_metadata?.role === 'Manager') && (
+                                    <Link href="/dashboard">
+                                        <Button
+                                            variant="ghost"
+                                            className="hover:text-pink-500 hover:bg-pink-500/10 active:scale-95 transition-all"
+                                        >
+                                            Dashboard
+                                        </Button>
+                                    </Link>
+                                )}
+                                <UserMenu email={user.email} />
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    variant="ghost"
+                                    className="hover:text-pink-500 hover:bg-pink-500/10 active:scale-95 transition-all"
+                                    onClick={() => onOpen("sign_in")}
+                                >
+                                    Sign In
+                                </Button>
+                                <Button
+                                    className="bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-pink-500/20 active:scale-95 transition-all"
+                                    onClick={() => onOpen("sign_up")}
+                                >
+                                    Sign Up
+                                </Button>
+                            </>
+                        )}
                     </div>
 
                     {/* Mobile Menu Trigger */}
@@ -191,15 +227,49 @@ export function Navbar() {
                         </nav>
 
                         <div className="mt-auto space-y-4 border-t pt-6">
-                            <Button
-                                className="w-full h-12 text-lg hover:text-pink-500 hover:bg-pink-500/10"
-                                variant="outline"
-                            >
-                                Sign In
-                            </Button>
-                            <Button className="w-full h-12 text-lg bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-pink-500/20">
-                                Sign Up
-                            </Button>
+                            {user ? (
+                                <>
+                                    <Link href="/home" onClick={() => setIsMobileMenuOpen(false)}>
+                                        <Button
+                                            className="w-full h-12 text-lg hover:text-pink-500 hover:bg-pink-500/10"
+                                            variant="outline"
+                                        >
+                                            Home
+                                        </Button>
+                                    </Link>
+                                    {(user?.app_metadata?.role === 'admin' || user?.app_metadata?.role === 'manager') && (
+                                        <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+                                            <Button
+                                                className="w-full h-12 text-lg bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-pink-500/20"
+                                            >
+                                                Dashboard
+                                            </Button>
+                                        </Link>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <Button
+                                        className="w-full h-12 text-lg hover:text-pink-500 hover:bg-pink-500/10"
+                                        variant="outline"
+                                        onClick={() => {
+                                            setIsMobileMenuOpen(false);
+                                            onOpen("sign_in");
+                                        }}
+                                    >
+                                        Sign In
+                                    </Button>
+                                    <Button
+                                        className="w-full h-12 text-lg bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-pink-500/20"
+                                        onClick={() => {
+                                            setIsMobileMenuOpen(false);
+                                            onOpen("sign_up");
+                                        }}
+                                    >
+                                        Sign Up
+                                    </Button>
+                                </>
+                            )}
                         </div>
                     </motion.div>
                 )}

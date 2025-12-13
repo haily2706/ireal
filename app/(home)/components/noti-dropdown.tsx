@@ -92,7 +92,7 @@ const getIconColor = (type: string) => {
     }
 };
 
-export function NotificationDropdown() {
+export function NotiDropdown() {
     const [isOpen, setIsOpen] = useState(false);
     const [readState, setReadState] = useState<number[]>([]);
 

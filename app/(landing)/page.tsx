@@ -11,7 +11,7 @@ import { CTASection } from "@/app/(landing)/components/cta-section";
 import { Instagram, Twitter, Youtube } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { Footer } from "@/app/components/footer";
+import { Footer } from "@/app/(landing)/components/footer";
 
 export default function Page() {
   return (
