@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import {
     X,
     Search,
@@ -49,7 +49,9 @@ export function Navbar() {
             >
                 <div className="flex h-16 items-center justify-between px-4 relative z-10 gap-4">
 
-                    <CategoryPills />
+                    <Suspense fallback={null}>
+                        <CategoryPills />
+                    </Suspense>
                     <div className="hidden md:flex flex-1 max-w-[850px] items-center justify-center bg-transparent">
 
                         <motion.div
