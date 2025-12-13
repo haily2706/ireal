@@ -15,7 +15,7 @@ interface FamousSectionProps {
     title?: string;
 }
 
-export function FamousSection({ people, title = "Famous Creators" }: FamousSectionProps) {
+export function FamousSection({ people, title = "Famous Streamers" }: FamousSectionProps) {
     if (people.length === 0) return null;
 
     return (
@@ -27,7 +27,7 @@ export function FamousSection({ people, title = "Famous Creators" }: FamousSecti
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 gap-4">
                 {people.map((person, index) => (
                     <FamousCard key={person.id} person={person} index={index} />
                 ))}
@@ -47,7 +47,7 @@ function FamousCard({ person, index }: { person: FamousPerson; index: number }) 
             className="group relative flex flex-col bg-card rounded-3xl overflow-hidden border border-border/50 shadow-sm hover:shadow-xl transition-all duration-300"
         >
             {/* Cover Image */}
-            <div className="h-24 relative bg-muted">
+            <div className="h-16 relative bg-muted">
                 <Image
                     src={person.coverImage}
                     alt="Cover"
@@ -58,46 +58,46 @@ function FamousCard({ person, index }: { person: FamousPerson; index: number }) 
             </div>
 
             {/* Avatar & Content */}
-            <div className="px-5 pb-5 pt-0 relative flex flex-col items-center -mt-10 space-y-3">
+            <div className="px-3 pb-3 pt-0 relative flex flex-col items-center -mt-7 space-y-2">
                 <Link href={`/channel/${person.username}`}>
                     <div className="p-1 rounded-full bg-background relative inline-block">
-                        <Avatar className="h-20 w-20 border-4 border-background shadow-md">
+                        <Avatar className="h-14 w-14 border-4 border-background shadow-md">
                             <AvatarImage src={person.avatar} />
                             <AvatarFallback>{person.name[0]}</AvatarFallback>
                         </Avatar>
-                        <div className="absolute bottom-1 right-1 bg-yellow-400 text-white rounded-full p-1 border-2 border-background" title="Verified">
-                            <Star className="h-3 w-3 fill-white" />
+                        <div className="absolute bottom-0 right-0 bg-yellow-400 text-white rounded-full p-0.5 border-2 border-background" title="Verified">
+                            <Star className="h-2.5 w-2.5 fill-white" />
                         </div>
                     </div>
                 </Link>
 
-                <div className="text-center space-y-1 w-full">
+                <div className="text-center space-y-0.5 w-full">
                     <Link href={`/channel/${person.username}`} className="block">
-                        <h3 className="font-bold text-lg hover:underline truncate px-2">{person.name}</h3>
+                        <h3 className="font-bold text-sm hover:underline truncate px-1">{person.name}</h3>
                     </Link>
-                    <p className="text-sm text-muted-foreground font-medium">{person.username}</p>
-                    <Badge variant="secondary" className="mt-1 bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20">
-                        {person.followerCount} Followers
+                    <p className="text-[10px] text-muted-foreground font-medium truncate">{person.username}</p>
+                    <Badge variant="secondary" className="mt-1 bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20 text-[10px] px-1.5 py-0 h-5">
+                        {person.followerCount}
                     </Badge>
                 </div>
 
-                <p className="text-xs text-center text-muted-foreground line-clamp-2 h-8 w-full px-2">
+                <p className="text-[10px] text-center text-muted-foreground line-clamp-2 h-7 w-full px-1 overflow-hidden leading-tight">
                     {person.description}
                 </p>
 
                 <Button
-                    className={`w-full rounded-full transition-all duration-300 ${isFollowing ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}
+                    className={`w-full rounded-full transition-all duration-300 h-7 text-xs ${isFollowing ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}
                     variant={isFollowing ? "secondary" : "default"}
                     onClick={() => setIsFollowing(!isFollowing)}
                     size="sm"
                 >
                     {isFollowing ? (
                         <>
-                            <Check className="h-4 w-4 mr-2" /> Following
+                            <Check className="h-3 w-3 mr-1" /> Subscribed
                         </>
                     ) : (
                         <>
-                            <UserPlus className="h-4 w-4 mr-2" /> Follow
+                            <UserPlus className="h-3 w-3 mr-1" /> Subscribe
                         </>
                     )}
                 </Button>

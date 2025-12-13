@@ -77,6 +77,7 @@ export const exploreItems: Post[] = [
         id: "p2",
         user: followers[1], // Mike
         content: "Getting ready for the big bash next week! Who's tuning in? 🕺💃",
+        image: "https://images.unsplash.com/photo-LO1lToLGGFA?q=80&w=2600&auto=format&fit=crop",
         likes: 89,
         comments: 12,
         createdAt: "2023-12-11T09:30:00Z",
@@ -136,6 +137,7 @@ export interface LiveStream {
     channel: User;
     viewers: number;
     isBirthday: boolean;
+    isVertical?: boolean;
 }
 
 export const recommendedVideos: Video[] = [
@@ -151,7 +153,7 @@ export const recommendedVideos: Video[] = [
     {
         id: "v2",
         title: "My 25th Birthday Celebration Highlights! 🎉",
-        thumbnail: "https://images.unsplash.com/photo-1530103862676-de3c9a59af38?q=80&w=2600&auto=format&fit=crop",
+        thumbnail: "https://images.unsplash.com/photo-UEeiZeKFlks?q=80&w=2600&auto=format&fit=crop",
         channel: followers[0], // Sarah
         views: "54K",
         postedAt: "5 hours ago",
@@ -205,7 +207,7 @@ export const recommendedVideos: Video[] = [
     {
         id: "v8",
         title: "Travel Vlog: Japan 🇯🇵",
-        thumbnail: "https://images.unsplash.com/photo-1493976040375-85c17d3b253c?q=80&w=2670&auto=format&fit=crop",
+        thumbnail: "https://images.unsplash.com/photo-D68ADLeMh5Q?q=80&w=2670&auto=format&fit=crop",
         channel: followers[2],
         views: "3.5M",
         postedAt: "6 months ago",
@@ -229,7 +231,7 @@ export const trendingShorts: Short[] = [
     {
         id: "s3",
         title: "Satisfying Cake Cutting 🍰",
-        thumbnail: "https://images.unsplash.com/photo-1541781777621-af130545f653?q=80&w=1740&auto=format&fit=crop",
+        thumbnail: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1740&auto=format&fit=crop",
         views: "2.3M",
     },
     {
@@ -256,7 +258,7 @@ export const birthdayLives: LiveStream[] = [
     {
         id: "l2",
         title: "Chilling and Coding on my Birthday",
-        thumbnail: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2670&auto=format&fit=crop",
+        thumbnail: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2670&auto=format&fit=crop",
         channel: followers[3], // Chris
         viewers: 450,
         isBirthday: true,
@@ -268,6 +270,7 @@ export const birthdayLives: LiveStream[] = [
         channel: followers[2], // Emily
         viewers: 230,
         isBirthday: false,
+        isVertical: true,
     },
     {
         id: "l5",
@@ -284,11 +287,12 @@ export const birthdayLives: LiveStream[] = [
         channel: followers[0], // Chris
         viewers: 120,
         isBirthday: false,
+        isVertical: true,
     },
     {
         id: "l7",
         title: "Outdoor Adventure",
-        thumbnail: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=2670&auto=format&fit=crop",
+        thumbnail: "https://images.unsplash.com/photo-1501555088652-021faa106b9b?q=80&w=2600&auto=format&fit=crop",
         channel: followers[2], // Emily
         viewers: 560,
         isBirthday: false,
@@ -300,6 +304,81 @@ export const birthdayLives: LiveStream[] = [
         channel: followers[0], // Sarah
         viewers: 410,
         isBirthday: false,
+        isVertical: true,
+    },
+    {
+        id: "l9",
+        title: "Epic Minecraft Build",
+        thumbnail: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=2600&auto=format&fit=crop",
+        channel: followers[1],
+        viewers: 1200,
+        isBirthday: false,
+    },
+    {
+        id: "l10",
+        title: "Cooking Italian Pasta 🍝",
+        thumbnail: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?q=80&w=2600&auto=format&fit=crop",
+        channel: followers[3],
+        viewers: 890,
+        isBirthday: false,
+        isVertical: true,
+    },
+    {
+        id: "l11",
+        title: "Midnight Horror Games 👻",
+        thumbnail: "https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[2],
+        viewers: 2100,
+        isBirthday: false,
+    },
+    {
+        id: "l12",
+        title: "Morning Yoga Session 🧘‍♀️",
+        thumbnail: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=2600&auto=format&fit=crop",
+        channel: followers[0],
+        viewers: 650,
+        isBirthday: false,
+        isVertical: true,
+    },
+    {
+        id: "l13",
+        title: "Tech Review Live: iPhone 16?",
+        thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[1],
+        viewers: 3400,
+        isBirthday: false,
+    },
+    {
+        id: "l14",
+        title: "Guitar Jamming 🎸",
+        thumbnail: "https://images.unsplash.com/photo-1525201548942-d8732f6617a0?q=80&w=2600&auto=format&fit=crop",
+        channel: followers[2],
+        viewers: 1560,
+        isBirthday: false,
+    },
+    {
+        id: "l15",
+        title: "Coding a React App from Scratch",
+        thumbnail: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[3],
+        viewers: 920,
+        isBirthday: false,
+    },
+    {
+        id: "l16",
+        title: "Travel Talk: Best Destinations",
+        thumbnail: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[0],
+        viewers: 780,
+        isBirthday: false,
+    },
+    {
+        id: "l17",
+        title: "Valorant Ranked Grind",
+        thumbnail: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[1],
+        viewers: 2800,
+        isBirthday: false,
     }
 ];
 
@@ -307,7 +386,7 @@ export const upcomingEvents: UpcomingEvent[] = [
     {
         id: "ue1",
         title: "Anniversary Special Stream",
-        thumbnail: "https://images.unsplash.com/photo-1514525253440-b39333979034?q=80&w=2574&auto=format&fit=crop",
+        thumbnail: "https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=2574&auto=format&fit=crop",
         channel: followers[0],
         viewers: 0,
         isBirthday: false,
@@ -325,7 +404,7 @@ export const upcomingEvents: UpcomingEvent[] = [
     {
         id: "ue3",
         title: "New Game Release Party",
-        thumbnail: "https://images.unsplash.com/photo-1592564630984-255d49cc4556?q=80&w=2574&auto=format&fit=crop",
+        thumbnail: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2600&auto=format&fit=crop",
         channel: followers[2],
         viewers: 0,
         isBirthday: false,
@@ -334,11 +413,101 @@ export const upcomingEvents: UpcomingEvent[] = [
     {
         id: "ue4",
         title: "Cooking Class Live",
-        thumbnail: "https://images.unsplash.com/photo-1556910103-1c02745a30bf?q=80&w=2670&auto=format&fit=crop",
+        thumbnail: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=2600&auto=format&fit=crop",
         channel: followers[3],
         viewers: 0,
         isBirthday: false,
         scheduledFor: "Mon, 6:00 PM"
+    },
+    {
+        id: "ue5",
+        title: "Digital Art Workshop 🎨",
+        thumbnail: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2671&auto=format&fit=crop",
+        channel: followers[0], // Sarah
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Tue, 4:00 PM"
+    },
+    {
+        id: "ue6",
+        title: "Speedrun Challenge: Mario 🍄",
+        thumbnail: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=2642&auto=format&fit=crop",
+        channel: followers[1], // Mike
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Wed, 9:00 PM"
+    },
+    {
+        id: "ue7",
+        title: "Jazz Night Session 🎷",
+        thumbnail: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[2], // Emily
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Thu, 8:00 PM"
+    },
+    {
+        id: "ue8",
+        title: "Morning Fitness Routine 💪",
+        thumbnail: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[3], // Chris
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Fri, 7:00 AM"
+    },
+    {
+        id: "ue9",
+        title: "React Native Crash Course 📱",
+        thumbnail: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[0], // Sarah
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Sat, 2:00 PM"
+    },
+    {
+        id: "ue10",
+        title: "Indie Game Showcase 🎮",
+        thumbnail: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[1], // Mike
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Sun, 3:00 PM"
+    },
+    {
+        id: "ue11",
+        title: "Songwriting Live Stream 🎵",
+        thumbnail: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[2], // Emily
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Mon, 6:00 PM"
+    },
+    {
+        id: "ue12",
+        title: "Ask Me Anything: Career 💼",
+        thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[3], // Chris
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Tue, 5:00 PM"
+    },
+    {
+        id: "ue13",
+        title: "Live Coding: Portfolio Site 💻",
+        thumbnail: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2672&auto=format&fit=crop",
+        channel: followers[0], // Sarah
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Wed, 10:00 AM"
+    },
+    {
+        id: "ue14",
+        title: "Retro Gaming Night 🕹️",
+        thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2670&auto=format&fit=crop",
+        channel: followers[1], // Mike
+        viewers: 0,
+        isBirthday: false,
+        scheduledFor: "Thu, 9:00 PM"
     }
 ];
 
@@ -409,6 +578,104 @@ export const famousPeople: FamousPerson[] = [
         followerCount: "900K",
         description: "Outdoor explorer and adventure photographer. Let's see the world together.",
         coverImage: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2621&auto=format&fit=crop"
+    },
+    {
+        id: "u7",
+        name: "Alexia Star",
+        username: "@alexia_s",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alexia",
+        isFollowing: false,
+        followerCount: "1.1M",
+        description: "Fashion & Beauty expert. Daily tips and tricks.",
+        coverImage: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+        id: "u8",
+        name: "David Rock",
+        username: "@david_r",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+        isFollowing: false,
+        followerCount: "4.5M",
+        description: "Fitness coach & motivator. Let's get fit together!",
+        coverImage: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+        id: "u9",
+        name: "Sophia Art",
+        username: "@sophia_art",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia",
+        isFollowing: false,
+        followerCount: "850K",
+        description: "Digital artist & animator. Watch me create magic.",
+        coverImage: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2671&auto=format&fit=crop"
+    },
+    {
+        id: "u10",
+        name: "James Cook",
+        username: "@james_cook",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=James",
+        isFollowing: false,
+        followerCount: "2.8M",
+        description: "Culinary master. Delicious recipes every week.",
+        coverImage: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=2600&auto=format&fit=crop"
+    }
+];
+
+export interface CompanyAd {
+    id: string;
+    companyName: string;
+    description: string;
+    banner: string;
+    logo: string;
+    link: string;
+    cta: string;
+}
+
+export const companyAds: CompanyAd[] = [
+    {
+        id: "ad1",
+        companyName: "TechGear Pro",
+        description: "Upgrade your setup with the latest gaming peripherals. Keyboards, mice, and headsets designed for champions.",
+        banner: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2670&auto=format&fit=crop",
+        logo: "https://api.dicebear.com/7.x/identicon/svg?seed=TechGear",
+        link: "https://example.com/techgear",
+        cta: "Shop Now"
+    },
+    {
+        id: "ad2",
+        companyName: "FreshFocus Energy",
+        description: "Stay sharp and focused during your longest streams with our natural, sugar-free energy drink.",
+        banner: "https://images.unsplash.com/photo-uTBMw32LIOI?q=80&w=2670&auto=format&fit=crop",
+        logo: "https://api.dicebear.com/7.x/identicon/svg?seed=FreshFocus",
+        link: "https://example.com/freshfocus",
+        cta: "Try It Free"
+    },
+    {
+        id: "ad3",
+        companyName: "CodeMaster Academy",
+        description: "Learn to code from industry experts. Master React, Node.js, and Python in just 12 weeks.",
+        banner: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1740&auto=format&fit=crop",
+        logo: "https://api.dicebear.com/7.x/identicon/svg?seed=CodeMaster",
+        link: "https://example.com/codemaster",
+        cta: "Start Learning"
+    },
+    {
+        id: "ad4",
+        companyName: "StreamLabs OBS",
+        description: "The best free streaming software. Go live on Twitch, YouTube, and Facebook in seconds.",
+        banner: "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?q=80&w=2574&auto=format&fit=crop",
+        logo: "https://api.dicebear.com/7.x/identicon/svg?seed=StreamLabs",
+        link: "https://example.com/streamlabs",
+        cta: "Download"
+    },
+    {
+        id: "ad5",
+        companyName: "UrbanWear Styles",
+        description: "Define your look with our exclusive collection of streetwear. Hoodies, tees, and accessories.",
+        banner: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2670&auto=format&fit=crop",
+        logo: "https://api.dicebear.com/7.x/identicon/svg?seed=UrbanWear",
+        link: "https://example.com/urbanwear",
+        cta: "View Collection"
     }
 ];
 

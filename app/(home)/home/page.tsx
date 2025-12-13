@@ -1,12 +1,10 @@
-import { birthdayLives, upcomingEvents, finishedEvents, famousPeople } from "@/lib/data";
+import { birthdayLives, upcomingEvents, finishedEvents, famousPeople, followers, companyAds } from "@/lib/data";
 import { LiveSection } from "./components/live-section";
 import { UpcomingSection } from "./components/upcoming-section";
-import { FinishedSection } from "./components/finished-section";
+import { JFYSection } from "./components/jfy-section";
 import { FamousSection } from "./components/famous-section";
 import { AdsBanner } from "./components/ads-banner";
 import { BackgroundBlobs } from "@/components/ui/background-blobs";
-import { Suspense } from "react";
-
 
 
 export default async function HomePage({
@@ -18,10 +16,10 @@ export default async function HomePage({
     const resolvedSearchParams = await searchParams;
     const category = resolvedSearchParams?.category;
     let filteredLives = [...birthdayLives];
-    let sectionTitle = "Featured Live";
+    let sectionTitle = "Trending Live";
 
     if (category && typeof category === 'string' && category !== "All") {
-        sectionTitle = `Top ${category}`;
+        sectionTitle = `Trending ${category}`;
         const term = category.toLowerCase();
 
         if (term === 'gaming') {
@@ -29,7 +27,8 @@ export default async function HomePage({
                 l.title.toLowerCase().includes("gaming") ||
                 l.title.toLowerCase().includes("game") ||
                 l.title.toLowerCase().includes("minecraft") ||
-                l.title.toLowerCase().includes("fortnite")
+                l.title.toLowerCase().includes("fortnite") ||
+                l.title.toLowerCase().includes("valorant")
             );
         } else if (term === 'sing' || term === 'music') {
             filteredLives = filteredLives.filter(l =>
@@ -43,22 +42,33 @@ export default async function HomePage({
         // 'Live' category generally means everything in this context, or maybe 'Just Chatting'
     }
 
+    // Sort by viewers (descending) and take top 10
+    filteredLives.sort((a, b) => b.viewers - a.viewers);
+    filteredLives = filteredLives.slice(0, 5);
+
 
     return (
         <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
             <BackgroundBlobs />
             <div className="p-4 md:p-6 space-y-16 max-w-[2000px] mx-auto w-full relative z-10 pb-20">
+
+                {/* Ads Banner */}
+                <AdsBanner />
+
                 {/* Live Section */}
                 <LiveSection lives={filteredLives} title={sectionTitle} />
 
                 {/* Upcoming Events Section */}
-                {/* <UpcomingSection events={upcomingEvents} /> */}
+                <UpcomingSection events={upcomingEvents.slice(0, 10)} />
 
-                {/* Just Finished Section */}
-                <FinishedSection events={finishedEvents} />
+                {/* Just For You Section */}
+                <JFYSection
+                    liveStreams={birthdayLives.filter(l => followers.some(f => f.id === l.channel.id))}
+                    upcomingStreams={upcomingEvents.filter(u => followers.some(f => f.id === u.channel.id))}
+                />
 
-                {/* Ads Banner */}
-                <AdsBanner />
+
+
                 {/* Famous People Section */}
                 <FamousSection people={famousPeople} />
             </div>

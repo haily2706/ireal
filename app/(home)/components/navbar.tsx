@@ -35,7 +35,8 @@ export const categories = [
     "All",
     "Live",
     "Gaming",
-    "Sing"
+    "Singing",
+    "Famous"
 ];
 
 interface NavbarProps { }

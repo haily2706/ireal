@@ -90,6 +90,14 @@ export function Navbar() {
 
                 {/* Right Section: Actions */}
                 <div className="flex items-center justify-end gap-3 flex-1">
+                    <div className="hidden md:flex items-center mr-2">
+                        <Button variant="ghost" size="sm" asChild className="gap-2 text-muted-foreground hover:text-foreground">
+                            <Link href="/home">
+                                <LogOut className="h-4 w-4" />
+                                <span className="hidden lg:inline">Back to Home</span>
+                            </Link>
+                        </Button>
+                    </div>
                     <div className="flex items-center gap-1 border-r border-border pr-3 mr-1">
                         <div className="hover:bg-accent rounded-full transition-colors">
                             <NotiDropdown />
