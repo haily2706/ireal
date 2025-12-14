@@ -69,17 +69,33 @@ export function Navbar() {
         return () => observer.disconnect();
     }, []);
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2,
+            },
+        },
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0 },
+    };
+
     return (
         <>
             <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/60">
-                <div className="container mx-auto flex items-center justify-between px-4 py--0">
+                <div className="container mx-auto flex h-16 items-center justify-between px-4">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2">
-                        <TextLogo className="h-16" />
+                        <TextLogo className="h-14 md:h-16" />
                     </Link>
 
                     {/* Desktop Links */}
-                    <nav className="hidden md:flex items-center gap-8">
+                    <nav className="hidden lg:flex items-center gap-8">
                         {navLinks.map((link, index) => {
                             const isActive = link.href.includes("#")
                                 ? activeSection === `#${link.href.split('#')[1]}`
@@ -112,7 +128,7 @@ export function Navbar() {
                     </nav>
 
                     {/* Desktop Right Side */}
-                    <div className="hidden md:flex items-center gap-4">
+                    <div className="hidden lg:flex items-center gap-4">
                         <ModeToggle />
                         {user ? (
                             <>
@@ -156,7 +172,10 @@ export function Navbar() {
                     </div>
 
                     {/* Mobile Menu Trigger */}
-                    <div className="flex md:hidden flex-1 justify-end">
+                    <div className="flex lg:hidden flex-1 justify-end items-center gap-4">
+                        <div className="lg:hidden">
+                            <ModeToggle />
+                        </div>
                         <button
                             onClick={() => setIsMobileMenuOpen(true)}
                             className="p-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -176,12 +195,11 @@ export function Navbar() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed inset-0 z-100 flex flex-col bg-background/95 backdrop-blur-3xl p-6 md:hidden"
+                        className="fixed inset-0 z-100 flex flex-col bg-background/95 backdrop-blur-3xl p-6 lg:hidden"
                     >
                         <div className="flex items-center justify-between mb-8">
-                            <TextLogo className="h-10" />
+                            <TextLogo className="h-16" />
                             <div className="flex items-center gap-4">
-                                <ModeToggle />
                                 <button
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="p-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -192,33 +210,44 @@ export function Navbar() {
                             </div>
                         </div>
 
-                        <nav className="flex flex-col gap-6">
+                        <motion.nav
+                            className="flex flex-col gap-6"
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="show"
+                        >
                             {navLinks.map((link) => {
                                 const isActive = link.href.includes("#")
                                     ? activeSection === `#${link.href.split('#')[1]}`
                                     : pathname === link.href;
                                 return (
-                                    <Link
-                                        key={link.name}
-                                        href={link.href}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                        className={`text-lg font-medium transition-colors ${isActive
-                                            ? "text-foreground"
-                                            : "text-muted-foreground hover:text-foreground"
-                                            }`}
-                                    >
-                                        {link.name}
-                                    </Link>
+                                    <motion.div key={link.name} variants={itemVariants}>
+                                        <Link
+                                            href={link.href}
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className={`text-2xl font-medium transition-colors ${isActive
+                                                ? "text-foreground"
+                                                : "text-muted-foreground hover:text-foreground"
+                                                }`}
+                                        >
+                                            {link.name}
+                                        </Link>
+                                    </motion.div>
                                 );
                             })}
-                        </nav>
+                        </motion.nav>
 
-                        <div className="mt-auto space-y-4 border-t pt-6">
+                        <motion.div
+                            className="mt-auto space-y-4 border-t pt-6 pb-20"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                        >
                             {user ? (
                                 <>
                                     <Link href="/home" onClick={() => setIsMobileMenuOpen(false)}>
                                         <Button
-                                            className="w-full h-12 text-lg hover:text-pink-500 hover:bg-pink-500/10"
+                                            className="mb-4 w-full h-12 text-lg hover:text-pink-500 hover:bg-pink-500/10"
                                             variant="outline"
                                         >
                                             Home
@@ -257,7 +286,7 @@ export function Navbar() {
                                     </Button>
                                 </>
                             )}
-                        </div>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
