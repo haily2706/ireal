@@ -34,10 +34,11 @@ import { UserMenu } from "@/app/components/auth/user-menu";
 
 export const categories = [
     "All",
-    "Live",
+    "Birthday",
     "Gaming",
     "Singing",
-    "Famous"
+    "Famous",
+    "Sports"
 ];
 
 interface NavbarProps { }

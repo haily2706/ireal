@@ -80,7 +80,7 @@ export function FeaturesSection() {
                         </span>
                     </h2>
                     <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                        Professional streaming tools designed specifically for birthday celebrations
+                        Professional streaming tools designed specifically for event celebrations
                     </p>
                 </motion.div>
 

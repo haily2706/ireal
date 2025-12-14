@@ -4,6 +4,7 @@ import { use, useEffect, useState } from "react";
 import { birthdayLives, LiveStream } from "@/lib/data";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     ThumbsUp,
@@ -12,7 +13,9 @@ import {
     MoreHorizontal,
     Maximize2,
     Play,
+    Pause,
     Volume2,
+    VolumeX,
     Settings,
     MessageSquare,
     Scissors,
@@ -29,6 +32,9 @@ export function LiveClient({ username }: LiveClientProps) {
     const [hearts, setHearts] = useState<{ id: number; left: number; color: string }[]>([]);
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [likeTrigger, setLikeTrigger] = useState(0);
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(true);
+    const [isMuted, setIsMuted] = useState(false);
 
     const handleLike = () => {
         setLikeTrigger(prev => prev + 1);
@@ -159,7 +165,7 @@ export function LiveClient({ username }: LiveClientProps) {
                             </div>
 
                             {/* Overlay Controls */}
-                            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-transparent to-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6">
+                            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-transparent to-black/60 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6">
                                 {/* Top Controls */}
                                 <div className="flex justify-between items-start">
                                     <div className="flex items-center gap-3">
@@ -201,11 +207,29 @@ export function LiveClient({ username }: LiveClientProps) {
 
                                     <div className="flex items-center justify-between animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
                                         <div className="flex items-center gap-2">
-                                            <Button size="icon" variant="ghost" className="text-white hover:bg-white/10 hover:scale-110 transition-transform">
-                                                <Play className="w-8 h-8 fill-current" />
+                                            <Button
+                                                size="icon"
+                                                variant="ghost"
+                                                className="text-white hover:bg-white/10 hover:scale-110 transition-transform"
+                                                onClick={() => setIsPlaying(!isPlaying)}
+                                            >
+                                                {isPlaying ? (
+                                                    <Pause className="w-8 h-8 fill-current" />
+                                                ) : (
+                                                    <Play className="w-8 h-8 fill-current" />
+                                                )}
                                             </Button>
-                                            <Button size="icon" variant="ghost" className="text-white hover:bg-white/10">
-                                                <Volume2 className="w-6 h-6" />
+                                            <Button
+                                                size="icon"
+                                                variant="ghost"
+                                                className="text-white hover:bg-white/10"
+                                                onClick={() => setIsMuted(!isMuted)}
+                                            >
+                                                {isMuted ? (
+                                                    <VolumeX className="w-6 h-6" />
+                                                ) : (
+                                                    <Volume2 className="w-6 h-6" />
+                                                )}
                                             </Button>
                                             <div className="text-sm font-medium ml-2 px-2 py-1 bg-red-600 rounded text-white flex items-center gap-2">
                                                 <span className="w-2 h-2 bg-white rounded-full" />
@@ -317,8 +341,32 @@ export function LiveClient({ username }: LiveClientProps) {
                 </div>
             </div>
 
-            {/* Chat Sidebar */}
-            <ChatList />
+            {/* Desktop Chat Sidebar */}
+            <ChatList className="hidden lg:flex" />
+
+            {/* Mobile Chat Button & Sheet */}
+            <div className="lg:hidden">
+                <Sheet open={isChatOpen} onOpenChange={setIsChatOpen}>
+                    <SheetTrigger asChild>
+                        <Button
+                            className="fixed bottom-6 right-6 z-50 rounded-full h-10 w-10 shadow-2xl bg-linear-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white transition-all hover:scale-110 active:scale-95 ring-offset-2 ring-offset-background ring-2 ring-indigo-500 animate-in fade-in zoom-in slide-in-from-bottom-10 duration-500"
+                            size="icon"
+                        >
+                            <MessageSquare className="w-7 h-7 fill-current drop-shadow-md animate-[bounce_2s_infinite]" />
+                            <span className="absolute top-0 right-0 flex h-4 w-4 -mt-1 -mr-1">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-background"></span>
+                            </span>
+                            <span className="sr-only">Open Chat</span>
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side="bottom" className="h-[85vh] p-0 border-t-0 rounded-t-3xl overflow-hidden bg-background">
+                        <div className="h-full w-full">
+                            <ChatList className="h-full w-full border-0" onClose={() => setIsChatOpen(false)} />
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            </div>
         </div>
     );
 }

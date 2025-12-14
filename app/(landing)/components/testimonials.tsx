@@ -52,7 +52,7 @@ export function Testimonials() {
                         </span>
                     </h2>
                     <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                        See how streamers are turning their birthdays into unforgettable experiences
+                        See how streamers are turning their streams into unforgettable experiences
                     </p>
                 </motion.div>
 

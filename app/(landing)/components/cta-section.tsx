@@ -1,9 +1,46 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Cake, ArrowRight } from "lucide-react";
 import Link from "next/link";
+
+const RotatingText = () => {
+    const items = [
+        { text: "Birthday", color: "bg-linear-to-r from-pink-500 via-rose-500 to-yellow-500" },
+        { text: "Gaming", color: "bg-linear-to-r from-purple-500 via-violet-500 to-indigo-500" },
+        { text: "Singing", color: "bg-linear-to-r from-cyan-400 via-blue-500 to-purple-500" },
+        { text: "FanMeet", color: "bg-linear-to-r from-orange-500 via-amber-500 to-yellow-400" },
+        { text: "Sports", color: "bg-linear-to-r from-green-400 via-emerald-500 to-teal-500" },
+    ];
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % items.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <span className="inline-grid grid-cols-1 place-items-center h-[1em] align-bottom overflow-hidden mx-2">
+            <span className="opacity-0 col-start-1 row-start-1 invisible pointer-events-none">Birthday</span>
+            <AnimatePresence mode="wait">
+                <motion.span
+                    key={index}
+                    initial={{ y: "100%", opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: "-100%", opacity: 0 }}
+                    transition={{ duration: 0.5, ease: "circOut" }}
+                    className={`col-start-1 row-start-1 bg-clip-text text-transparent animate-gradient bg-300% ${items[index].color}`}
+                >
+                    {items[index].text}
+                </motion.span>
+            </AnimatePresence>
+        </span>
+    );
+};
 
 export function CTASection() {
     return (
@@ -60,14 +97,14 @@ export function CTASection() {
 
                     {/* Headline */}
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
-                        Ready to Make Your Birthday{" "}
+                        Ready to Make Your <RotatingText />
                         <span className="bg-linear-to-r from-pink-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
                             Unforgettable?
                         </span>
                     </h2>
 
                     <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
-                        Join thousands of creators who are turning their birthdays into amazing
+                        Join thousands of creators who are turning their streams into amazing
                         live experiences. Start streaming for free today!
                     </p>
 
