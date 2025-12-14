@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Plus, ArrowUpRight, ArrowDownLeft, CreditCard, MoreHorizontal, Wallet as WalletIcon } from "lucide-react";
+import { Coin } from "@/components/ui/coin";
 import Image from "next/image";
 
 export default function WalletPage() {
@@ -19,17 +20,22 @@ export default function WalletPage() {
 
             {/* Balance Section */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="col-span-2 overflow-hidden relative border-none bg-linear-to-br from-primary/10 via-primary/5 to-background shadow-xl">
-                    <div className="absolute top-0 right-0 p-4 opacity-5">
-                        <WalletIcon className="w-32 h-32" />
+                <Card className="col-span-2 overflow-hidden relative border-none bg-linear-to-br from-primary/10 via-primary/5 to-background shadow-xl group">
+                    {/* Background Coin */}
+                    <div className="absolute -right-5 -bottom-5 opacity-[0.05] group-hover:opacity-15 transition-all duration-500 rotate-[15deg] group-hover:rotate-0 scale-100 group-hover:scale-110 pointer-events-none">
+                        <Coin className="w-56 h-56 blur-[1px]" />
                     </div>
+
                     <CardHeader className="pb-2 relative z-10">
                         <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total Balance</CardTitle>
                     </CardHeader>
                     <CardContent className="relative z-10">
-                        <div className="flex items-baseline gap-1">
-                            <div className="text-4xl font-bold tracking-tighter">$98,890</div>
+                        <div className="flex items-baseline gap-1 mb-1">
+                            <div className="text-4xl font-bold tracking-tighter">98,890</div>
                             <div className="text-2xl font-normal text-muted-foreground">.00</div>
+                        </div>
+                        <div className="text-sm font-medium text-muted-foreground">
+                            ≈ $988.90 USD
                         </div>
                         <div className="flex items-center gap-2 mt-2">
                             <div className="px-2 py-0.5 rounded-full bg-green-500/10 text-green-500 text-xs font-medium">

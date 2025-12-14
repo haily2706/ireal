@@ -26,13 +26,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSidebar } from "@/app/(home)/components/provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Coin } from "@/components/ui/coin";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 
 export function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
-    const { isCollapsed, toggleSidebar } = useSidebar();
+    const { isCollapsed, toggleSidebar, showPremiumBalance } = useSidebar();
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const subscription = "Creator" as "Free" | "Pro" | "Creator"; // Mock Data
 
@@ -80,7 +81,7 @@ export function Sidebar() {
                 <div className="absolute -bottom-[10%] left-[10%] w-[40%] h-[30%] bg-pink-500/5 dark:bg-pink-500/10 blur-[80px] rounded-full" />
             </div>
 
-            <div className={cn("h-12 flex items-center relative z-20", isCollapsed ? "justify-center" : "justify-between px-2")}>
+            <div className={cn("h-12 mb-4 flex items-center relative z-20", isCollapsed ? "justify-center" : "justify-between px-2")}>
                 <Button
                     variant="ghost"
                     size="icon"
@@ -158,26 +159,32 @@ export function Sidebar() {
                                         </div>
 
                                         {/* Premium Balance Card */}
-                                        <div
-                                            onClick={() => router.push("/settings/wallet")}
-                                            className="mt-6 p-4 rounded-2xl bg-linear-to-b from-muted/50 to-transparent border border-border backdrop-blur-md shadow-2xl relative overflow-hidden group cursor-pointer hover:border-purple-500/50 transition-all duration-300"
-                                        >
-                                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-foreground/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                                        {showPremiumBalance && (
+                                            <div
+                                                onClick={() => router.push("/settings/wallet")}
+                                                className="mt-6 p-4 rounded-2xl bg-linear-to-b from-muted/50 to-transparent border border-border backdrop-blur-md relative overflow-hidden group cursor-pointer hover:border-purple-500/50 transition-all duration-300"
+                                            >
+                                                {/* Background Coin */}
+                                                <div className="absolute -right-5 -bottom-5 opacity-[0.05] group-hover:opacity-15 transition-all duration-500 rotate-[15deg] group-hover:rotate-0 scale-100 group-hover:scale-110 pointer-events-none">
+                                                    <Coin className="w-28 h-28 blur-[1px]" />
+                                                </div>
 
-                                            <div className="flex items-center justify-between mb-2">
-                                                <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
-                                                    <div className="p-1 rounded-md bg-muted/50">
-                                                        <Wallet className="w-3 h-3 text-yellow-600 dark:text-yellow-500" />
+                                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-foreground/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
+
+                                                <div className="flex items-center justify-between mb-2 relative z-10">
+                                                    <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
+                                                        <div className="p-1 rounded-md bg-muted/50">
+                                                            <Wallet className="w-3 h-3 text-yellow-600 dark:text-yellow-500" />
+                                                        </div>
+                                                        Balance
                                                     </div>
-                                                    Balance
+                                                </div>
+
+                                                <div className="text-xl font-bold text-foreground tracking-tighter text-left flex items-center gap-1 relative z-10">
+                                                    98,890
                                                 </div>
                                             </div>
-
-                                            <div className="text-xl font-bold text-foreground tracking-tighter text-left">
-                                                <span className="text-sm text-muted-foreground align-top mr-1">$</span>
-                                                98,890
-                                            </div>
-                                        </div>
+                                        )}
                                     </motion.div>
                                 )}
                             </AnimatePresence>

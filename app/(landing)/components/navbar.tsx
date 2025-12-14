@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
@@ -11,6 +10,7 @@ import { ModeToggle } from "@/app/components/theme/mode-toggle";
 import { useAuthModal } from "@/app/components/auth/use-auth-modal";
 import { useAuthStore } from "@/app/components/auth/use-auth-store";
 import { UserMenu } from "@/app/components/auth/user-menu";
+import { TextLogo } from "@/components/ui/text-logo";
 
 const navLinks = [
     { name: "How it Works", href: "/#how-it-works" }, // Absolute paths for cross-page nav
@@ -75,14 +75,7 @@ export function Navbar() {
                 <div className="container mx-auto flex items-center justify-between px-4 py--0">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2">
-                        <Image
-                            src="/text-logo.svg"
-                            alt="LiveReal Logo"
-                            width={160}
-                            height={40}
-                            className="w-auto h-16 hover:opacity-80 transition-opacity"
-                            priority
-                        />
+                        <TextLogo className="h-16" />
                     </Link>
 
                     {/* Desktop Links */}
@@ -186,13 +179,7 @@ export function Navbar() {
                         className="fixed inset-0 z-100 flex flex-col bg-background/95 backdrop-blur-3xl p-6 md:hidden"
                     >
                         <div className="flex items-center justify-between mb-8">
-                            <Image
-                                src="/text-logo.svg"
-                                alt="LiveReal Logo"
-                                width={160}
-                                height={40}
-                                className="h-10 w-auto"
-                            />
+                            <TextLogo className="h-10" />
                             <div className="flex items-center gap-4">
                                 <ModeToggle />
                                 <button

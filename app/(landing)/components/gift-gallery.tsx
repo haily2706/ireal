@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import Image from "next/image";
+
+import { Coin } from "@/components/ui/coin";
 
 const gifts = [
     {
@@ -118,14 +119,7 @@ export function GiftGallery() {
                                 {/* Value */}
                                 <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-linear-to-r ${gift.color}`}>
                                     <span className="text-xs font-medium">{gift.coins}</span>
-                                    <div className="relative w-3.5 h-3.5">
-                                        <Image
-                                            src="/coin.svg"
-                                            alt="coin"
-                                            fill
-                                            className="object-contain"
-                                        />
-                                    </div>
+                                    <Coin className="w-3.5 h-3.5" />
                                 </div>
 
                                 {/* Real Value */}
@@ -146,14 +140,7 @@ export function GiftGallery() {
                     className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground mt-10"
                 >
                     <span>💡 100</span>
-                    <span className="relative w-3.5 h-3.5">
-                        <Image
-                            src="/coin.svg"
-                            alt="coin"
-                            fill
-                            className="object-contain"
-                        />
-                    </span>
+                    <Coin className="w-3.5 h-3.5" />
                     <span>= $1.00 • Withdraw earnings anytime with zero fees</span>
                 </motion.p>
             </div>

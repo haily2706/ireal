@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { LayoutDashboard, Users, Settings, LogOut } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import { TextLogo } from "@/components/ui/text-logo";
 
 
 const mobileLinks = [
@@ -58,10 +58,7 @@ export function Navbar() {
                             <SheetHeader className="p-6 border-b border-border">
                                 <SheetTitle asChild>
                                     <Link href="/dashboard" className="flex items-center gap-3">
-                                        <div className="h-10 w-10 rounded-xl bg-linear-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                                            <span className="font-bold text-lg text-white">iR</span>
-                                        </div>
-                                        <span className="font-bold text-xl text-foreground">iReal</span>
+                                        <TextLogo className="h-10" />
                                     </Link>
                                 </SheetTitle>
                             </SheetHeader>
@@ -79,6 +76,7 @@ export function Navbar() {
                             </nav>
                         </SheetContent>
                     </Sheet>
+
                     {/* Page Title with dynamic effect */}
                     <div className="hidden md:block">
                         <h1 className="text-lg font-bold tracking-tight bg-linear-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">

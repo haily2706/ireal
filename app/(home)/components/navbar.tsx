@@ -18,6 +18,7 @@ import { currentUser } from "@/lib/data";
 
 import { ModeToggle } from "@/app/components/theme/mode-toggle";
 import { NotiDropdown } from "./noti-dropdown";
+import { TextLogo } from "@/components/ui/text-logo";
 
 const appLinks = [
     { name: "Home", href: "/home" },
@@ -80,14 +81,7 @@ export function Navbar({ }: NavbarProps) {
             >
                 <div className="flex h-14 items-center justify-between pl-2 pr-6 relative z-10 gap-4">
                     <Link href="/">
-                        <Image
-                            src="/text-logo.svg"
-                            alt="LiveReal Logo"
-                            width={160}
-                            height={40}
-                            className="w-auto h-18 hover:opacity-80 transition-opacity"
-                            priority
-                        />
+                        <TextLogo />
                     </Link>
 
                     {/* Center Section - Toggle between Pills and Search */}

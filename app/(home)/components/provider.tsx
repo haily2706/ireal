@@ -5,16 +5,25 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 interface SidebarContextType {
     isCollapsed: boolean;
     toggleSidebar: () => void;
+    showPremiumBalance: boolean;
+    togglePremiumBalance: () => void;
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function HomeProvider({ children }: { children: React.ReactNode }) {
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [showPremiumBalance, setShowPremiumBalance] = useState(true);
+
     useEffect(() => {
-        const stored = localStorage.getItem("sidebar-collapsed");
-        if (stored) {
-            setIsCollapsed(JSON.parse(stored));
+        const storedCollapsed = localStorage.getItem("sidebar-collapsed");
+        if (storedCollapsed) {
+            setIsCollapsed(JSON.parse(storedCollapsed));
+        }
+
+        const storedBalance = localStorage.getItem("sidebar-show-premium-balance");
+        if (storedBalance) {
+            setShowPremiumBalance(JSON.parse(storedBalance));
         }
     }, []);
 
@@ -26,8 +35,16 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
         });
     };
 
+    const togglePremiumBalance = () => {
+        setShowPremiumBalance((prev) => {
+            const newState = !prev;
+            localStorage.setItem("sidebar-show-premium-balance", JSON.stringify(newState));
+            return newState;
+        });
+    };
+
     return (
-        <SidebarContext.Provider value={{ isCollapsed, toggleSidebar }}>
+        <SidebarContext.Provider value={{ isCollapsed, toggleSidebar, showPremiumBalance, togglePremiumBalance }}>
             {children}
         </SidebarContext.Provider>
     );

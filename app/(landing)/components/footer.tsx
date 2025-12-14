@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Instagram, Twitter, Youtube } from "lucide-react";
-import Image from "next/image";
+import { TextLogo } from "@/components/ui/text-logo";
 
 export function Footer() {
     return (
@@ -10,14 +10,7 @@ export function Footer() {
                     {/* Copyright */}
                     <div className="flex flex-col items-center md:items-start gap-2">
                         <div className="flex items-center gap-2">
-                            <Image
-                                src="/text-logo.svg"
-                                alt="LiveReal Logo"
-                                width={160}
-                                height={20}
-                                className="w-auto h-12 hover:opacity-80 transition-opacity"
-                                priority
-                            />
+                            <TextLogo className="h-12" />
                         </div>
                         <p className="text-sm text-muted-foreground pl-2">
                             © {new Date().getFullYear()} LiveReal. All rights reserved.

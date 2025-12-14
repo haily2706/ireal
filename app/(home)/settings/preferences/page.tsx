@@ -1,6 +1,13 @@
+"use client";
+
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { useSidebar } from "@/app/(home)/components/provider";
 
 export default function PreferencesPage() {
+    const { showPremiumBalance, togglePremiumBalance } = useSidebar();
+
     return (
         <div className="space-y-6">
             <div>
@@ -10,7 +17,21 @@ export default function PreferencesPage() {
                 </p>
             </div>
             <Separator />
-            <div className="text-sm text-muted-foreground">Preferences coming soon...</div>
+
+            <div className="space-y-4">
+                <div className="flex items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                        <Label className="text-base">Premium Balance</Label>
+                        <p className="text-sm text-muted-foreground">
+                            Show your premium coin balance card in the sidebar.
+                        </p>
+                    </div>
+                    <Switch
+                        checked={showPremiumBalance}
+                        onCheckedChange={togglePremiumBalance}
+                    />
+                </div>
+            </div>
         </div>
     );
 }

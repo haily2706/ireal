@@ -23,6 +23,7 @@ import { useSidebar } from "./provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import { TextLogo } from "@/components/ui/text-logo";
 
 export function Sidebar() {
     const pathname = usePathname();
@@ -76,7 +77,12 @@ export function Sidebar() {
                 <div className="absolute -bottom-[10%] left-[10%] w-[40%] h-[30%] bg-pink-500/5 dark:bg-pink-500/10 blur-[80px] rounded-full" />
             </div>
 
-            <div className={cn("h-12 flex items-center relative z-20", isCollapsed ? "justify-center" : "justify-between px-2")}>
+            <div className={cn("h-14 flex items-center relative z-20", isCollapsed ? "justify-center" : "justify-between pr-2")}>
+                {!isCollapsed && (
+                    <Link href="/dashboard" className="flex items-center">
+                        <TextLogo className="h-16 w-auto" />
+                    </Link>
+                )}
                 <Button
                     variant="ghost"
                     size="icon"
@@ -101,7 +107,7 @@ export function Sidebar() {
                 </Badge> */}
             </div>
 
-            <div className="flex flex-col flex-1 h-full overflow-y-auto custom-scrollbar relative z-10 px-2 space-y-2 pb-4 gap-4">
+            <div className=" mt-4 flex flex-col flex-1 h-full overflow-y-auto custom-scrollbar relative z-10 px-2 space-y-2 pb-4 gap-4">
                 {/* Profile Section */}
                 <div className={cn("flex flex-col items-center transition-all duration-300", isCollapsed ? "px-0" : "px-2")}>
                     {user ? (
