@@ -25,9 +25,6 @@ export function StreamCard({ stream, type, index, rank, showRemindMe = false, is
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
             className={`group relative flex flex-col gap-3 ${isVertical ? 'row-span-2' : 'col-span-1'}`}
         >
             {/* Stream/Event Card */}

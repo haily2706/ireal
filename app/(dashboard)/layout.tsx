@@ -10,13 +10,18 @@ export const metadata: Metadata = {
     description: "LiveReal Admin Dashboard",
 };
 
-export default function DashboardLayout({
+import { cookies } from "next/headers";
+
+export default async function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const cookieStore = await cookies();
+    const defaultCollapsed = cookieStore.get("dashboard-sidebar-collapsed")?.value === "true";
+
     return (
-        <DashboardProvider>
+        <DashboardProvider defaultCollapsed={defaultCollapsed}>
             <div className="flex min-h-screen bg-transparent text-foreground">
                 <Sidebar />
                 <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out">

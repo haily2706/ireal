@@ -8,13 +8,14 @@ import { useAuthStore } from "@/app/components/auth/use-auth-store";
 export function AuthListener() {
     const supabase = createClient();
     const router = useRouter();
-    const { setUser } = useAuthStore();
+    const { setUser, setIsLoading } = useAuthStore();
 
     useEffect(() => {
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((event, session) => {
             setUser(session?.user ?? null);
+            setIsLoading(false);
             if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
                 router.refresh();
             }
@@ -23,7 +24,7 @@ export function AuthListener() {
         return () => {
             subscription.unsubscribe();
         };
-    }, [setUser, router]);
+    }, [setUser, setIsLoading, router]);
 
     return null;
 }

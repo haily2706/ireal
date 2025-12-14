@@ -47,7 +47,7 @@ export function Navbar({ }: NavbarProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isSearchFocused, setIsSearchFocused] = useState(false);
     const { onOpen } = useAuthModal();
-    const { user } = useAuthStore();
+    const { user, isLoading } = useAuthStore();
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -74,9 +74,7 @@ export function Navbar({ }: NavbarProps) {
 
     return (
         <>
-            <motion.header
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
+            <header
                 className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/80"
             >
                 <div className="flex h-14 items-center justify-between px-6 relative z-10 gap-4">
@@ -86,7 +84,7 @@ export function Navbar({ }: NavbarProps) {
 
                     {/* Center Section - Toggle between Pills and Search */}
                     <div className="hidden md:flex flex-1 max-w-[850px] items-center justify-center bg-transparent relative">
-                        <AnimatePresence mode="popLayout">
+                        <AnimatePresence mode="popLayout" initial={false}>
                             {isSearchFocused ? (
                                 <motion.div
                                     key="search-bar"
@@ -172,22 +170,25 @@ export function Navbar({ }: NavbarProps) {
                             </Button>
                         </div>
                         {/* Desktop Search Trigger */}
-                        {!isSearchFocused && (
-                            <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="hidden md:block"
-                            >
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="text-muted-foreground hover:text-foreground rounded-full"
-                                    onClick={() => setIsSearchFocused(true)}
+                        <AnimatePresence initial={false}>
+                            {!isSearchFocused && (
+                                <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    exit={{ scale: 0 }}
+                                    className="hidden md:block"
                                 >
-                                    <Search className="h-5 w-5" />
-                                </Button>
-                            </motion.div>
-                        )}
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="text-muted-foreground hover:text-foreground rounded-full"
+                                        onClick={() => setIsSearchFocused(true)}
+                                    >
+                                        <Search className="h-5 w-5" />
+                                    </Button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         {user && <NotiDropdown />}
 
@@ -195,7 +196,9 @@ export function Navbar({ }: NavbarProps) {
                             <ModeToggle />
                         </div>
 
-                        {user ? (
+                        {isLoading ? (
+                            <div className="h-10 w-10 rounded-full bg-muted animate-pulse" />
+                        ) : user ? (
                             <UserMenu email={user.email} />
                         ) : (
                             <>
@@ -238,7 +241,7 @@ export function Navbar({ }: NavbarProps) {
                         );
                     })}
                 </div>
-            </motion.header >
+            </header>
 
             {/* Mobile Search - Visible only on mobile */}
             <AnimatePresence>

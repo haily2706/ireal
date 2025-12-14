@@ -28,7 +28,11 @@ export function AdsBanner() {
                         <Button size="sm" className="bg-white text-indigo-600 hover:bg-indigo-50 font-bold rounded-full shadow-md hover:shadow-lg transition-all h-9 px-4">
                             Get Premium
                         </Button>
-                        <Button size="sm" variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-full h-9 px-4">
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            className="bg-transparent border-white/30 text-white hover:bg-white/20 hover:text-white rounded-full h-9 px-4 hover:border-white/50"
+                        >
                             Learn More
                         </Button>
                     </div>

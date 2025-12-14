@@ -1,6 +1,8 @@
 "use client";
 
+
 import { motion, AnimatePresence } from "framer-motion";
+import { UserRole } from "@/types/role";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -29,7 +31,7 @@ export function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState("");
     const { onOpen } = useAuthModal();
-    const { user } = useAuthStore();
+    const { user, isLoading } = useAuthStore();
 
     // Prevent body scroll when menu is open
     useEffect(() => {
@@ -130,7 +132,9 @@ export function Navbar() {
                     {/* Desktop Right Side */}
                     <div className="hidden lg:flex items-center gap-4">
                         <ModeToggle />
-                        {user ? (
+                        {isLoading ? (
+                            <div className="h-10 w-10 rounded-full bg-muted animate-pulse ml-auto" />
+                        ) : user ? (
                             <>
                                 <Link href="/home">
                                     <Button
@@ -140,7 +144,7 @@ export function Navbar() {
                                         Home
                                     </Button>
                                 </Link>
-                                {(user?.app_metadata?.role === 'Admin' || user?.app_metadata?.role === 'Manager') && (
+                                {(user?.app_metadata?.role === UserRole.ADMIN || user?.app_metadata?.role === UserRole.MANAGER) && (
                                     <Link href="/dashboard">
                                         <Button
                                             variant="ghost"
@@ -243,7 +247,9 @@ export function Navbar() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}
                         >
-                            {user ? (
+                            {isLoading ? (
+                                <div className="w-full h-12 rounded-lg bg-muted animate-pulse" />
+                            ) : user ? (
                                 <>
                                     <Link href="/home" onClick={() => setIsMobileMenuOpen(false)}>
                                         <Button
@@ -253,7 +259,7 @@ export function Navbar() {
                                             Home
                                         </Button>
                                     </Link>
-                                    {(user?.app_metadata?.role === 'Admin' || user?.app_metadata?.role === 'Manager') && (
+                                    {(user?.app_metadata?.role === UserRole.ADMIN || user?.app_metadata?.role === UserRole.MANAGER) && (
                                         <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                                             <Button
                                                 className="w-full h-12 text-lg bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-pink-500/20"

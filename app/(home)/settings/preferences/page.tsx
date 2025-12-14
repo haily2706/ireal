@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useSidebar } from "@/app/(home)/components/provider";
+import { ChangePassword } from "./_components/change-password";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -91,6 +92,9 @@ export default function PreferencesPage() {
                         onCheckedChange={togglePremiumBalance}
                     />
                 </div>
+
+                {/* Password Setting */}
+                <ChangePassword />
             </div>
         </div>
     );

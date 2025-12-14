@@ -33,7 +33,7 @@ export function Sidebar() {
     const subscription = "Creator" as "Free" | "Pro" | "Creator"; // Mock Data
 
     const supabase = createClient();
-    const { user, setUser } = useAuthStore();
+    const { user, setUser, isLoading } = useAuthStore();
     const { onOpen } = useAuthModal();
 
     useEffect(() => {
@@ -64,7 +64,8 @@ export function Sidebar() {
     return (
         <aside
             className={cn(
-                "sticky top-0 left-0 h-screen flex-col border-r border-border/50 hidden md:flex transition-all duration-500 cubic-bezier(0.25, 1, 0.5, 1) z-40",
+                "sticky top-0 left-0 h-screen flex-col border-r border-border/50 hidden md:flex z-40",
+                "transition-all duration-500 cubic-bezier(0.25, 1, 0.5, 1)",
                 "bg-background/80 dark:bg-background/20 backdrop-blur-xl supports-backdrop-filter:bg-background/80",
                 "shadow-[5px_0_30px_0_rgba(0,0,0,0.1)] dark:shadow-[5px_0_30px_0_rgba(0,0,0,0.3)]",
                 isCollapsed ? "w-[90px]" : "w-[240px]"
@@ -105,7 +106,19 @@ export function Sidebar() {
             <div className=" mt-4 flex flex-col flex-1 h-full overflow-y-auto custom-scrollbar relative z-10 px-2 space-y-2 pb-4 gap-4">
                 {/* Profile Section */}
                 <div className={cn("flex flex-col items-center transition-all duration-300", isCollapsed ? "px-0" : "px-2")}>
-                    {user ? (
+                    {isLoading ? (
+                        <>
+                            <div className={cn(
+                                "rounded-full bg-muted animate-pulse",
+                                isCollapsed ? "h-[50px] w-[50px]" : "h-[90px] w-[90px]"
+                            )} />
+                            {!isCollapsed && (
+                                <div className="mt-5 w-full flex flex-col items-center gap-2">
+                                    <div className="h-6 w-32 bg-muted animate-pulse rounded-md" />
+                                </div>
+                            )}
+                        </>
+                    ) : user ? (
                         <>
                             <div className="relative group cursor-pointer" onClick={() => router.push("/settings")}>
                                 <motion.div
@@ -182,7 +195,9 @@ export function Sidebar() {
             {/* Footer Actions */}
             <div className={cn("mt-auto p-4 flex items-center border-t border-border/50 bg-background/60 dark:bg-background/20 backdrop-blur-md relative z-20", isCollapsed ? "justify-center flex-col gap-4" : "justify-between")}>
 
-                {user ? (
+                {isLoading ? (
+                    <div className="h-9 w-9 rounded-xl bg-muted animate-pulse" />
+                ) : user ? (
                     <Button variant="ghost" size="icon" onClick={handleSignOut} className="text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all">
                         <LogOut className="h-5 w-5" />
                     </Button>

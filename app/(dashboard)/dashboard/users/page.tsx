@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { UsersTable, UserData } from "./users-table";
+import { UserRole } from "@/types/role";
 import { formatDistanceToNow, subDays } from "date-fns";
 import {
     Card,
@@ -40,7 +41,7 @@ export default async function UsersPage() {
         id: user.id,
         name: user.user_metadata?.full_name || "Unknown",
         email: user.email || "",
-        role: (user.app_metadata?.role as string) || "User",
+        role: (user.app_metadata?.role as UserRole) || UserRole.USER,
         status: (user as any).banned_until ? "Suspended" : (user.email_confirmed_at ? "Active" : "Pending"),
         lastActive: user.last_sign_in_at
             ? `${formatDistanceToNow(new Date(user.last_sign_in_at))} ago`

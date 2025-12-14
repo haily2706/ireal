@@ -11,16 +11,17 @@ interface SidebarContextType {
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-export function HomeProvider({ children }: { children: React.ReactNode }) {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+export function HomeProvider({
+    children,
+    defaultCollapsed = false
+}: {
+    children: React.ReactNode;
+    defaultCollapsed?: boolean;
+}) {
+    const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
     const [showPremiumBalance, setShowPremiumBalance] = useState(true);
 
     useEffect(() => {
-        const storedCollapsed = localStorage.getItem("sidebar-collapsed");
-        if (storedCollapsed) {
-            setIsCollapsed(JSON.parse(storedCollapsed));
-        }
-
         const storedBalance = localStorage.getItem("sidebar-show-premium-balance");
         if (storedBalance) {
             setShowPremiumBalance(JSON.parse(storedBalance));
@@ -30,7 +31,7 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
     const toggleSidebar = () => {
         setIsCollapsed((prev) => {
             const newState = !prev;
-            localStorage.setItem("sidebar-collapsed", JSON.stringify(newState));
+            document.cookie = `sidebar-collapsed=${newState}; path=/; max-age=31536000; SameSite=Lax`;
             return newState;
         });
     };

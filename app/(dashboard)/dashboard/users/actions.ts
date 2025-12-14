@@ -3,8 +3,9 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { UserRole } from "@/types/role";
 
-export async function updateUserRole(userId: string, role: string) {
+export async function updateUserRole(userId: string, role: UserRole) {
     const supabase = await createClient();
 
     // Get current user to check permissions
@@ -15,7 +16,7 @@ export async function updateUserRole(userId: string, role: string) {
     }
 
     const currentRole = currentUser.app_metadata?.role as string | undefined;
-    const hasAccess = currentRole && (currentRole.toLowerCase() === 'admin' || currentRole.toLowerCase() === 'manager');
+    const hasAccess = currentRole && (currentRole === UserRole.ADMIN || currentRole === UserRole.MANAGER);
 
     if (!hasAccess) {
         throw new Error("Unauthorized: Insufficient permissions");

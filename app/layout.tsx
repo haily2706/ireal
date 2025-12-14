@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/app/components/theme/theme-provider";
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
     },
     description: "Turn your events into a live experience. Stream your celebration, connect with your audience, and receive gifts in real-time.",
     icons: {
-        icon: "/text-logo.svg",
+        icon: "/icon.svg",
     },
     openGraph: {
         type: "website",
@@ -59,7 +60,9 @@ export default function RootLayout({
                 >
                     <AuthListener />
                     {children}
-                    <AuthModal />
+                    <Suspense fallback={null}>
+                        <AuthModal />
+                    </Suspense>
                     <Toaster theme="system" richColors closeButton />
                 </ThemeProvider>
             </body>

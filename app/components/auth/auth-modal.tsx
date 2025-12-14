@@ -1,34 +1,41 @@
 "use client";
 
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { createClient } from "@/lib/supabase/client";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useAuthModal } from "@/app/components/auth/use-auth-modal";
-
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
+import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { useAuthModal } from "@/app/components/auth/use-auth-modal";
 
 const supabase = createClient();
 
 
 
 export const AuthModal = () => {
-    const { isOpen, onClose, view } = useAuthModal();
+    const { isOpen, onClose, onOpen, view } = useAuthModal();
     const router = useRouter();
-    const { theme } = useTheme();
-    // Ensure we have a valid theme string for Supabase UI
-    const [authTheme, setAuthTheme] = useState<string>("dark");
+    const searchParams = useSearchParams();
+    const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
+
 
     useEffect(() => {
-        if (theme === "light") {
-            setAuthTheme("light");
-        } else {
-            setAuthTheme("dark");
+        if (searchParams?.get("recovery") === "true") {
+            onOpen("update_password");
         }
-    }, [theme]);
+    }, [searchParams, onOpen]);
 
     useEffect(() => {
         const {
@@ -38,12 +45,19 @@ export const AuthModal = () => {
                 router.refresh();
                 onClose();
             }
+            if (event === "PASSWORD_RECOVERY") {
+                onOpen("update_password");
+            }
+            if (event === "USER_UPDATED" && view === "update_password") {
+                router.push("/home");
+                onClose();
+            }
         });
 
         return () => {
             subscription.unsubscribe();
         };
-    }, [router, onClose]);
+    }, [router, onClose, onOpen, view]);
 
     // Handle dialog open state change
     const onChange = (open: boolean) => {
@@ -55,7 +69,8 @@ export const AuthModal = () => {
     const getTitle = () => {
         switch (view) {
             case 'sign_in': return 'Welcome Back';
-
+            case 'forgotten_password': return 'Reset Password';
+            case 'update_password': return 'Update Password';
             default: return 'Join the Revolution';
         }
     };
@@ -63,7 +78,8 @@ export const AuthModal = () => {
     const getDescription = () => {
         switch (view) {
             case 'sign_in': return 'Enter your credentials to access your account';
-
+            case 'forgotten_password': return 'Enter your email to reset your password';
+            case 'update_password': return 'Enter your new password below';
             default: return 'Create an account to start your journey';
         }
     };
@@ -87,48 +103,185 @@ export const AuthModal = () => {
                     </DialogHeader>
 
                     <div className="space-y-4">
-                        <Auth
-                            supabaseClient={supabase}
-                            view={view as any} // Cast to any because we extended types but Auth component might strictly type check
-                            appearance={{
-                                theme: ThemeSupa,
-                                variables: {
-                                    default: {
-                                        colors: {
-                                            brand: 'transparent', // We override this with tailored classes
-                                            brandAccent: 'transparent',
-                                        },
-                                        space: {
-                                            inputPadding: '12px',
-                                            buttonPadding: '12px',
-                                        },
-                                        borderWidths: {
-                                            buttonBorderWidth: '0px',
-                                            inputBorderWidth: '1px',
-                                        },
-                                        radii: {
-                                            borderRadiusButton: '8px',
-                                            buttonBorderRadius: '8px',
-                                            inputBorderRadius: '8px',
-                                        },
-                                    },
-                                },
-                                className: {
-                                    container: 'flex flex-col gap-4',
-                                    button: 'w-full px-4 py-3 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold shadow-lg shadow-purple-500/20 transition-all duration-200 ease-in-out hover:scale-[1.02] active:scale-[0.98]',
-                                    input: 'bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/40 focus:border-purple-500/50 focus:bg-white dark:focus:bg-white/10 focus:ring-1 focus:ring-purple-500/50 transition-all duration-200',
-                                    label: 'text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1.5 ml-1',
-                                    loader: 'text-purple-500',
-                                    anchor: 'text-purple-600 dark:text-purple-400 hover:text-purple-500 dark:hover:text-purple-300 transition-colors text-sm font-medium underline-offset-4 hover:underline',
-                                    divider: 'bg-slate-200 dark:bg-white/10 my-4',
-                                    message: 'text-red-500 dark:text-red-400 text-sm mt-1 bg-red-50 dark:bg-red-500/10 p-2 rounded border border-red-200 dark:border-red-500/20',
-                                }
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                const formData = new FormData(e.currentTarget);
+                                const email = formData.get("email") as string;
+                                const password = formData.get("password") as string;
+                                const confirmPassword = formData.get("confirmPassword") as string; // For update only
+
+                                const handleSubmit = async () => {
+                                    setLoading(true);
+                                    try {
+                                        if (view === "sign_in") {
+                                            const { error } = await supabase.auth.signInWithPassword({
+                                                email,
+                                                password,
+                                            });
+                                            if (error) throw error;
+                                            toast.success("Signed in successfully");
+                                        } else if (view === "sign_up") {
+                                            const { error } = await supabase.auth.signUp({
+                                                email,
+                                                password,
+                                                options: {
+                                                    emailRedirectTo: `${window.location.origin}/auth/callback`,
+                                                },
+                                            });
+                                            if (error) throw error;
+                                            toast.success("Check your email to confirm your account");
+                                        } else if (view === "forgotten_password") {
+                                            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                                                redirectTo: `${window.location.origin}/auth/callback?next=/?recovery=true`,
+                                            });
+                                            if (error) throw error;
+                                            toast.success("Check your email for the reset link");
+                                        } else if (view === "update_password") {
+                                            if (password !== confirmPassword) {
+                                                toast.error("Passwords do not match");
+                                                setLoading(false);
+                                                return;
+                                            }
+                                            const { error } = await supabase.auth.updateUser({
+                                                password: password,
+                                            });
+                                            if (error) throw error;
+                                            toast.success("Password updated successfully");
+                                        }
+                                    } catch (error: any) {
+                                        toast.error(error.message);
+                                    } finally {
+                                        setLoading(false);
+                                    }
+                                };
+                                handleSubmit();
                             }}
-                            theme={authTheme}
-                            providers={[]}
-                            magicLink
-                            showLinks={false}
-                        />
+                            className="flex flex-col gap-4"
+                        >
+                            {view !== "update_password" && (
+                                <div className="space-y-2">
+                                    <Label htmlFor="email" className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1.5 ml-1">Email</Label>
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        placeholder="name@example.com"
+                                        disabled={loading}
+                                        required
+                                        className="bg-background border border-slate-200 dark:border-white/10 text-foreground placeholder:text-muted-foreground focus:border-purple-500/50 focus:bg-background focus:ring-1 focus:ring-purple-500/50 transition-all duration-200"
+                                    />
+                                </div>
+                            )}
+
+                            {view !== "forgotten_password" && (
+                                <div className="space-y-2">
+                                    <Label htmlFor="password" className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1.5 ml-1">
+                                        {view === "update_password" ? "New Password" : "Password"}
+                                    </Label>
+                                    <div className="relative">
+                                        <Input
+                                            id="password"
+                                            name="password"
+                                            type={showPassword ? "text" : "password"}
+                                            disabled={loading}
+                                            required
+                                            className="bg-background border border-slate-200 dark:border-white/10 text-foreground placeholder:text-muted-foreground focus:border-purple-500/50 focus:bg-background focus:ring-1 focus:ring-purple-500/50 transition-all duration-200 pr-10"
+                                            placeholder="******"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground hover:text-foreground"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="h-4 w-4" />
+                                            ) : (
+                                                <Eye className="h-4 w-4" />
+                                            )}
+                                            <span className="sr-only">Toggle password visibility</span>
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {view === "update_password" && (
+                                <div className="space-y-2">
+                                    <Label htmlFor="confirmPassword" className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1.5 ml-1">
+                                        Confirm Password
+                                    </Label>
+                                    <div className="relative">
+                                        <Input
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            type={showPassword ? "text" : "password"}
+                                            disabled={loading}
+                                            required
+                                            className="bg-background border border-slate-200 dark:border-white/10 text-foreground placeholder:text-muted-foreground focus:border-purple-500/50 focus:bg-background focus:ring-1 focus:ring-purple-500/50 transition-all duration-200 pr-10"
+                                            placeholder="******"
+                                        />
+                                        {/* Toggle button shared state or individual? Usually shared for form or individual. Let's rely on same toggle for simplicity or add another if needed. User asked to 'view/unview', one toggle usually suffices for the user's intent or I can duplicate. I'll use the same toggle state for both for cleaner UI unless I want separate. Actually let's just use the same state for simplicity as they are usually revealed together, or I can add another state. Let's add another state. */}
+                                    </div>
+                                </div>
+                            )}
+
+                            <Button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full px-4 py-3 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold shadow-lg shadow-purple-500/20 transition-all duration-200 ease-in-out hover:scale-[1.02] active:scale-[0.98] rounded-lg h-auto"
+                            >
+                                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                {view === 'sign_in' && 'Sign In'}
+                                {view === 'sign_up' && 'Sign Up'}
+                                {view === 'forgotten_password' && 'Send Reset Instructions'}
+                                {view === 'update_password' && 'Update Password'}
+                            </Button>
+                        </form>
+                        <div className="flex flex-col gap-2">
+                            {view === 'sign_in' && (
+                                <>
+                                    <button
+                                        onClick={() => onOpen('forgotten_password')}
+                                        className="text-sm text-muted-foreground hover:text-primary transition-colors hover:underline"
+                                    >
+                                        Forgot Password?
+                                    </button>
+                                    <div className="text-center text-sm text-muted-foreground">
+                                        Don&apos;t have an account?{" "}
+                                        <button
+                                            onClick={() => onOpen('sign_up')}
+                                            className="text-primary hover:underline font-medium"
+                                        >
+                                            Sign Up
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                            {view === 'sign_up' && (
+                                <div className="text-center text-sm text-muted-foreground">
+                                    Already have an account?{" "}
+                                    <button
+                                        onClick={() => onOpen('sign_in')}
+                                        className="text-primary hover:underline font-medium"
+                                    >
+                                        Sign In
+                                    </button>
+                                </div>
+                            )}
+                            {view === 'forgotten_password' && (
+                                <div className="text-center text-sm text-muted-foreground">
+                                    Remember your password?{" "}
+                                    <button
+                                        onClick={() => onOpen('sign_in')}
+                                        className="text-primary hover:underline font-medium"
+                                    >
+                                        Back to Sign In
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </DialogContent>

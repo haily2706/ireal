@@ -27,7 +27,7 @@ const mobileLinks = [
 export function Navbar() {
     const pathname = usePathname();
     const { onOpen } = useAuthModal();
-    const { user } = useAuthStore();
+    const { user, isLoading } = useAuthStore();
 
     const segments = pathname.split('/').filter(Boolean);
     const lastSegment = segments[segments.length - 1];
@@ -101,7 +101,9 @@ export function Navbar() {
                         </div>
                     </div>
 
-                    {user ? (
+                    {isLoading ? (
+                        <div className="h-10 w-10 rounded-full bg-muted animate-pulse" />
+                    ) : user ? (
                         <div className="relative group">
                             <div className="absolute -inset-0.5 bg-linear-to-r from-indigo-500 to-purple-500 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500" />
                             <div className="relative">

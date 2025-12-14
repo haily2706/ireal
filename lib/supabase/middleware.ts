@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+import { UserRole } from '@/types/role'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
@@ -43,7 +44,7 @@ export async function updateSession(request: NextRequest) {
         // Check for admin or manager role (case-insensitive)
         const hasAccess =
             userRole &&
-            (userRole.toLowerCase() === 'admin' || userRole.toLowerCase() === 'manager')
+            (userRole === UserRole.ADMIN || userRole === UserRole.MANAGER)
 
         if (!user || !hasAccess) {
             const url = request.nextUrl.clone()

@@ -38,7 +38,7 @@ export function Sidebar() {
     const subscription = "Creator" as "Free" | "Pro" | "Creator"; // Mock Data
 
     const supabase = createClient();
-    const { user, setUser } = useAuthStore();
+    const { user, setUser, isLoading } = useAuthStore();
     const { onOpen } = useAuthModal();
 
     useEffect(() => {
@@ -68,7 +68,8 @@ export function Sidebar() {
     return (
         <aside
             className={cn(
-                "sticky top-0 left-0 h-screen flex-col border-r border-border/50 hidden md:flex transition-all duration-500 cubic-bezier(0.25, 1, 0.5, 1) z-40",
+                "sticky top-0 left-0 h-screen flex-col border-r border-border/50 hidden md:flex z-40",
+                "transition-all duration-500 cubic-bezier(0.25, 1, 0.5, 1)",
                 "bg-background/80 dark:bg-background/20 backdrop-blur-xl supports-backdrop-filter:bg-background/80",
                 "shadow-[5px_0_30px_0_rgba(0,0,0,0.1)] dark:shadow-[5px_0_30px_0_rgba(0,0,0,0.3)]",
                 isCollapsed ? "w-[90px]" : "w-[240px]"
@@ -109,7 +110,24 @@ export function Sidebar() {
             <div className="flex flex-col flex-1 h-full overflow-y-auto custom-scrollbar relative z-10 px-2 space-y-2 pb-4 gap-4">
                 {/* Profile Section */}
                 <div className={cn("flex flex-col items-center transition-all duration-300", isCollapsed ? "px-0" : "px-2")}>
-                    {user ? (
+                    {isLoading ? (
+                        <>
+                            <div className={cn(
+                                "rounded-full bg-muted animate-pulse",
+                                isCollapsed ? "h-[50px] w-[50px]" : "h-[90px] w-[90px]"
+                            )} />
+                            {!isCollapsed && (
+                                <div className="mt-5 w-full flex flex-col items-center gap-2">
+                                    <div className="h-6 w-32 bg-muted animate-pulse rounded-md" />
+                                    <div className="h-4 w-24 bg-muted animate-pulse rounded-md" />
+
+                                    {showPremiumBalance && (
+                                        <div className="mt-6 w-full h-24 bg-muted animate-pulse rounded-2xl" />
+                                    )}
+                                </div>
+                            )}
+                        </>
+                    ) : user ? (
                         <>
                             <div className="relative group cursor-pointer" onClick={() => router.push("/settings")}>
                                 <motion.div
@@ -165,7 +183,7 @@ export function Sidebar() {
                                                 className="mt-6 p-4 rounded-2xl bg-linear-to-b from-muted/50 to-transparent border border-border backdrop-blur-md relative overflow-hidden group cursor-pointer hover:border-purple-500/50 transition-all duration-300"
                                             >
                                                 {/* Background Coin */}
-                                                <div className="absolute -right-5 -bottom-5 opacity-[0.05] group-hover:opacity-15 transition-all duration-500 rotate-[15deg] group-hover:rotate-0 scale-100 group-hover:scale-110 pointer-events-none">
+                                                <div className="absolute -right-5 -bottom-5 opacity-[0.05] group-hover:opacity-15 transition-all duration-500 rotate-15 group-hover:rotate-0 scale-100 group-hover:scale-110 pointer-events-none">
                                                     <Coin className="w-28 h-28 blur-[1px]" />
                                                 </div>
 
@@ -195,9 +213,14 @@ export function Sidebar() {
                 {/* Main Links */}
                 <div className="flex-1 space-y-2">
                     {!isCollapsed && (
-                        <h3 className="px-2 text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3 pl-4">Discover</h3>
+                        <h3 className="px-2 text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3 pl-4">
+                            Discover
+                        </h3>
                     )}
-                    <div className="space-y-2" onMouseLeave={() => setHoveredLink(null)}>
+                    <div
+                        className="space-y-2"
+                        onMouseLeave={() => setHoveredLink(null)}
+                    >
                         {[
                             { icon: Compass, label: "Explore", href: "/home", color: "text-blue-400" },
                             // { icon: Clapperboard, label: "Shorts", href: "/shorts", color: "text-red-400" },
@@ -205,14 +228,15 @@ export function Sidebar() {
                             { icon: Calendar, label: "Schedules", href: "/schedules", color: "text-purple-400" },
                             { icon: Settings, label: "Settings", href: "/settings", color: "text-gray-400" }
                         ].map((link) => (
-                            <SidebarLink
-                                key={link.href}
-                                link={link}
-                                pathname={pathname}
-                                isCollapsed={isCollapsed}
-                                isHovered={hoveredLink === link.href}
-                                onHover={() => setHoveredLink(link.href)}
-                            />
+                            <div key={link.href}>
+                                <SidebarLink
+                                    link={link}
+                                    pathname={pathname}
+                                    isCollapsed={isCollapsed}
+                                    isHovered={hoveredLink === link.href}
+                                    onHover={() => setHoveredLink(link.href)}
+                                />
+                            </div>
                         ))}
                     </div>
                 </div>
@@ -221,7 +245,9 @@ export function Sidebar() {
             {/* Footer Actions */}
             <div className={cn("mt-auto p-4 flex items-center border-t border-border/50 bg-background/60 dark:bg-background/20 backdrop-blur-md relative z-20", isCollapsed ? "justify-center flex-col gap-4" : "justify-between")}>
 
-                {user ? (
+                {isLoading ? (
+                    <div className="h-9 w-9 rounded-xl bg-muted animate-pulse" />
+                ) : user ? (
                     <Button variant="ghost" size="icon" onClick={handleSignOut} className="text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all">
                         <LogOut className="h-5 w-5" />
                     </Button>

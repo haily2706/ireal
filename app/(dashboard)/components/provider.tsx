@@ -9,19 +9,23 @@ interface SidebarContextType {
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-export function DashboardProvider({ children }: { children: React.ReactNode }) {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+export function DashboardProvider({
+    children,
+    defaultCollapsed = false
+}: {
+    children: React.ReactNode;
+    defaultCollapsed?: boolean;
+}) {
+    const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+
     useEffect(() => {
-        const stored = localStorage.getItem("dashboard-sidebar-collapsed");
-        if (stored) {
-            setIsCollapsed(JSON.parse(stored));
-        }
+        // No local storage initialization for collapse needed anymore
     }, []);
 
     const toggleSidebar = () => {
         setIsCollapsed((prev) => {
             const newState = !prev;
-            localStorage.setItem("dashboard-sidebar-collapsed", JSON.stringify(newState));
+            document.cookie = `dashboard-sidebar-collapsed=${newState}; path=/; max-age=31536000; SameSite=Lax`;
             return newState;
         });
     };

@@ -9,13 +9,18 @@ export const metadata: Metadata = {
     description: "LiveReal Dashboard",
 };
 
+import { cookies } from "next/headers";
+
 export default async function HomeLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const cookieStore = await cookies();
+    const defaultCollapsed = cookieStore.get("sidebar-collapsed")?.value === "true";
+
     return (
-        <HomeProvider>
+        <HomeProvider defaultCollapsed={defaultCollapsed}>
             <div className="flex min-h-screen">
                 <Sidebar />
                 <div className="flex-1 flex flex-col min-w-0">

@@ -33,12 +33,13 @@ import {
 import { useState, useTransition } from "react";
 import { updateUserRole } from "./actions";
 import { toast } from "sonner";
+import { UserRole } from "@/types/role";
 
 export type UserData = {
     id: string;
     name: string;
     email: string;
-    role: string;
+    role: UserRole;
     status: string;
     lastActive: string;
     avatar: string;
@@ -57,7 +58,7 @@ export function UsersTable({ users }: UsersTableProps) {
         user.email.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleRoleChange = (userId: string, newRole: string) => {
+    const handleRoleChange = (userId: string, newRole: UserRole) => {
         startTransition(async () => {
             try {
                 await updateUserRole(userId, newRole);
@@ -128,16 +129,16 @@ export function UsersTable({ users }: UsersTableProps) {
                                         <TableCell>
                                             <Select
                                                 defaultValue={user.role}
-                                                onValueChange={(value) => handleRoleChange(user.id, value)}
+                                                onValueChange={(value) => handleRoleChange(user.id, value as UserRole)}
                                                 disabled={isPending}
                                             >
                                                 <SelectTrigger className="w-[110px] h-8">
                                                     <SelectValue placeholder="Select role" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="User">User</SelectItem>
-                                                    <SelectItem value="Manager">Manager</SelectItem>
-                                                    <SelectItem value="Admin">Admin</SelectItem>
+                                                    <SelectItem value={UserRole.USER}>{UserRole.USER}</SelectItem>
+                                                    <SelectItem value={UserRole.MANAGER}>{UserRole.MANAGER}</SelectItem>
+                                                    <SelectItem value={UserRole.ADMIN}>{UserRole.ADMIN}</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </TableCell>
