@@ -79,7 +79,7 @@ export function Navbar({ }: NavbarProps) {
                 animate={{ y: 0 }}
                 className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/80"
             >
-                <div className="flex h-14 items-center justify-between pl-2 pr-6 relative z-10 gap-4">
+                <div className="flex h-14 items-center justify-between px-6 relative z-10 gap-4">
                     <Link href="/">
                         <TextLogo />
                     </Link>

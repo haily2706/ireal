@@ -14,7 +14,7 @@ export function TextLogo({ className, width = 160, height = 40 }: TextLogoProps)
             alt="LiveReal Logo"
             width={width}
             height={height}
-            className={cn("w-auto h-18 hover:opacity-80 transition-opacity", className)}
+            className={cn("w-auto h-6 hover:opacity-80 transition-opacity", className)}
             priority
         />
     );

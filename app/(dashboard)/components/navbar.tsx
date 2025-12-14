@@ -44,7 +44,7 @@ export function Navbar() {
             {/* Ambient Gradient Top Line */}
             <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-indigo-500/20 to-transparent" />
 
-            <div className="flex h-full items-center pl-2 pr-4 gap-4">
+            <div className="flex h-full items-center px-6 gap-4">
                 {/* Left Section: Mobile Menu & Title */}
                 <div className="flex items-center gap-4 flex-1">
                     <Sheet>
@@ -58,7 +58,7 @@ export function Navbar() {
                             <SheetHeader className="p-6 border-b border-border">
                                 <SheetTitle asChild>
                                     <Link href="/dashboard" className="flex items-center gap-3">
-                                        <TextLogo className="h-10" />
+                                        <TextLogo />
                                     </Link>
                                 </SheetTitle>
                             </SheetHeader>

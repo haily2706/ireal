@@ -137,11 +137,15 @@ export function GiftGallery() {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.5 }}
-                    className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground mt-10"
+                    className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-1.5 text-sm text-muted-foreground mt-10 text-center"
                 >
-                    <span>💡 100</span>
-                    <Coin className="w-3.5 h-3.5" />
-                    <span>= $1.00 • Withdraw earnings anytime with zero fees</span>
+                    <span className="flex items-center gap-1.5">
+                        <span>💡 100</span>
+                        <Coin className="w-3.5 h-3.5" />
+                        <span>= $1.00</span>
+                    </span>
+                    <span className="hidden sm:inline">•</span>
+                    <span>Withdraw earnings anytime with zero fees</span>
                 </motion.p>
             </div>
         </section>

@@ -8,7 +8,7 @@ import { GiftGallery } from "@/app/(landing)/components/gift-gallery";
 import { Testimonials } from "@/app/(landing)/components/testimonials";
 import { PricingSection } from "@/app/(landing)/components/pricing-section";
 import { CTASection } from "@/app/(landing)/components/cta-section";
-import { Instagram, Twitter, Youtube } from "lucide-react";
+import { Instagram, Youtube } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Footer } from "@/app/(landing)/components/footer";

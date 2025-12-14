@@ -91,7 +91,7 @@ export function Navbar() {
                 <div className="container mx-auto flex h-16 items-center justify-between px-4">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2">
-                        <TextLogo className="h-14 md:h-16" />
+                        <TextLogo />
                     </Link>
 
                     {/* Desktop Links */}
@@ -198,7 +198,7 @@ export function Navbar() {
                         className="fixed inset-0 z-100 flex flex-col bg-background/95 backdrop-blur-3xl p-6 lg:hidden"
                     >
                         <div className="flex items-center justify-between mb-8">
-                            <TextLogo className="h-16" />
+                            <TextLogo />
                             <div className="flex items-center gap-4">
                                 <button
                                     onClick={() => setIsMobileMenuOpen(false)}

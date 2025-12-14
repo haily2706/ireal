@@ -23,7 +23,7 @@ import { useSidebar } from "./provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { TextLogo } from "@/components/ui/text-logo";
+
 
 export function Sidebar() {
     const pathname = usePathname();
