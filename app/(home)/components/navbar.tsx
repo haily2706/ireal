@@ -21,11 +21,10 @@ import { NotiDropdown } from "./noti-dropdown";
 import { TextLogo } from "@/components/ui/text-logo";
 
 const appLinks = [
-    { name: "Home", href: "/home" },
-    { name: "Explore", href: "/explore" },
-    { name: "Shorts", href: "/shorts" },
+    { name: "Explore", href: "/home" },
     { name: "Messages", href: "/messages" },
     { name: "Schedules", href: "/schedules" },
+    { name: "Settings", href: "/settings" },
 ];
 
 import { useAuthStore } from "@/app/components/auth/use-auth-store";
@@ -163,6 +162,15 @@ export function Navbar({ }: NavbarProps) {
                     </div>
 
                     <div className="flex items-center gap-3">
+                        <div className="md:hidden">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => setIsMobileMenuOpen(true)}
+                            >
+                                <Search className="h-5 w-5" />
+                            </Button>
+                        </div>
                         {/* Desktop Search Trigger */}
                         {!isSearchFocused && (
                             <motion.div
@@ -206,16 +214,29 @@ export function Navbar({ }: NavbarProps) {
                                 </Button>
                             </>
                         )}
-                        <div className="md:hidden">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => setIsMobileMenuOpen(true)}
-                            >
-                                <Search className="h-5 w-5" />
-                            </Button>
-                        </div>
+
                     </div>
+                </div>
+                {/* Mobile Categories - Visible only on mobile */}
+                <div className="md:hidden flex items-center gap-2 overflow-x-auto px-4 py-2 no-scrollbar border-t border-border/50">
+                    {categories.map((category) => {
+                        const isSelected = selectedCategory === category;
+                        return (
+                            <Button
+                                key={category}
+                                variant={isSelected ? "default" : "secondary"}
+                                onClick={() => handleSelect(category)}
+                                className={cn(
+                                    "whitespace-nowrap rounded-full text-xs font-medium transition-all duration-300 h-7 px-3 shrink-0",
+                                    isSelected
+                                        ? "bg-foreground text-background hover:bg-foreground/90"
+                                        : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border"
+                                )}
+                            >
+                                {category}
+                            </Button>
+                        );
+                    })}
                 </div>
             </motion.header >
 
@@ -233,13 +254,7 @@ export function Navbar({ }: NavbarProps) {
                         >
                             <div className="flex items-center justify-between mb-6">
                                 <Link href="/">
-                                    <Image
-                                        src="/logo.svg"
-                                        alt="LiveReal Logo"
-                                        width={120}
-                                        height={30}
-                                        className="h-8 w-auto"
-                                    />
+                                    <TextLogo />
                                 </Link>
                                 <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
                                     <X className="h-6 w-6" />

@@ -224,7 +224,7 @@ export function Navbar() {
                                             Home
                                         </Button>
                                     </Link>
-                                    {(user?.app_metadata?.role === 'admin' || user?.app_metadata?.role === 'manager') && (
+                                    {(user?.app_metadata?.role === 'Admin' || user?.app_metadata?.role === 'Manager') && (
                                         <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                                             <Button
                                                 className="w-full h-12 text-lg bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-pink-500/20"

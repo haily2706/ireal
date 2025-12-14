@@ -1,0 +1,58 @@
+import { Sparkles, Zap, Crown } from "lucide-react";
+
+export const SUBSCRIPTION_TIERS = [
+    {
+        id: "free",
+        name: "Free",
+        icon: Sparkles,
+        price: "$0",
+        period: "forever",
+        description: "Perfect for getting started",
+        features: [
+            "Up to 100 viewers per stream",
+            "Basic birthday themes",
+            "Standard gift animations",
+            "24-hour stream scheduling",
+            "Community support",
+        ],
+        color: "blue",
+        gradient: "from-blue-500 to-cyan-500",
+    },
+    {
+        id: "pro",
+        name: "Pro",
+        icon: Zap,
+        price: "$2.99",
+        period: "/month",
+        description: "For serious streamers",
+        features: [
+            "Unlimited viewers",
+            "Premium birthday themes",
+            "Custom gift animations",
+            "Schedule streams 30 days ahead",
+            "Priority support",
+            "Analytics dashboard",
+        ],
+        popular: true,
+        color: "pink",
+        gradient: "from-pink-500 to-purple-500",
+    },
+    {
+        id: "creator",
+        name: "Creator",
+        icon: Crown,
+        price: "$9.99",
+        period: "/month",
+        description: "Maximum earnings potential",
+        features: [
+            "Everything in Pro",
+            "Lowest platform fees (5%)",
+            "Custom branding removal",
+            "API access",
+            "Dedicated account manager",
+            "Early access to features",
+        ],
+        color: "orange",
+        gradient: "from-yellow-500 to-orange-500",
+    },
+];

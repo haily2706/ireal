@@ -260,6 +260,16 @@ body {
   background: var(--color-muted-foreground);
 }
 
+/* Utility to hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 @theme inline {
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);

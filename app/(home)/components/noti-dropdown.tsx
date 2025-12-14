@@ -150,7 +150,7 @@ export function NotiDropdown() {
 
             <PopoverContent
                 align="end"
-                className="w-[380px] p-0 border-border/50 bg-background/80 backdrop-blur-2xl shadow-[0_0_50px_-12px_rgba(0,0,0,0.25)] rounded-2xl overflow-hidden"
+                className="w-[380px] max-w-[95vw] p-0 border-border/50 bg-background/80 backdrop-blur-2xl shadow-[0_0_50px_-12px_rgba(0,0,0,0.25)] rounded-2xl overflow-hidden"
                 sideOffset={10}
             >
                 {/* Header */}
