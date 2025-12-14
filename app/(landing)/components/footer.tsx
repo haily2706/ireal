@@ -20,7 +20,7 @@ export function Footer() {
                     {/* Social Links */}
                     <div className="flex items-center gap-6">
                         <a
-                            href="https://instagram.com/ireal"
+                            href="https://instagram.com/livereal"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground transition-all hover:text-pink-500 hover:scale-110"
@@ -29,7 +29,7 @@ export function Footer() {
                             <Instagram className="h-6 w-6" />
                         </a>
                         <a
-                            href="https://x.com/ireal"
+                            href="https://x.com/livereal"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground transition-all hover:text-blue-400 hover:scale-110"
@@ -38,7 +38,7 @@ export function Footer() {
                             <Twitter className="h-6 w-6" />
                         </a>
                         <a
-                            href="https://youtube.com/@ireal"
+                            href="https://youtube.com/@livereal"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground transition-all hover:text-red-500 hover:scale-110"

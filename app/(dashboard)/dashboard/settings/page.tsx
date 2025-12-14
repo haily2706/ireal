@@ -58,15 +58,15 @@ export default function SettingsPage() {
                         <CardContent className="space-y-4">
                             <div className="grid gap-2">
                                 <Label htmlFor="system-name">System Name</Label>
-                                <Input id="system-name" defaultValue="iReal Platform" placeholder="Enter platform name" />
+                                <Input id="system-name" defaultValue="LiveReal Platform" placeholder="Enter platform name" />
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="support-email">Support Email</Label>
-                                <Input id="support-email" defaultValue="support@ireal.com" placeholder="Enter support email" />
+                                <Input id="support-email" defaultValue="support@livereal.com" placeholder="Enter support email" />
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="url">Platform URL</Label>
-                                <Input id="url" defaultValue="https://ireal.com" placeholder="https://..." />
+                                <Input id="url" defaultValue="https://livereal.com" placeholder="https://..." />
                             </div>
                         </CardContent>
                     </Card>

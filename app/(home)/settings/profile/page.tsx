@@ -227,7 +227,7 @@ export default function ProfilePage() {
                 <div>
                     <h3 className="text-base font-semibold tracking-tight">Display Name</h3>
                     <p className="text-xs text-muted-foreground mt-1">
-                        Choose a channel name that represents you and your content. Changes made to your name and picture are visible only on iReal. You can change your name twice in 14 days.
+                        Choose a channel name that represents you and your content. Changes made to your name and picture are visible only on LiveReal. You can change your name twice in 14 days.
                     </p>
                 </div>
                 <div className="relative">
@@ -274,7 +274,7 @@ export default function ProfilePage() {
 
                     <div className="pl-1">
                         <p className="text-xs text-muted-foreground font-mono bg-muted/50 inline-block px-2 py-1 rounded-md">
-                            {handle ? `https://ireal.app/${handle}` : 'https://ireal.app/@handle'}
+                            {handle ? `https://livereal.app/${handle}` : 'https://livereal.app/@handle'}
                         </p>
                     </div>
                 </div>

@@ -234,7 +234,7 @@ export function Navbar({ }: NavbarProps) {
                                 <Link href="/">
                                     <Image
                                         src="/logo.svg"
-                                        alt="iReal Logo"
+                                        alt="LiveReal Logo"
                                         width={120}
                                         height={30}
                                         className="h-8 w-auto"

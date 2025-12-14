@@ -9,7 +9,7 @@ const CoinIcon = ({ className }: { className?: string }) => (
     <div className={`relative ${className}`}>
         <Image
             src="/coin.svg"
-            alt="iReal Coin"
+            alt="LiveReal Coin"
             fill
             className="object-contain"
         />
@@ -26,8 +26,8 @@ const features = [
     },
     {
         icon: CoinIcon,
-        title: "iReal Coin Integration",
-        description: "Hold and transact with iReal coin, the native currency of our ecosystem.",
+        title: "LiveReal Coin Integration",
+        description: "Hold and transact with LiveReal coin, the native currency of our ecosystem.",
         color: "text-brand-blue",
         gradient: "from-brand-blue/20 to-cyan-500/20",
     },
@@ -75,7 +75,7 @@ export function HBarWalletSection() {
                         </h2>
                         <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                             Experience true ownership with your personal HBar wallet.
-                            Receive gifts, hold iReal coins, and trade on the HBar network
+                            Receive gifts, hold LiveReal coins, and trade on the HBar network
                             with low fees and instant settlement.
                         </p>
 

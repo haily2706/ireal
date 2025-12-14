@@ -6,8 +6,8 @@ import { ContentWrapper } from "@/app/(dashboard)/components/content-wrapper";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-    title: "Admin Dashboard | iReal",
-    description: "iReal Admin Dashboard",
+    title: "Admin Dashboard | LiveReal",
+    description: "LiveReal Admin Dashboard",
 };
 
 export default function DashboardLayout({

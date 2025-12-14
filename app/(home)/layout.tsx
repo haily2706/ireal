@@ -5,8 +5,8 @@ import { HomeProvider } from "@/app/(home)/components/provider";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-    title: "Home | iReal",
-    description: "iReal Dashboard",
+    title: "Home | LiveReal",
+    description: "LiveReal Dashboard",
 };
 
 export default async function HomeLayout({

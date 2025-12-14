@@ -9,7 +9,7 @@ const testimonials = [
         handle: "@sarahcreates",
         avatar: "🎤",
         earnings: "$2,500",
-        quote: "My 21st birthday stream was incredible! I connected with fans from 15 countries and received so many heartfelt gifts. iReal made it unforgettable.",
+        quote: "My 21st birthday stream was incredible! I connected with fans from 15 countries and received so many heartfelt gifts. LiveReal made it unforgettable.",
         gradient: "from-pink-500/20 to-rose-500/20",
     },
     {
@@ -17,7 +17,7 @@ const testimonials = [
         handle: "@marcuslive",
         avatar: "🎸",
         earnings: "$4,200",
-        quote: "I never thought I could monetize my birthday. iReal changed everything. The platform is so easy to use and the gift system is amazing!",
+        quote: "I never thought I could monetize my birthday. LiveReal changed everything. The platform is so easy to use and the gift system is amazing!",
         gradient: "from-purple-500/20 to-violet-500/20",
     },
     {

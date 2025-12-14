@@ -36,7 +36,7 @@ export default function DashboardPage() {
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
                     <p className="text-muted-foreground">
-                        Hi, welcome back to your iReal overview.
+                        Hi, welcome back to your LiveReal overview.
                     </p>
                 </div>
                 <div className="flex items-center space-x-2">

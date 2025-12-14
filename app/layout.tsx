@@ -8,10 +8,10 @@ import { AuthListener } from "@/app/components/auth/auth-listener";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    metadataBase: new URL("https://ireal.live"),
+    metadataBase: new URL("https://livereal.live"),
     title: {
-        default: "iReal - Birthday Streaming Platform",
-        template: "%s | iReal",
+        default: "LiveReal - Birthday Streaming Platform",
+        template: "%s | LiveReal",
     },
     description: "Turn your birthday into a live experience. Stream your celebration, connect with your audience, and receive gifts in real-time.",
     icons: {
@@ -20,22 +20,22 @@ export const metadata: Metadata = {
     openGraph: {
         type: "website",
         locale: "en_US",
-        url: "https://ireal.live",
-        siteName: "iReal",
-        title: "iReal - Birthday Streaming Platform",
+        url: "https://livereal.live",
+        siteName: "LiveReal",
+        title: "LiveReal - Birthday Streaming Platform",
         description: "Stream your birthday celebration, connect with your audience, and receive gifts in real-time.",
         images: [
             {
                 url: "/og-image.png",
                 width: 1200,
                 height: 630,
-                alt: "iReal - Birthday Streaming Platform",
+                alt: "LiveReal - Birthday Streaming Platform",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "iReal - Birthday Streaming Platform",
+        title: "LiveReal - Birthday Streaming Platform",
         description: "Stream your birthday, receive gifts, and connect with your audience live.",
         images: ["/og-image.png"],
     },

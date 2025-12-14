@@ -35,14 +35,14 @@ export default function InvestorPage() {
                             Fueling the <br />
                             <span className="text-transparent bg-clip-text bg-linear-to-b from-gray-900 to-gray-500 dark:from-white dark:to-white/50">Next Gen</span>{" "}
                             <span className="text-transparent bg-clip-text bg-linear-to-r from-pink-500 via-purple-500 to-indigo-500">
-                                Social Platform
+                                Live Platform
                             </span>
                         </h1>
                         <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
                             We've validated the core with our MVP. Now, we're ready to scale globally and capture the mobile market.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                            <Link href="mailto:invest@ireal.com">
+                            <Link href="mailto:invest@livereal.com">
                                 <Button size="lg" className="h-14 px-10 text-lg rounded-full bg-foreground text-background hover:bg-foreground/90 shadow-[0_0_40px_-10px_rgba(0,0,0,0.3)] dark:shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] transition-all">
                                     Contact for Investment
                                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -60,7 +60,7 @@ export default function InvestorPage() {
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">Available Everywhere</h2>
                         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                            Whether on desktop or on the go, iReal delivers a seamless, high-fidelity experience.
+                            Whether on desktop or on the go, LiveReal delivers a seamless, high-fidelity experience.
                         </p>
                     </div>
 
@@ -123,7 +123,7 @@ export default function InvestorPage() {
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">Market Opportunity</h2>
                         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                            The social connection economy is booming. iReal is positioned to capture a significant wedge of the high-value authentic interaction market.
+                            The social connection economy is booming. LiveReal is positioned to capture a significant wedge of the high-value authentic interaction market.
                         </p>
                     </div>
 
@@ -219,8 +219,8 @@ export default function InvestorPage() {
                             <RoadmapItem
                                 quarter="Q1"
                                 year="2026"
-                                title="Scale API"
-                                items={["Infrastructure Scaling", "Latency Reduction", "Core API Optimization"]}
+                                title="Global Scale System"
+                                items={["UI/UX Enhancement", "Premiumn Features", "Core API Optimization"]}
                                 align="left"
                             />
                             <RoadmapItem
@@ -256,7 +256,7 @@ export default function InvestorPage() {
                     <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
                         We are building the future of digital connection. The train is leaving the station.
                     </p>
-                    <Link href="mailto:invest@ireal.com">
+                    <Link href="mailto:invest@livereal.com">
                         <Button size="lg" className="h-16 px-12 text-xl rounded-full bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-xl shadow-pink-500/25 scale-100 hover:scale-105 transition-all duration-300">
                             Inquire About Investment
                         </Button>
