@@ -149,7 +149,7 @@ export function ChatList({ className, onClose }: ChatListProps) {
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 relative z-10">
+            <ScrollArea className="flex-1 relative z-10 [&>div]:overscroll-y-contain">
                 <div className="p-4 space-y-5">
                     {messages.map((message, i) => (
                         <div
