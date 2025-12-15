@@ -40,9 +40,9 @@ export async function POST(req: Request) {
             stripeCustomerId: subscription.customer as string,
             stripePriceId: subscription.items.data[0].price.id,
             planId: session.metadata.planId,
-            stripeCurrentPeriodEnd: new Date(
-                (subscription as any).current_period_end * 1000
-            ),
+            stripeCurrentPeriodEnd: (subscription as any).current_period_end
+                ? new Date((subscription as any).current_period_end * 1000)
+                : null,
         });
     }
 
@@ -56,9 +56,9 @@ export async function POST(req: Request) {
             .update(subscriptions)
             .set({
                 stripePriceId: subscription.items.data[0].price.id,
-                stripeCurrentPeriodEnd: new Date(
-                    (subscription as any).current_period_end * 1000
-                ),
+                stripeCurrentPeriodEnd: (subscription as any).current_period_end
+                    ? new Date((subscription as any).current_period_end * 1000)
+                    : null,
                 planId: subscription.metadata.planId,
             })
             .where(eq(subscriptions.stripeSubscriptionId, subscription.id));
@@ -74,9 +74,9 @@ export async function POST(req: Request) {
             .update(subscriptions)
             .set({
                 stripePriceId: subscription.items.data[0].price.id,
-                stripeCurrentPeriodEnd: new Date(
-                    (subscription as any).current_period_end * 1000
-                ),
+                stripeCurrentPeriodEnd: (subscription as any).current_period_end
+                    ? new Date((subscription as any).current_period_end * 1000)
+                    : null,
                 planId: subscription.metadata.planId,
             })
             .where(eq(subscriptions.stripeSubscriptionId, subscription.id));
