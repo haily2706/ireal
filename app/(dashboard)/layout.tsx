@@ -6,8 +6,8 @@ import { ContentWrapper } from "@/app/(dashboard)/components/content-wrapper";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-    title: "Admin Dashboard | LiveReal",
-    description: "LiveReal Admin Dashboard",
+    title: "Dashboard",
+    description: "Dashboard",
 };
 
 import { cookies } from "next/headers";

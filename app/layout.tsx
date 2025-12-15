@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
     metadataBase: new URL("https://livereal.vercel.app"),
     title: {
-        default: "LiveReal - GenZ Streaming Platform",
+        default: "LiveReal - NextGen Streaming Platform",
         template: "%s | LiveReal",
     },
     description: "Turn your events into a live experience. Stream your celebration, connect with your audience, and receive gifts in real-time.",
