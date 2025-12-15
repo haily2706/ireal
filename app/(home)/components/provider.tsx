@@ -13,7 +13,7 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function HomeProvider({
     children,
-    defaultCollapsed = false
+    defaultCollapsed = true
 }: {
     children: React.ReactNode;
     defaultCollapsed?: boolean;

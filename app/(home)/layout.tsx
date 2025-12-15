@@ -17,7 +17,7 @@ export default async function HomeLayout({
     children: React.ReactNode;
 }) {
     const cookieStore = await cookies();
-    const defaultCollapsed = cookieStore.get("sidebar-collapsed")?.value === "true";
+    const defaultCollapsed = (cookieStore.get("sidebar-collapsed")?.value ?? "true") === "true";
 
     return (
         <HomeProvider defaultCollapsed={defaultCollapsed}>
