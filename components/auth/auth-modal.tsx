@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-
-import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +14,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { useAuthModal } from "@/app/components/auth/use-auth-modal";
+import { useAuthModal } from "@/components/auth/use-auth-modal";
 
 const supabase = createClient();
 
@@ -126,14 +124,14 @@ export const AuthModal = () => {
                                                 email,
                                                 password,
                                                 options: {
-                                                    emailRedirectTo: `${window.location.origin}/auth/callback`,
+                                                    emailRedirectTo: `${window.location.origin}/api/auth/callback`,
                                                 },
                                             });
                                             if (error) throw error;
                                             toast.success("Check your email to confirm your account");
                                         } else if (view === "forgotten_password") {
                                             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                                                redirectTo: `${window.location.origin}/auth/callback?next=/?recovery=true`,
+                                                redirectTo: `${window.location.origin}/api/auth/callback?next=/?recovery=true`,
                                             });
                                             if (error) throw error;
                                             toast.success("Check your email for the reset link");

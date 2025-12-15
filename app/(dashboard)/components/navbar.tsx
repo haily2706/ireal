@@ -2,11 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import { Menu, Search, Bell, Monitor, Moon, Sun } from "lucide-react";
-import { useAuthModal } from "@/app/components/auth/use-auth-modal";
-import { useAuthStore } from "@/app/components/auth/use-auth-store";
-import { UserMenu } from "@/app/components/auth/user-menu";
+import { useAuthModal } from "@/components/auth/use-auth-modal";
+import { useAuthStore } from "@/components/auth/use-auth-store";
+import { UserMenu } from "@/components/auth/user-menu";
 import { NotiDropdown } from "@/app/(home)/components/noti-dropdown";
-import { ModeToggle } from "@/app/components/theme/mode-toggle";
+import { ModeToggle } from "@/components/theme/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";

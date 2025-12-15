@@ -19,8 +19,8 @@ import {
     Crown
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { useAuthStore } from "@/app/components/auth/use-auth-store";
-import { useAuthModal } from "@/app/components/auth/use-auth-modal";
+import { useAuthStore } from "@/components/auth/use-auth-store";
+import { useAuthModal } from "@/components/auth/use-auth-modal";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

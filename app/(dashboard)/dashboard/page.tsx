@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/app/components/auth/use-auth-store";
+import { useAuthStore } from "@/components/auth/use-auth-store";
 import {
     Card,
     CardContent,

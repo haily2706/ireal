@@ -8,10 +8,10 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/app/components/theme/mode-toggle";
-import { useAuthModal } from "@/app/components/auth/use-auth-modal";
-import { useAuthStore } from "@/app/components/auth/use-auth-store";
-import { UserMenu } from "@/app/components/auth/user-menu";
+import { ModeToggle } from "@/components/theme/mode-toggle";
+import { useAuthModal } from "@/components/auth/use-auth-modal";
+import { useAuthStore } from "@/components/auth/use-auth-store";
+import { UserMenu } from "@/components/auth/user-menu";
 import { TextLogo } from "@/components/ui/text-logo";
 
 const navLinks = [

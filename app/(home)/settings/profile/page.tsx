@@ -1,7 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { useAuthStore } from "@/app/components/auth/use-auth-store";
+import { useAuthStore } from "@/components/auth/use-auth-store";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";

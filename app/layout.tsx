@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/app/components/theme/theme-provider";
-import { AuthModal } from "@/app/components/auth/auth-modal";
-import { AuthListener } from "@/app/components/auth/auth-listener";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { AuthModal } from "@/components/auth/auth-modal";
+import { AuthListener } from "@/components/auth/auth-listener";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     },
     description: "Turn your events into a live experience. Stream your celebration, connect with your audience, and receive gifts in real-time.",
     icons: {
-        icon: "/icon.svg",
+        icon: "/logo.svg",
     },
     openGraph: {
         type: "website",

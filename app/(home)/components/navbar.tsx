@@ -13,11 +13,11 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useAuthModal } from "@/app/components/auth/use-auth-modal";
+import { useAuthModal } from "@/components/auth/use-auth-modal";
 
 import { currentUser } from "@/lib/data";
 
-import { ModeToggle } from "@/app/components/theme/mode-toggle";
+import { ModeToggle } from "@/components/theme/mode-toggle";
 import { NotiDropdown } from "./noti-dropdown";
 import { TextLogo } from "@/components/ui/text-logo";
 
@@ -28,9 +28,9 @@ const appLinks = [
     { name: "Settings", href: "/settings" },
 ];
 
-import { useAuthStore } from "@/app/components/auth/use-auth-store";
+import { useAuthStore } from "@/components/auth/use-auth-store";
 
-import { UserMenu } from "@/app/components/auth/user-menu";
+import { UserMenu } from "@/components/auth/user-menu";
 
 export const categories = [
     "All",

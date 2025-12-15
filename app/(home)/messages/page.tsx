@@ -1,7 +1,7 @@
 "use client";
 
 import { MessageCircle } from "lucide-react";
-import { ComingSoon } from "@/app/components/coming-soon";
+import { ComingSoon } from "@/components/coming-soon";
 
 export default function MessagesPage() {
     return (

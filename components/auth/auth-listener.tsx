@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { useAuthStore } from "@/app/components/auth/use-auth-store";
+import { useAuthStore } from "@/components/auth/use-auth-store";
 
 export function AuthListener() {
     const supabase = createClient();

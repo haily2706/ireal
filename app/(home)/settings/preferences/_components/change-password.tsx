@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuthStore } from "@/app/components/auth/use-auth-store";
+import { useAuthStore } from "@/components/auth/use-auth-store";
 
 export function ChangePassword() {
     const { user } = useAuthStore();
