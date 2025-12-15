@@ -1,4 +1,4 @@
-import { checkSubscription, getSubscription } from "@/lib/subscription";
+import { getSubscription } from "@/lib/subscription";
 import { createClient } from "@/lib/supabase/server";
 import { SubscriptionView } from "./_components/subscription-view";
 import { redirect } from "next/navigation";
@@ -13,7 +13,6 @@ export default async function SubscriptionPage() {
         redirect("/");
     }
 
-    const isPro = await checkSubscription(user.id);
     const subscription = await getSubscription(user.id);
 
     return (
@@ -22,7 +21,7 @@ export default async function SubscriptionPage() {
             <p className="text-muted-foreground">
                 Manage your subscription plan and billing details.
             </p>
-            <SubscriptionView isPro={isPro} subscription={subscription} />
+            <SubscriptionView subscription={subscription} />
         </div>
     );
 }

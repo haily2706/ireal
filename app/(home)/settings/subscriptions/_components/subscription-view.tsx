@@ -7,19 +7,17 @@ import { Check, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { SUBSCRIPTION_PLANS } from "../constants";
+import { PlanId } from "@/lib/types";
 
 interface SubscriptionViewProps {
-    isPro: boolean;
     subscription: any;
 }
 
-export const SubscriptionView = ({ isPro, subscription }: SubscriptionViewProps) => {
+export const SubscriptionView = ({ subscription }: SubscriptionViewProps) => {
     const [loading, setLoading] = useState(false);
 
-    // TODO: Map stripePriceId to plan ID when you have the IDs
-    // For now, if isPro is true, we assume 'pro' or check for 'creator' if logic allows
-    // But since we can't distinguish without IDs, we'll default to 'free' if !isPro.
-    const currentPlanId = isPro ? "pro" : "free";
+
+    const currentPlanId = subscription?.planId ?? PlanId.FREE;
 
     // Find current plan details
     const currentPlan = SUBSCRIPTION_PLANS.find(tier => tier.id === currentPlanId) || SUBSCRIPTION_PLANS[0];

@@ -10,19 +10,20 @@ export const getSubscription = async (userId: string) => {
         .from(subscriptions)
         .where(eq(subscriptions.userId, userId));
 
-    return subscription;
-};
-
-export const checkSubscription = async (userId: string) => {
-    const subscription = await getSubscription(userId);
-
     if (!subscription) {
-        return false;
+        return null;
+    }
+
+    const subscriptionEndDate = new Date(subscription.createdAt!);
+    subscriptionEndDate.setMonth(subscriptionEndDate.getMonth() + 1);
+
+    if (subscriptionEndDate.getDate() !== subscription.createdAt!.getDate()) {
+        subscriptionEndDate.setDate(0);
     }
 
     const isValid =
         subscription.stripePriceId &&
-        subscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS > Date.now();
+        subscriptionEndDate.getTime() + DAY_IN_MS > Date.now();
 
-    return !!isValid;
+    return isValid ? subscription : null;
 };
