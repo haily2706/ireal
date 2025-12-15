@@ -4,28 +4,39 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { Check, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { SUBSCRIPTION_PLANS } from "../constants";
 import { PlanId } from "@/lib/types";
 
 interface SubscriptionViewProps {
     subscription: any;
+    planIdFromUrl?: string; // Add this
 }
 
-export const SubscriptionView = ({ subscription }: SubscriptionViewProps) => {
+export const SubscriptionView = ({ subscription, planIdFromUrl }: SubscriptionViewProps) => {
     const [loading, setLoading] = useState(false);
 
+    // Determine the effective plan ID, prioritizing the one from URL/success redirect
+    let currentPlanId = subscription?.planId ?? PlanId.FREE;
 
-    const currentPlanId = subscription?.planId ?? PlanId.FREE;
+    if (planIdFromUrl && SUBSCRIPTION_PLANS.some(p => p.id === planIdFromUrl)) {
+        currentPlanId = planIdFromUrl;
+    }
 
     // Find current plan details
     const currentPlan = SUBSCRIPTION_PLANS.find(tier => tier.id === currentPlanId) || SUBSCRIPTION_PLANS[0];
 
+    useEffect(() => {
+        if (planIdFromUrl) {
+            toast.success("Subscription updated successfully!");
+        }
+    }, [planIdFromUrl]);
+
     const onSubscribe = async (planId: string) => {
         try {
             setLoading(true);
-            const response = await axios.post("/api/stripe/checkout", {
+            const response = await axios.post("/api/payments/stripe/checkout", {
                 planId
             });
 
@@ -40,7 +51,7 @@ export const SubscriptionView = ({ subscription }: SubscriptionViewProps) => {
     const onManage = async () => {
         try {
             setLoading(true);
-            const response = await axios.post("/api/stripe/portal");
+            const response = await axios.post("/api/payments/stripe/portal");
 
             window.location.href = response.data.url;
         } catch (error) {
@@ -57,12 +68,22 @@ export const SubscriptionView = ({ subscription }: SubscriptionViewProps) => {
                 <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
                     Current Plan
                 </h4>
-                <div className="relative rounded-xl border p-8 bg-linear-to-r from-pink-500/5 to-purple-500/5 overflow-hidden">
+                <div className={cn(
+                    "relative rounded-xl border p-8 bg-linear-to-r overflow-hidden",
+                    currentPlanId === "free" && "from-blue-500/5 to-cyan-500/5",
+                    currentPlanId === "pro" && "from-pink-500/5 to-purple-500/5",
+                    currentPlanId === "creator" && "from-yellow-500/5 to-orange-500/5"
+                )}>
                     <div className="flex flex-col md:flex-row justify-between gap-6 relative z-10">
                         <div className="space-y-4">
                             <div className="flex items-center gap-x-3">
                                 <h2 className="text-3xl font-bold">{currentPlan.name}</h2>
-                                <span className="px-2.5 py-0.5 rounded-full bg-blue-500 text-white text-xs font-medium">
+                                <span className={cn(
+                                    "px-2.5 py-0.5 rounded-full text-white text-xs font-medium",
+                                    currentPlanId === "free" && "bg-blue-500",
+                                    currentPlanId === "pro" && "bg-pink-500",
+                                    currentPlanId === "creator" && "bg-orange-500"
+                                )}>
                                     Active
                                 </span>
                             </div>
@@ -88,8 +109,13 @@ export const SubscriptionView = ({ subscription }: SubscriptionViewProps) => {
 
                     {/* Decorative Icon */}
                     <div className="absolute top-6 right-6">
-                        <div className="bg-blue-500 rounded-xl p-2.5">
-                            <Sparkles className="h-6 w-6 text-white" />
+                        <div className={cn(
+                            "rounded-xl p-2.5",
+                            currentPlanId === "free" && "bg-blue-500",
+                            currentPlanId === "pro" && "bg-pink-500",
+                            currentPlanId === "creator" && "bg-orange-500"
+                        )}>
+                            <currentPlan.icon className="h-6 w-6 text-white" />
                         </div>
                     </div>
                 </div>

@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
 
         if (userSubscription && userSubscription.stripeCustomerId) {
             stripeSession = await stripe.checkout.sessions.create({
-                success_url: absoluteUrl("/settings/subscriptions"),
+                success_url: absoluteUrl(`/settings/subscriptions?planId=${planId}`),
                 cancel_url: absoluteUrl("/settings/subscriptions"),
                 payment_method_types: ["card"],
                 mode: "subscription",
@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
             });
         } else {
             stripeSession = await stripe.checkout.sessions.create({
-                success_url: absoluteUrl("/settings/subscriptions"),
+                success_url: absoluteUrl(`/settings/subscriptions?planId=${planId}`),
                 cancel_url: absoluteUrl("/settings/subscriptions"),
                 payment_method_types: ["card"],
                 mode: "subscription",

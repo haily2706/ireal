@@ -1,9 +1,16 @@
-import { getSubscription } from "@/lib/subscription";
+import { getSubscription } from "@/app/api/subcriptions/get-subscription";
 import { createClient } from "@/lib/supabase/server";
-import { SubscriptionView } from "./_components/subscription-view";
+import { SubscriptionView } from "./components/subscription-view";
 import { redirect } from "next/navigation";
 
-export default async function SubscriptionPage() {
+
+interface SubscriptionPageProps {
+    searchParams: {
+        planId?: string;
+    }
+}
+
+export default async function SubscriptionPage({ searchParams }: SubscriptionPageProps) {
     const supabase = await createClient();
     const {
         data: { user },
@@ -21,7 +28,10 @@ export default async function SubscriptionPage() {
             <p className="text-muted-foreground">
                 Manage your subscription plan and billing details.
             </p>
-            <SubscriptionView subscription={subscription} />
+            <SubscriptionView
+                subscription={subscription}
+                planIdFromUrl={searchParams.planId}
+            />
         </div>
     );
 }

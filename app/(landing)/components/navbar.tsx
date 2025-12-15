@@ -132,28 +132,19 @@ export function Navbar() {
                     {/* Desktop Right Side */}
                     <div className="hidden lg:flex items-center gap-4">
                         <ModeToggle />
+                        <Link href="/home">
+                            <Button
+                                variant="ghost"
+                                className="hover:text-pink-500 hover:bg-pink-500/10 active:scale-95 transition-all"
+                            >
+                                Home
+                            </Button>
+                        </Link>
                         {isLoading ? (
                             <div className="h-10 w-10 rounded-full bg-muted animate-pulse ml-auto" />
                         ) : user ? (
                             <>
-                                <Link href="/home">
-                                    <Button
-                                        variant="ghost"
-                                        className="hover:text-pink-500 hover:bg-pink-500/10 active:scale-95 transition-all"
-                                    >
-                                        Home
-                                    </Button>
-                                </Link>
-                                {(user?.app_metadata?.role === UserRole.ADMIN || user?.app_metadata?.role === UserRole.MANAGER) && (
-                                    <Link href="/dashboard">
-                                        <Button
-                                            variant="ghost"
-                                            className="hover:text-pink-500 hover:bg-pink-500/10 active:scale-95 transition-all"
-                                        >
-                                            Dashboard
-                                        </Button>
-                                    </Link>
-                                )}
+
                                 <UserMenu email={user.email} />
                             </>
                         ) : (
@@ -247,27 +238,19 @@ export function Navbar() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}
                         >
+                            <Link href="/home" onClick={() => setIsMobileMenuOpen(false)}>
+                                <Button
+                                    className="mb-4 w-full h-12 text-lg hover:text-pink-500 hover:bg-pink-500/10"
+                                    variant="outline"
+                                >
+                                    Home
+                                </Button>
+                            </Link>
                             {isLoading ? (
                                 <div className="w-full h-12 rounded-lg bg-muted animate-pulse" />
                             ) : user ? (
                                 <>
-                                    <Link href="/home" onClick={() => setIsMobileMenuOpen(false)}>
-                                        <Button
-                                            className="mb-4 w-full h-12 text-lg hover:text-pink-500 hover:bg-pink-500/10"
-                                            variant="outline"
-                                        >
-                                            Home
-                                        </Button>
-                                    </Link>
-                                    {(user?.app_metadata?.role === UserRole.ADMIN || user?.app_metadata?.role === UserRole.MANAGER) && (
-                                        <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
-                                            <Button
-                                                className="w-full h-12 text-lg bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-pink-500/20"
-                                            >
-                                                Dashboard
-                                            </Button>
-                                        </Link>
-                                    )}
+
                                 </>
                             ) : (
                                 <>

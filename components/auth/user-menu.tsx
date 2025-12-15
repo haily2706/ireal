@@ -9,6 +9,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { UserRole } from "@/types/role";
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "./use-auth-store"
@@ -35,6 +36,11 @@ export function UserMenu({ email }: { email?: string }) {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuLabel className="font-normal text-xs text-muted-foreground">{email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {(user?.app_metadata?.role === UserRole.ADMIN || user?.app_metadata?.role === UserRole.MANAGER) && (
+                    <DropdownMenuItem onClick={() => router.push("/dashboard")}>
+                        Dashboard
+                    </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={() => router.push("/settings")}>Settings</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>Sign Out</DropdownMenuItem>

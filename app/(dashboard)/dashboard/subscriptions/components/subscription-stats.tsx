@@ -19,7 +19,7 @@ interface SubStatsProps {
     activeSubscriptions: number;
 }
 
-export function SubStats({ totalSubscriptions, activeSubscriptions }: SubStatsProps) {
+export function SubscriptionStats({ totalSubscriptions, activeSubscriptions }: SubStatsProps) {
     return (
         <div className="grid gap-4 md:grid-cols-3">
             <Card className="hover:shadow-md transition-shadow">

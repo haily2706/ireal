@@ -5,7 +5,7 @@ import { ProductType, Plan } from "@/lib/types";
 import { db } from "@/lib/db";
 import { subscriptions } from "@/lib/db/schema";
 import { count, gt, desc } from "drizzle-orm";
-import { SubStats } from "./components/sub-stats";
+import { SubscriptionStats } from "./components/subscription-stats";
 import { SubscriptionTable, SubscriptionData } from "./components/subscription-table";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -102,7 +102,7 @@ export default async function PlansPage() {
             </div>
 
             {/* Stats Cards */}
-            <SubStats
+            <SubscriptionStats
                 totalSubscriptions={Number(totalSubs.count)}
                 activeSubscriptions={Number(activeSubs.count)}
             />

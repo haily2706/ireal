@@ -40,8 +40,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
             </div>
 
             <div className={cn(
-                "relative z-10 h-full mx-auto p-6 transition-all duration-500 ease-in-out",
-                isCollapsed ? "max-w-full px-10" : "max-w-7xl"
+                "relative z-10 h-full mx-auto p-4 transition-all duration-500 ease-in-out",
+                isCollapsed ? "max-w-full px-6" : "max-w-7xl"
             )}>
                 <div className="space-y-6">
                     <div className="flex flex-col gap-2 mb-6">
