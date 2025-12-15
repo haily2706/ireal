@@ -5,3 +5,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function absoluteUrl(path: string) {
+  return `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}${path}`
+}
+
+
+export function formatCurrency(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(value)
+}

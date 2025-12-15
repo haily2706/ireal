@@ -1,6 +1,6 @@
 import { Sparkles, Zap, Crown } from "lucide-react";
 
-export const SUBSCRIPTION_TIERS = [
+export const SUBSCRIPTION_PLANS = [
     {
         id: "free",
         name: "Free",
@@ -20,6 +20,7 @@ export const SUBSCRIPTION_TIERS = [
     },
     {
         id: "pro",
+        stripeProdId: "prod_TbjaLeHjXqA7Xs",
         name: "Pro",
         icon: Zap,
         price: "$2.99",
@@ -39,6 +40,7 @@ export const SUBSCRIPTION_TIERS = [
     },
     {
         id: "creator",
+        stripeProdId: "prod_TbjcKCyXxAHoGN",
         name: "Creator",
         icon: Crown,
         price: "$9.99",

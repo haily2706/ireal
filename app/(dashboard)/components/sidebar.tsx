@@ -177,6 +177,7 @@ export function Sidebar() {
                         {[
                             { icon: CircleGauge, label: "Dashboard", href: "/dashboard", color: "text-blue-400" },
                             { icon: Users, label: "Users", href: "/dashboard/users", color: "text-pink-400" },
+                            { icon: Zap, label: "Plans", href: "/dashboard/plans", color: "text-yellow-400" },
                             { icon: Settings, label: "Settings", href: "/dashboard/settings", color: "text-gray-400" }
                         ].map((link) => (
                             <SidebarLink
