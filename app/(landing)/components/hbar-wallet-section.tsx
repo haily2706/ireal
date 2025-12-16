@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Wallet, Coins, ArrowRightLeft, CreditCard, ShieldCheck, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import Image from "next/image";
 
 const CoinIcon = ({ className }: { className?: string }) => (
@@ -79,12 +80,16 @@ export function HBarWalletSection() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <Button size="lg" className="bg-linear-to-r from-brand-blue to-purple-600 hover:opacity-90 transition-opacity">
-                                Create Wallet
-                            </Button>
-                            <Button size="lg" variant="outline" className="border-brand-blue/30 hover:bg-brand-blue/10">
-                                Learn More
-                            </Button>
+                            <Link href="/home">
+                                <Button size="lg" className="bg-linear-to-r from-brand-blue to-purple-600 hover:opacity-90 transition-opacity text-white">
+                                    Create Wallet
+                                </Button>
+                            </Link>
+                            <Link href="/home">
+                                <Button size="lg" variant="outline" className="border-brand-blue/30 hover:bg-brand-blue/10">
+                                    Learn More
+                                </Button>
+                            </Link>
                         </div>
 
                         <div className="mt-10 flex items-center gap-6 text-sm text-muted-foreground">

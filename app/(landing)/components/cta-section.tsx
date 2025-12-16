@@ -112,7 +112,7 @@ export function CTASection() {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Button
                             size="lg"
-                            className="h-14 px-8 text-lg bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 animate-pulse-glow"
+                            className="h-14 px-8 text-lg bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 animate-pulse-glow text-white"
                             asChild
                         >
                             <Link href="/home">

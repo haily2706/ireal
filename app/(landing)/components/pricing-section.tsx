@@ -157,7 +157,7 @@ export function PricingSection() {
 
                                 {/* CTA */}
                                 <Button
-                                    className={`w-full h-12 ${tier.popular ? 'bg-linear-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600' : ''}`}
+                                    className={`w-full h-12 ${tier.popular ? 'bg-linear-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white' : ''}`}
                                     variant={tier.buttonVariant}
                                 >
                                     {tier.cta}

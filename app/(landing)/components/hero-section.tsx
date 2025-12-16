@@ -139,7 +139,7 @@ export function HeroSection() {
                 >
                     <Button
                         size="lg"
-                        className="h-14 px-8 text-lg bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 animate-pulse-glow rounded-2xl"
+                        className="h-14 px-8 text-lg bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 animate-pulse-glow rounded-2xl text-white"
                         asChild
                     >
                         <Link href="/home">
