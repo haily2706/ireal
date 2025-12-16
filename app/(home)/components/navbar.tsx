@@ -37,7 +37,6 @@ export const categories = [
     "Birthday",
     "Gaming",
     "Singing",
-    "Famous",
     "Sports"
 ];
 
