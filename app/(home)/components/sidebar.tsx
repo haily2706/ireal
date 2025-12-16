@@ -9,7 +9,7 @@ import {
     LogOut,
     LogIn,
     Menu,
-    Wallet,
+
     Calendar,
     Compass,
     Clapperboard,
@@ -26,7 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSidebar } from "@/app/(home)/components/provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Coin } from "@/components/ui/coin";
+import { PremiumBalanceCard } from "@/app/(home)/settings/wallet/components/premium-balance-card";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 
@@ -178,32 +178,10 @@ export function Sidebar() {
 
                                         {/* Premium Balance Card */}
                                         {showPremiumBalance && (
-                                            <div
-                                                onClick={() => router.push("/settings/wallet")}
-                                                className="mt-6 p-4 rounded-2xl bg-linear-to-b from-muted/50 to-transparent border border-border backdrop-blur-md relative overflow-hidden group cursor-pointer hover:border-purple-500/50 transition-all duration-300"
-                                            >
-                                                {/* Background Coin */}
-                                                <div className="absolute -right-5 -bottom-5 opacity-[0.05] group-hover:opacity-15 transition-all duration-500 rotate-15 group-hover:rotate-0 scale-100 group-hover:scale-110 pointer-events-none">
-                                                    <Coin className="w-28 h-28 blur-[1px]" />
-                                                </div>
-
-                                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-foreground/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
-
-                                                <div className="flex items-center justify-between mb-2 relative z-10">
-                                                    <div className="flex items-center gap-2 text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
-                                                        <div className="p-1 rounded-md bg-muted/50">
-                                                            <Wallet className="w-3 h-3 text-yellow-600 dark:text-yellow-500" />
-                                                        </div>
-                                                        Balance
-                                                    </div>
-                                                </div>
-
-                                                <div className="text-xl font-bold text-foreground tracking-tighter text-left flex items-center gap-1 relative z-10">
-                                                    98,890
-                                                </div>
-                                            </div>
+                                            <PremiumBalanceCard />
                                         )}
                                     </motion.div>
+
                                 )}
                             </AnimatePresence>
                         </>
