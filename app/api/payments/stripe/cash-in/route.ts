@@ -80,25 +80,25 @@ export async function POST(req: NextRequest) {
 
         let stripeSession;
         // In cash-in, success url redirects back to wallet
-        const successUrl = absoluteUrl(`/wallet?success=true`);
-        const cancelUrl = absoluteUrl("/wallet");
+        const successUrl = absoluteUrl(`/settings/wallet?success=true`);
+        const cancelUrl = absoluteUrl("/settings/wallet");
 
-    
-            stripeSession = await stripe.checkout.sessions.create({
-                success_url: successUrl,
-                cancel_url: cancelUrl,
-                payment_method_types: ["card"],
-                mode: "payment",
-                billing_address_collection: "auto",
-                customer_email: user.email,
-                line_items: [line_item],
-                metadata: {
-                    userId: user.id,
-                    planId,
-                    type: "cash_in",
-                },
-            });
-    
+
+        stripeSession = await stripe.checkout.sessions.create({
+            success_url: successUrl,
+            cancel_url: cancelUrl,
+            payment_method_types: ["card"],
+            mode: "payment",
+            billing_address_collection: "auto",
+            customer_email: user.email,
+            line_items: [line_item],
+            metadata: {
+                userId: user.id,
+                planId,
+                type: "cash_in",
+            },
+        });
+
 
         return NextResponse.json({ url: stripeSession.url });
     } catch (error) {
