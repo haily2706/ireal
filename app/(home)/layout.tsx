@@ -5,8 +5,7 @@ import { HomeProvider } from "@/app/(home)/components/provider";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-    title: "",
-    description: "",
+  
 };
 
 import { cookies } from "next/headers";
