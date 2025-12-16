@@ -36,7 +36,7 @@ export default async function IndexPage() {
     const spec = await getApiDocs();
     return (
         <main className="min-h-screen bg-white text-black">
-            <nav className="sticky top-0 z-50 w-full h-16 px-6 flex items-center border-b border-gray-200">
+            <nav className="sticky top-0 z-50 w-full h-16 px-6 flex items-center border-b border-gray-200 bg-white">
                 <Link href="/">
                     <TextLogo className="h-6 w-auto" />
                 </Link>

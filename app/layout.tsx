@@ -32,6 +32,12 @@ export const metadata: Metadata = {
                 height: 630,
                 alt: "NextGen Streaming Platform",
             },
+            {
+                url: "/og-image-4x3.png",
+                width: 1200,
+                height: 900,
+                alt: "NextGen Streaming Platform",
+            },
         ],
     },
     twitter: {

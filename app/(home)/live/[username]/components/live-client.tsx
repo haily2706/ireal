@@ -127,7 +127,6 @@ export function LiveClient({ username }: LiveClientProps) {
                 .bar:nth-child(2) { animation-duration: 1.1s; animation-delay: 0.2s; }
                 .bar:nth-child(3) { animation-duration: 0.9s; animation-delay: 0.3s; }
                 .bar:nth-child(4) { animation-duration: 1.2s; animation-delay: 0.4s; }
-                .bar:nth-child(4) { animation-duration: 1.2s; animation-delay: 0.4s; }
             `}</style>
 
             {/* Main Content */}
@@ -143,7 +142,7 @@ export function LiveClient({ username }: LiveClientProps) {
                     {/* Video Player Container */}
                     <div className="relative aspect-video w-full rounded-2xl overflow-hidden group shadow-2xl ring-1 ring-border bg-black backdrop-blur-sm">
                         {/* Video Glow Effect */}
-                        <div className="absolute -inset-1 bg-linear-to-r from-red-500/20 to-purple-500/20 blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-1000" />
+                        <div className="absolute -inset-1 bg-gradient-to-r from-red-500/20 to-purple-500/20 blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-1000" />
 
                         <div className="relative h-full w-full bg-black z-10">
                             <Image
@@ -169,7 +168,7 @@ export function LiveClient({ username }: LiveClientProps) {
                             </div>
 
                             {/* Overlay Controls */}
-                            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-transparent to-black/60 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/60 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6">
                                 {/* Top Controls */}
                                 <div className="flex justify-between items-start">
                                     <div className="flex items-center gap-3">
@@ -257,14 +256,14 @@ export function LiveClient({ username }: LiveClientProps) {
                     {/* Info Section */}
                     <div className="mt-6 grid grid-cols-1 lg:grid-cols-[1fr,350px] gap-6">
                         <div className="space-y-4">
-                            <h1 className="text-2xl font-bold leading-tight tracking-tight bg-linear-to-r from-foreground via-foreground to-foreground/50 bg-clip-text text-transparent drop-shadow-sm">
+                            <h1 className="text-2xl font-bold leading-tight tracking-tight bg-gradient-to-r from-foreground via-foreground to-foreground/50 bg-clip-text text-transparent drop-shadow-sm">
                                 {live.title}
                             </h1>
 
                             <div className="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-border">
                                 <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
                                     <div className="relative group cursor-pointer shrink-0">
-                                        <div className="absolute -inset-0.5 bg-linear-to-r from-pink-600 to-purple-600 rounded-full opacity-75 group-hover:opacity-100 blur transition duration-200"></div>
+                                        <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full opacity-75 group-hover:opacity-100 blur transition duration-200"></div>
                                         <Avatar className="h-10 w-10 sm:h-12 sm:w-12 ring-2 ring-background relative">
                                             <AvatarImage src={live.channel.avatar} />
                                             <AvatarFallback>{live.channel.name[0]}</AvatarFallback>
@@ -353,7 +352,7 @@ export function LiveClient({ username }: LiveClientProps) {
                 <Sheet open={isChatOpen} onOpenChange={setIsChatOpen}>
                     <SheetTrigger asChild>
                         <Button
-                            className="fixed bottom-6 right-6 z-50 rounded-full h-10 w-10 shadow-2xl bg-linear-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white transition-all hover:scale-110 active:scale-95 ring-offset-2 ring-offset-background ring-2 ring-indigo-500 animate-in fade-in zoom-in slide-in-from-bottom-10 duration-500"
+                            className="fixed bottom-6 right-6 z-50 rounded-full h-10 w-10 shadow-2xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white transition-all hover:scale-110 active:scale-95 ring-offset-2 ring-offset-background ring-2 ring-indigo-500 animate-in fade-in zoom-in slide-in-from-bottom-10 duration-500"
                             size="icon"
                         >
                             <MessageSquare className="w-7 h-7 fill-current drop-shadow-md animate-[bounce_2s_infinite]" />
