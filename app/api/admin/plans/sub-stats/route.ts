@@ -5,6 +5,32 @@ import { db } from "@/lib/db";
 import { subscriptions } from "@/lib/db/schema";
 import { count, gt } from "drizzle-orm";
 
+/**
+ * @swagger
+ * /api/admin/plans/sub-stats:
+ *   get:
+ *     summary: Get Subscription Statistics
+ *     description: Returns the total number of subscriptions and the number of active subscriptions.
+ *     tags:
+ *       - Admin
+ *       - Stats
+ *     responses:
+ *       200:
+ *         description: Subscription statistics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalSubscriptions:
+ *                   type: number
+ *                 activeSubscriptions:
+ *                   type: number
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Error
+ */
 export async function GET(req: NextRequest) {
     try {
         const supabase = await createClient();

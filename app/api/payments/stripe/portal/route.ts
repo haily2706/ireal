@@ -6,6 +6,33 @@ import { db } from "@/lib/db";
 import { subscriptions } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
+/**
+ * @swagger
+ * /api/payments/stripe/portal:
+ *   post:
+ *     summary: Create Customer Portal Session
+ *     description: Creates a Stripe Customer Portal session for managing subscriptions.
+ *     tags:
+ *       - Payments
+ *     responses:
+ *       200:
+ *         description: Portal URL
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 url:
+ *                   type: string
+ *       400:
+ *         description: No Customer ID found for subscription
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Subscription not found
+ *       500:
+ *         description: Internal Error
+ */
 export async function POST(req: NextRequest) {
     try {
         const supabase = await createClient();

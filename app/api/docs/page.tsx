@@ -1,5 +1,6 @@
 import { createSwaggerSpec } from 'next-swagger-doc';
 import ReactSwagger from './react-swagger';
+import Link from 'next/link';
 
 export const getApiDocs = async () => {
     const spec = createSwaggerSpec({
@@ -36,7 +37,9 @@ export default async function IndexPage() {
     return (
         <main className="min-h-screen bg-white text-black">
             <nav className="sticky top-0 z-50 w-full h-16 px-6 flex items-center border-b border-gray-200">
-                <TextLogo className="h-6 w-auto" />
+                <Link href="/">
+                    <TextLogo className="h-6 w-auto" />
+                </Link>
             </nav>
             <section className="container mx-auto">
                 <ReactSwagger spec={spec} />

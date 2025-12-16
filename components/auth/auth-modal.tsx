@@ -40,6 +40,8 @@ export const AuthModal = () => {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((event) => {
             if (event === "SIGNED_IN") {
+                // Initialize wallet
+                fetch('/api/wallet/init');
                 router.refresh();
                 onClose();
             }

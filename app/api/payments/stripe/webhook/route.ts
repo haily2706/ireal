@@ -2,9 +2,11 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
-import { db } from "@/lib/db";
-import { subscriptions } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import {
+    handleCheckoutSessionCompleted,
+    handleInvoicePaymentSucceeded,
+    handleSubscriptionUpdatedOrDeleted
+} from "./handlers";
 
 export async function POST(req: Request) {
     const body = await req.text();
@@ -22,65 +24,35 @@ export async function POST(req: Request) {
         return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
     }
 
-    const session = event.data.object as Stripe.Checkout.Session;
+    try {
+        switch (event.type) {
+            case "checkout.session.completed":
+                await handleCheckoutSessionCompleted(event.data.object as Stripe.Checkout.Session);
+                break;
+            case "invoice.payment_succeeded":
+                await handleInvoicePaymentSucceeded(event.data.object as Stripe.Invoice);
+                break;
+            case "customer.subscription.updated":
+            case "customer.subscription.deleted":
+                await handleSubscriptionUpdatedOrDeleted(event.data.object as Stripe.Subscription);
+                break;
+            default:
+                console.log(`Unhandled event type ${event.type}`);
+        }
+    } catch (error: any) {
+        console.error(`Error processing webhook event ${event.type}:`, error);
 
+        const clientErrors = [
+            "User id is required",
+            "Invalid Plan",
+            "User Hedera Account Not Found"
+        ];
 
-    if (event.type === "checkout.session.completed") {
-        const subscription = await stripe.subscriptions.retrieve(
-            session.subscription as string
-        );
-
-        if (!session?.metadata?.userId) {
-            return new NextResponse("User id is required", { status: 400 });
+        if (clientErrors.includes(error.message)) {
+            return new NextResponse(error.message, { status: 400 });
         }
 
-        await db.insert(subscriptions).values({
-            id: subscription.id,
-            userId: session.metadata.userId,
-            stripeSubscriptionId: subscription.id,
-            stripeCustomerId: subscription.customer as string,
-            stripePriceId: subscription.items.data[0].price.id,
-            planId: session.metadata.planId,
-            status: subscription.status,
-            cancelAtPeriodEnd: subscription.cancel_at_period_end,
-            stripeCurrentPeriodEnd: subscription.items.data[0].current_period_end ? new Date(subscription.items.data[0].current_period_end * 1000) : null,
-        });
-    }
-
-    if (event.type === "invoice.payment_succeeded") {
-        const invoice = event.data.object as Stripe.Invoice;
-        const subscription = await stripe.subscriptions.retrieve(
-            (invoice as any).subscription as string
-        );
-
-        await db
-            .update(subscriptions)
-            .set({
-                stripePriceId: subscription.items.data[0].price.id,
-                stripeCurrentPeriodEnd: subscription.items.data[0].current_period_end ? new Date(subscription.items.data[0].current_period_end * 1000) : null,
-                planId: subscription.metadata.planId,
-                status: subscription.status,
-                cancelAtPeriodEnd: subscription.cancel_at_period_end,
-            })
-            .where(eq(subscriptions.stripeSubscriptionId, subscription.id));
-    }
-
-    if (
-        event.type === "customer.subscription.updated" ||
-        event.type === "customer.subscription.deleted"
-    ) {
-        const subscription = event.data.object as Stripe.Subscription;
-
-        await db
-            .update(subscriptions)
-            .set({
-                stripePriceId: subscription.items.data[0].price.id,
-                stripeCurrentPeriodEnd: subscription.items.data[0].current_period_end ? new Date(subscription.items.data[0].current_period_end * 1000) : null,
-                planId: subscription.metadata.planId,
-                status: subscription.status,
-                cancelAtPeriodEnd: subscription.cancel_at_period_end,
-            })
-            .where(eq(subscriptions.stripeSubscriptionId, subscription.id));
+        return new NextResponse("Internal Server Error", { status: 500 });
     }
 
     return new NextResponse(null, { status: 200 });

@@ -15,6 +15,20 @@
       "when": 1765857723990,
       "tag": "0001_modern_kronos",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765873397962,
+      "tag": "0002_unknown_harpoon",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1765877794513,
+      "tag": "0003_right_skaar",
+      "breakpoints": true
     }
   ]
 }

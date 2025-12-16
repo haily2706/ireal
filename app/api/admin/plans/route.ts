@@ -5,6 +5,44 @@ import Stripe from "stripe";
 import { absoluteUrl } from "@/lib/utils";
 import { ProductType } from "@/lib/types";
 
+/**
+ * @swagger
+ * /api/admin/plans:
+ *   get:
+ *     summary: List Subscription Plans
+ *     description: Fetches a list of active subscription plans from Stripe.
+ *     tags:
+ *       - Admin
+ *       - Plans
+ *     responses:
+ *       200:
+ *         description: List of plans
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   price:
+ *                     type: number
+ *                   currency:
+ *                     type: string
+ *                   interval:
+ *                     type: string
+ *                   features:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Error
+ */
 export async function GET(req: NextRequest) {
     try {
         const supabase = await createClient();
@@ -52,6 +90,45 @@ export async function GET(req: NextRequest) {
     }
 }
 
+/**
+ * @swagger
+ * /api/admin/plans:
+ *   post:
+ *     summary: Update Subscription Plan
+ *     description: Updates an existing subscription plan in Stripe. Creating new plans is currently disabled.
+ *     tags:
+ *       - Admin
+ *       - Plans
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The ID of the product to update
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               features:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Plan updated successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Creating new plans is not allowed
+ *       500:
+ *         description: Internal Error
+ */
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();

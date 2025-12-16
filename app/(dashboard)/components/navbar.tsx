@@ -21,7 +21,7 @@ const mobileLinks = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Users", href: "/dashboard/users", icon: Users },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
-    { name: "Back to Home", href: "/home", icon: LogOut },
+    { name: "Home", href: "/home", icon: LogOut },
 ];
 
 export function Navbar() {
@@ -85,12 +85,14 @@ export function Navbar() {
                 {/* Right Section: Actions */}
                 <div className="flex items-center justify-end gap-3 flex-1">
                     <div className="hidden md:flex items-center mr-2">
-                        <Button variant="ghost" size="sm" asChild className="gap-2 text-muted-foreground hover:text-foreground">
-                            <Link href="/home">
-                                <LogOut className="h-4 w-4" />
-                                <span className="hidden lg:inline">Back to Home</span>
-                            </Link>
-                        </Button>
+                        <Link href="/home">
+                            <Button
+                                variant="ghost"
+                                className="hover:text-pink-500 hover:bg-pink-500/10 active:scale-95 transition-all"
+                            >
+                                Home
+                            </Button>
+                        </Link>
                     </div>
                     <div className="flex items-center gap-1 border-r border-border pr-3 mr-1">
                         {user && (

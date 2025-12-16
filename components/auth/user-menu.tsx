@@ -41,6 +41,11 @@ export function UserMenu({ email }: { email?: string }) {
                         Dashboard
                     </DropdownMenuItem>
                 )}
+                {user?.app_metadata?.role === UserRole.ADMIN && (
+                    <DropdownMenuItem onClick={() => router.push("/api/docs")}>
+                        API Docs
+                    </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={() => router.push("/settings")}>Settings</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>Sign Out</DropdownMenuItem>

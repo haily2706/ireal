@@ -5,6 +5,8 @@ export const users = pgTable('users', {
     email: text('email').notNull(),
     fullName: text('full_name'),
     avatarUrl: text('avatar_url'),
+    hbarAccountId: text('hbar_account_id'),
+    hbarPrivateKey: text('hbar_private_key'),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -19,6 +21,31 @@ export const subscriptions = pgTable('subscriptions', {
     status: text('status'), // active, canceled, etc.
     cancelAtPeriodEnd: boolean('cancel_at_period_end'),
     stripeCurrentPeriodEnd: timestamp('stripe_current_period_end'),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const tokens = pgTable('tokens', {
+    id: text('id').primaryKey(),
+    tokenId: text('token_id').notNull().unique(),
+    name: text('name').notNull(),
+    symbol: text('symbol').notNull(),
+    decimals: text('decimals').notNull(),
+    totalSupply: text('total_supply').notNull(),
+    description: text('description'),
+    imageUrl: text('image_url'),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const cashIns = pgTable('cash_ins', {
+    id: text('id').primaryKey(),
+    userId: text('user_id').notNull().references(() => users.id),
+    stripeCustomerId: text('stripe_customer_id'),
+    stripePaymentIntentId: text('stripe_payment_intent_id'),
+    amount: text('amount').notNull(), // Amount in cents
+    currency: text('currency').notNull(),
+    status: text('status'), // succeeded, pending, failed
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow(),
 });

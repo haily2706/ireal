@@ -11,7 +11,8 @@ import {
     Users,
     Zap,
     Sparkles,
-    Crown
+    Crown,
+    Banknote
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuthStore } from "@/components/auth/use-auth-store";
@@ -177,6 +178,7 @@ export function Sidebar() {
                         {[
                             { icon: CircleGauge, label: "Dashboard", href: "/dashboard", color: "text-blue-400" },
                             { icon: Users, label: "Users", href: "/dashboard/users", color: "text-pink-400" },
+                            { icon: Banknote, label: "Cash Ins", href: "/dashboard/cash-ins", color: "text-green-400" },
                             { icon: Zap, label: "Subscriptions", href: "/dashboard/subscriptions", color: "text-yellow-400" },
                             { icon: Settings, label: "Settings", href: "/dashboard/settings", color: "text-gray-400" }
                         ].map((link) => (

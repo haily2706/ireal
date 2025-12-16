@@ -1,13 +1,41 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Plus, ArrowUpRight, ArrowDownLeft, CreditCard, MoreHorizontal, Wallet as WalletIcon } from "lucide-react";
 import { Coin } from "@/components/ui/coin";
 import Image from "next/image";
+import { CashInModal } from "./components/cash-in-modal";
 
 export default function WalletPage() {
+    const [balanceData, setBalanceData] = useState<{
+        hbarBalance: string;
+        tokenBalance: string;
+        accountId: string;
+    } | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchBalance = async () => {
+            try {
+                const res = await fetch('/api/wallet/balance');
+                if (res.ok) {
+                    const data = await res.json();
+                    setBalanceData(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch balance", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBalance();
+    }, []);
+
     return (
         <div className="space-y-8 animate-in fade-in-50 duration-500">
             <div>
@@ -15,6 +43,11 @@ export default function WalletPage() {
                 <p className="text-sm text-muted-foreground">
                     Manage your balance, cash in/out, and payment methods.
                 </p>
+                {balanceData && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                        Hedera Account ID: <span className="font-mono">{balanceData.accountId}</span>
+                    </p>
+                )}
             </div>
             <Separator />
 
@@ -30,13 +63,24 @@ export default function WalletPage() {
                         <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total Balance</CardTitle>
                     </CardHeader>
                     <CardContent className="relative z-10">
-                        <div className="flex items-baseline gap-1 mb-1">
-                            <div className="text-4xl font-bold tracking-tighter">98,890</div>
-                            <div className="text-2xl font-normal text-muted-foreground">.00</div>
-                        </div>
-                        <div className="text-sm font-medium text-muted-foreground">
-                            ≈ $988.90 USD
-                        </div>
+                        {loading ? (
+                            <div className="flex items-baseline gap-1 mb-1 animate-pulse">
+                                <div className="h-10 w-32 bg-muted rounded"></div>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="flex items-baseline gap-1 mb-1">
+                                    <div className="text-4xl font-bold tracking-tighter">
+                                        {balanceData ? parseInt(balanceData.tokenBalance).toLocaleString() : "0"}
+                                    </div>
+                                    <div className="text-ms font-normal text-muted-foreground">LREAL</div>
+                                </div>
+                                <div className="text-sm font-medium text-muted-foreground">
+                                    ≈ {balanceData ? (parseInt(balanceData.tokenBalance) / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : "$0.00"}
+                                </div>
+                            </>
+                        )}
+
                         <div className="flex items-center gap-2 mt-2">
                             <div className="px-2 py-0.5 rounded-full bg-green-500/10 text-green-500 text-xs font-medium">
                                 +20.1%
@@ -47,13 +91,15 @@ export default function WalletPage() {
                 </Card>
 
                 {/* Actions */}
-                <Card className="col-span-1 group flex flex-col justify-center items-center p-6 cursor-pointer bg-background hover:bg-muted/30 transition-all duration-300 border-dashed hover:border-solid hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/10">
-                    <div className="h-14 w-14 rounded-full bg-green-500/100 group-hover:scale-110 group-hover:bg-green-500 text-background group-hover:text-white flex items-center justify-center mb-4 transition-all duration-300 shadow-sm">
-                        <ArrowDownLeft className="h-7 w-7" />
-                    </div>
-                    <div className="font-bold text-lg group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">Cash In</div>
-                    <p className="text-xs text-muted-foreground text-center mt-1 group-hover:text-muted-foreground/80">Add funds to your wallet</p>
-                </Card>
+                <CashInModal>
+                    <Card className="col-span-1 group flex flex-col justify-center items-center p-6 cursor-pointer bg-background hover:bg-muted/30 transition-all duration-300 border-dashed hover:border-solid hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/10">
+                        <div className="h-14 w-14 rounded-full bg-green-500/100 group-hover:scale-110 group-hover:bg-green-500 text-background group-hover:text-white flex items-center justify-center mb-4 transition-all duration-300 shadow-sm">
+                            <ArrowDownLeft className="h-7 w-7" />
+                        </div>
+                        <div className="font-bold text-lg group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">Cash In</div>
+                        <p className="text-xs text-muted-foreground text-center mt-1 group-hover:text-muted-foreground/80">Add funds to your wallet</p>
+                    </Card>
+                </CashInModal>
 
                 <Card className="col-span-1 group flex flex-col justify-center items-center p-6 cursor-pointer bg-background hover:bg-muted/30 transition-all duration-300 border-dashed hover:border-solid hover:border-red-500/50 hover:shadow-lg hover:shadow-red-500/10">
                     <div className="h-14 w-14 rounded-full bg-red-500/10 group-hover:scale-110 group-hover:bg-red-500 text-red-500 group-hover:text-white flex items-center justify-center mb-4 transition-all duration-300 shadow-sm">

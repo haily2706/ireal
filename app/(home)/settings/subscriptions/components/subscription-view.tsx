@@ -36,7 +36,7 @@ export const SubscriptionView = ({ subscription, planIdFromUrl }: SubscriptionVi
     const onSubscribe = async (planId: string) => {
         try {
             setLoading(true);
-            const response = await axios.post("/api/payments/stripe/checkout", {
+            const response = await axios.post("/api/payments/stripe/subscribe", {
                 planId
             });
 
@@ -118,6 +118,16 @@ export const SubscriptionView = ({ subscription, planIdFromUrl }: SubscriptionVi
                         </div>
 
                         <div className="flex items-end gap-2">
+                            {currentPlanId !== PlanId.FREE && (
+                                <Button
+                                    onClick={onManage}
+                                    disabled={loading}
+                                    variant="outline"
+                                    size="sm"
+                                >
+                                    Manage Subscription
+                                </Button>
+                            )}
                             {subscription?.status === 'active' && !subscription?.cancelAtPeriodEnd && currentPlanId !== PlanId.FREE && (
                                 <Button
                                     onClick={onCancel}

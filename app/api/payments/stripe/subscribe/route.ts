@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from "next/server";
 import { absoluteUrl } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
@@ -7,6 +8,43 @@ import { subscriptions } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { SUBSCRIPTION_PLANS } from "@/app/(home)/settings/subscriptions/constants";
 
+/**
+ * @swagger
+ * /api/payments/stripe/subscribe:
+ *   post:
+ *     summary: Create Subscription Checkout Session
+ *     description: Creates a Stripe checkout session for a subscription plan.
+ *     tags:
+ *       - Payments
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               planId:
+ *                 type: string
+ *                 description: The ID of the plan to subscribe to
+ *     responses:
+ *       200:
+ *         description: Checkout URL
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 url:
+ *                   type: string
+ *       400:
+ *         description: Invalid Plan
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Product price not found
+ *       500:
+ *         description: Internal Error
+ */
 export async function POST(req: NextRequest) {
     try {
         const { planId } = await req.json();
@@ -49,7 +87,6 @@ export async function POST(req: NextRequest) {
                 quantity: 1,
             };
         } else {
-            // Fallback or default
             return new NextResponse("Invalid Plan", { status: 400 });
         }
 
@@ -67,6 +104,7 @@ export async function POST(req: NextRequest) {
                 metadata: {
                     userId: user.id,
                     planId,
+                    type: "subscription",
                 },
                 subscription_data: {
                     metadata: {
@@ -87,6 +125,7 @@ export async function POST(req: NextRequest) {
                 metadata: {
                     userId: user.id,
                     planId,
+                    type: "subscription",
                 },
                 subscription_data: {
                     metadata: {
@@ -99,7 +138,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ url: stripeSession.url });
     } catch (error) {
-        console.log("[STRIPE_CHECKOUT]", error);
+        console.log("[STRIPE_SUBSCRIBE]", error);
         return new NextResponse("Internal Error", { status: 500 });
     }
 }
