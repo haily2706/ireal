@@ -34,6 +34,7 @@ export async function POST(req: Request) {
             return new NextResponse("User id is required", { status: 400 });
         }
 
+        console.log(JSON.stringify(subscriptions, null, 2));
         await db.insert(subscriptions).values({
             id: subscription.id,
             userId: session.metadata.userId,
@@ -55,7 +56,7 @@ export async function POST(req: Request) {
             .update(subscriptions)
             .set({
                 stripePriceId: subscription.items.data[0].price.id,
-                stripeCurrentPeriodEnd: subscription.items.data[0].current_period_end ? new Date(subscription.items.data[0].current_period_end * 1000) : null;
+                stripeCurrentPeriodEnd: subscription.items.data[0].current_period_end ? new Date(subscription.items.data[0].current_period_end * 1000) : null,
                 planId: subscription.metadata.planId,
             })
             .where(eq(subscriptions.stripeSubscriptionId, subscription.id));
