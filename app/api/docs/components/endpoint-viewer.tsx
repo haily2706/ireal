@@ -20,7 +20,7 @@ export function EndpointViewer({ spec, selectedEndpoint }: EndpointViewerProps) 
                 {/* <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl -z-10" /> */}
                 {/* <div className="absolute bottom-0 left-0 w-64 h-64 bg-pink-500/5 rounded-full blur-3xl -z-10" /> */}
 
-                <div className="max-w-4xl mx-auto p-8 lg:p-12 space-y-12">
+                <div className="max-w-4xl mx-auto p-4 lg:p-12 space-y-12">
                     {/* Header */}
                     <div className="space-y-4">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/50 border border-border/50 text-xs font-medium text-muted-foreground backdrop-blur-md">
@@ -131,7 +131,7 @@ export function EndpointViewer({ spec, selectedEndpoint }: EndpointViewerProps) 
 
     return (
         <div className="flex-1 h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar bg-transparent text-foreground relative scroll-smooth">
-            <div className="max-w-5xl mx-auto p-8 lg:p-12">
+            <div className="max-w-5xl mx-auto p-4 lg:p-8">
 
                 {/* Header Section */}
                 <div className="flex flex-col gap-6 mb-10 border-b border-border/40 pb-10">

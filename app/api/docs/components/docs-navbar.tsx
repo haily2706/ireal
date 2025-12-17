@@ -20,8 +20,8 @@ export function DocsNavbar({ mobileNav, mobileRightNav }: DocsNavbarProps) {
 
     return (
         <nav className="sticky top-0 z-50 w-full h-16 border-b border-border/50 bg-background/40 backdrop-blur-xl supports-backdrop-filter:bg-background/20 transition-all duration-300">
-            <div className="container mx-auto h-full px-6 flex items-center justify-between">
-                <div className="flex items-center gap-4">
+            <div className="container mx-auto h-full px-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
                     {mobileNav}
                     <Link href="/" className="flex items-center gap-2">
                         <TextLogo />

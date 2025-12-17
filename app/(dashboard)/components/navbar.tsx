@@ -46,7 +46,7 @@ export function Navbar() {
 
             <div className="flex h-full items-center px-6 gap-4">
                 {/* Left Section: Mobile Menu & Title */}
-                <div className="flex items-center gap-4 flex-1">
+                <div className="flex items-center gap-2 flex-1">
                     <Sheet>
                         <SheetTrigger asChild>
                             <Button variant="ghost" size="icon" className="md:hidden -ml-2 text-muted-foreground hover:text-foreground hover:bg-accent">
