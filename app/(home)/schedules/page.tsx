@@ -1,16 +1,19 @@
-"use client";
+import { getEvents } from "./actions";
+import { EventsView } from "./components/events-view";
 
-import { Calendar } from "lucide-react";
-import { ComingSoon } from "@/components/coming-soon";
+import { Metadata } from "next";
 
-export default function SchedulesPage() {
+export const metadata: Metadata = {
+    title: "Events | LiveReal",
+    description: "Manage your upcoming live streams and broadcast events.",
+};
+
+export default async function SchedulesPage() {
+    const events = await getEvents();
+
     return (
-        <div className="flex-1 w-full h-full p-6">
-            <ComingSoon
-                title="Schedules"
-                description="Keep track of upcoming streams and events. The scheduling feature is currently under development."
-                icon={Calendar}
-            />
+        <div className="flex flex-col min-h-screen relative">
+            <EventsView initialEvents={events} />
         </div>
     );
 }

@@ -114,6 +114,15 @@
   --color-birthday-gold: hsl(45 95% 55%);
   --color-birthday-cyan: hsl(185 80% 50%);
   --color-birthday-orange: hsl(25 95% 55%);
+
+  /* Mappings for consistency */
+  --color-brand-purple: var(--color-birthday-purple);
+  --color-brand-pink: var(--color-birthday-pink);
+  --color-brand-primary: var(--color-brand-gold);
+}
+
+@utility bg-brand-gradient {
+  background-image: linear-gradient(to right, var(--color-brand-purple), var(--color-brand-pink));
 }
 
 /*

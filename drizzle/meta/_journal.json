@@ -29,6 +29,13 @@
       "when": 1765877794513,
       "tag": "0003_right_skaar",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1766053106851,
+      "tag": "0004_regular_malice",
+      "breakpoints": true
     }
   ]
 }

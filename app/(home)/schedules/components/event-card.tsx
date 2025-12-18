@@ -1,0 +1,353 @@
+"use client";
+
+import { useTransition } from "react";
+import { formatDistanceToNow } from "date-fns";
+import {
+    Calendar,
+    Trash2,
+    Edit,
+    Play,
+    Clock,
+    MoreVertical,
+    Eye,
+    Heart,
+    Coins,
+    Signal,
+    CalendarClock,
+    CheckCircle2,
+    ThumbsUp,
+    ThumbsDown
+} from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { deleteEvent, publishEvent } from "../actions";
+import { toast } from "sonner";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { EventDurationBadge } from "./event-duration-badge";
+import { EventDateBadge } from "./event-date-badge";
+import { cn } from "@/lib/utils";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { motion } from "framer-motion";
+
+interface EventCardProps {
+    event: {
+        id: string;
+        title: string;
+        description: string | null;
+        startTime: Date | string;
+        endTime: Date | string;
+        isLive: boolean | null;
+        status: string | null;
+        thumbnailUrl: string | null;
+    };
+    onEdit?: (event: any) => void;
+    isVertical?: boolean;
+    index?: number;
+    mockStats?: {
+        views: number;
+        likes: number;
+        lreal: number;
+    };
+}
+
+export function EventCard({
+    event,
+    onEdit,
+    isVertical = false,
+    index = 0,
+    mockStats = { views: 0, likes: 0, lreal: 0 }
+}: EventCardProps) {
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+
+    function onDelete() {
+        startTransition(() => {
+            deleteEvent(event.id)
+                .then((data) => {
+                    if (data.error) {
+                        toast.error(data.error);
+                    } else {
+                        toast.success("Event deleted");
+                        router.refresh();
+                    }
+                })
+                .catch(() => toast.error("Something went wrong"));
+        });
+    }
+
+    function onPublish() {
+        startTransition(() => {
+            publishEvent(event.id)
+                .then((data) => {
+                    if (data.error) {
+                        toast.error(data.error);
+                    } else {
+                        toast.success("Event published");
+                        router.refresh();
+                    }
+                })
+                .catch(() => toast.error("Something went wrong"));
+        });
+    }
+
+    const startDate = new Date(event.startTime);
+    // const now = new Date();
+    // const isEnded = isPast(endDate);
+
+    // Determine detailed status
+    let statusBadge;
+
+    if (event.isLive) {
+        statusBadge = (
+            <Badge variant="destructive" className="animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.6)] font-bold tracking-widest uppercase border-0 flex items-center gap-1.5 px-3 py-1 bg-red-600/90 text-white">
+                <Signal className="h-3 w-3" /> LIVE
+            </Badge>
+        );
+    }
+
+    // Interactive Stats (Mocked for now)
+    const getHash = (str: string) => {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return Math.abs(hash);
+    };
+
+    const seed = getHash(event.id);
+    const views = mockStats.views || ((seed % 1000) + 50);
+    const likes = mockStats.likes || ((seed % 500) + 10);
+    const lreal = mockStats.lreal || ((seed % 200) + 5);
+
+    return (
+        <motion.div
+            className={cn(
+                "group relative flex flex-row md:flex-col gap-3 md:gap-3 w-full",
+                isVertical ? "row-span-2" : "col-span-1"
+            )}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: index * 0.05 }}
+        >
+            <Card className={cn(
+                "relative overflow-hidden border-0 shadow-lg transition-all duration-500 hover:-translate-y-1 ring-1 ring-white/10 dark:ring-white/5 bg-transparent shrink-0",
+                isVertical ? "aspect-9/16" : "w-[40%] max-w-[160px] aspect-video md:w-full"
+            )}>
+                {/* Main Background Image - Absolute Cover */}
+                <div className="absolute inset-0 z-0">
+                    {event.thumbnailUrl ? (
+                        <Image
+                            src={event.thumbnailUrl}
+                            alt={event.title}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                    ) : (
+                        <div className="h-full w-full bg-linear-to-br from-indigo-900 via-purple-900 to-black transition-all duration-500">
+                            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
+                        </div>
+                    )}
+
+                    {/* Dark Overlays for Text Readability */}
+                    <div className={cn(
+                        "absolute inset-0 transition-opacity duration-300",
+                        isVertical
+                            ? "bg-linear-to-t from-black/90 via-black/20 to-black/20 opacity-100"
+                            : "bg-linear-to-t from-black/60 via-transparent to-black/20 opacity-60 group-hover:opacity-40"
+                    )} />
+                </div>
+
+                {/* Date Badge - Top Right */}
+                <div className="absolute top-2 right-2 z-20">
+                    <EventDateBadge startTime={event.startTime} />
+                </div>
+
+                {/* Status Badge - Top Left */}
+                <div className="absolute top-3 left-3 z-20">
+                    {statusBadge}
+                </div>
+
+                {/* Menu Button - Top Right (Shifted Left on Desktop) */}
+                <div className="absolute top-3 right-16 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:block">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                size="icon"
+                                variant="secondary"
+                                className="h-8 w-8 rounded-full bg-black/40 backdrop-blur-md hover:bg-black/60 text-white border-0 shadow-lg ring-1 ring-white/20 transition-all duration-300 hover:scale-105"
+                            >
+                                <MoreVertical className="h-4 w-4" />
+                                <span className="sr-only">Menu</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-52 bg-background/80 backdrop-blur-2xl border border-white/10 shadow-2xl p-1">
+                            {event.status !== "published" && (
+                                <DropdownMenuItem
+                                    onClick={onPublish}
+                                    disabled={isPending}
+                                    className="cursor-pointer text-emerald-500 focus:text-emerald-500 focus:bg-emerald-500/10 p-2.5 rounded-sm font-medium"
+                                >
+                                    <Play className="mr-2 h-4 w-4" />
+                                    Publish Event
+                                </DropdownMenuItem>
+                            )}
+                            {onEdit ? (
+                                <DropdownMenuItem onClick={() => onEdit(event)} className="cursor-pointer p-2.5 rounded-sm font-medium">
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Edit Details
+                                </DropdownMenuItem>
+                            ) : (
+                                <DropdownMenuItem asChild>
+                                    <Link href={`/schedules/${event.id}/edit`} className="cursor-pointer flex items-center p-2.5 rounded-sm font-medium">
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        Edit Details
+                                    </Link>
+                                </DropdownMenuItem>
+                            )}
+                            <DropdownMenuItem
+                                className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer p-2.5 rounded-sm font-medium"
+                                onClick={onDelete}
+                                disabled={isPending}
+                            >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete Event
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+
+                {/* Vertical Layout Content - Overlay */}
+                {isVertical && (
+                    <div className="absolute inset-x-0 bottom-0 p-4 pt-12 z-10 flex flex-col gap-3">
+                        <div className="flex justify-between items-end">
+                            <div className="space-y-1 max-w-[70%]">
+
+                                <h3 className="font-bold text-base text-white line-clamp-2 leading-tight drop-shadow-md">
+                                    {event.title}
+                                </h3>
+                            </div>
+
+                            {/* Vertical Stats Pill */}
+                            <div className="flex flex-col gap-2 items-end">
+                                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-xs font-bold text-white shadow-lg">
+                                    <Eye className="h-3.5 w-3.5 text-sky-400" />
+                                    <span>{views}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-xs font-bold text-white shadow-lg">
+                                    <ThumbsUp className="h-3.5 w-3.5 text-green-400" />
+                                    <span>{likes}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Horizontal Overlay Content (Minimal) */}
+                {!isVertical && (
+                    <div className="absolute bottom-2 right-2 z-10">
+                        <EventDurationBadge startTime={event.startTime} endTime={event.endTime} />
+                    </div>
+                )}
+
+            </Card>
+
+            {/* Horizontal Layout - Info */}
+            {!isVertical && (
+                <div className="flex flex-col gap-1.5 md:gap-2 px-0 md:px-1 flex-1 min-w-0 py-1">
+                    <div className="flex justify-between items-start gap-2">
+                        <h3 className="font-semibold text-base md:text-lg line-clamp-2 md:line-clamp-1 leading-snug group-hover:text-primary transition-colors text-foreground tracking-tight">
+                            {event.title}
+                        </h3>
+
+                        {/* Mobile Menu Button - Visible inline */}
+                        <div className="md:hidden shrink-0 -mr-2 -mt-1">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+                                        <MoreVertical className="h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    {event.status !== "published" && (
+                                        <DropdownMenuItem onClick={onPublish} disabled={isPending}>
+                                            <Play className="mr-2 h-4 w-4" /> Publish
+                                        </DropdownMenuItem>
+                                    )}
+                                    <DropdownMenuItem onClick={() => onEdit?.(event)}>
+                                        <Edit className="mr-2 h-4 w-4" /> Edit
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={onDelete} disabled={isPending} className="text-destructive">
+                                        <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5 md:hidden">
+                        <span>{views} views</span>
+                        <span>•</span>
+                        <span>{formatDistanceToNow(startDate, { addSuffix: true })}</span>
+                    </div>
+
+                    <div className="flex items-center gap-2 mt-auto md:hidden">
+                        {/* Mobile Actions/Stats */}
+                        <div className="flex items-center gap-4 text-muted-foreground">
+                            <div className="flex items-center gap-1.5">
+                                <ThumbsUp className="h-3.5 w-3.5" />
+                                <span className="text-xs">{likes}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <div className="h-3.5 w-3.5 flex items-center justify-center">
+                                    <div className="w-3 h-3 rounded-full border border-current" />
+                                </div>
+                                <span className="text-xs">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Desktop Description & Full Stats (Hidden on Mobile) */}
+                    <div className="hidden md:block space-y-2">
+                        <p className="text-xs text-muted-foreground line-clamp-1 font-medium">
+                            {event.description || "No description"}
+                        </p>
+
+                        <div className="flex items-center gap-3 mt-1">
+                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/50 border border-border/50 text-xs font-bold text-muted-foreground shadow-sm hover:bg-secondary/80 transition-colors">
+                                <Eye className="h-3.5 w-3.5 text-sky-500" />
+                                <span>{views.toLocaleString()}</span>
+                            </div>
+
+                            <div className="flex items-center gap-0 rounded-full bg-secondary/50 border border-border/50 p-0.5 shadow-sm">
+                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-background/50 hover:bg-green-500/10 hover:text-green-600 transition-colors cursor-pointer text-xs font-bold text-muted-foreground border border-transparent hover:border-green-500/20">
+                                    <ThumbsUp className="h-3.5 w-3.5" />
+                                    <span>{likes.toLocaleString()}</span>
+                                </div>
+                                <div className="w-px h-4 bg-border/60 mx-0.5"></div>
+                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full hover:bg-red-500/10 hover:text-red-500 transition-colors cursor-pointer text-xs font-bold text-muted-foreground">
+                                    <ThumbsDown className="h-3.5 w-3.5" />
+                                </div>
+                            </div>
+
+                            <div className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-xs font-bold text-yellow-600 dark:text-yellow-500 shadow-sm">
+                                <Coins className="h-3.5 w-3.5 fill-yellow-500 text-yellow-600" />
+                                <span>{lreal.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </motion.div>
+    );
+}

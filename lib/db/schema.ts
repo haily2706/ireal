@@ -49,3 +49,19 @@ export const cashIns = pgTable('cash_ins', {
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow(),
 });
+
+export const events = pgTable('events', {
+    id: text('id').primaryKey(),
+    userId: text('user_id').notNull().references(() => users.id),
+    title: text('title').notNull(),
+    description: text('description'),
+    startTime: timestamp('start_time').notNull(),
+    endTime: timestamp('end_time').notNull(),
+    isLive: boolean('is_live').default(false),
+    streamUrl: text('stream_url'),
+    streamKey: text('stream_key'),
+    thumbnailUrl: text('thumbnail_url'),
+    status: text('status').default('draft'), // draft, published, ended
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
+});

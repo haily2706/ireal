@@ -8,12 +8,14 @@ interface ComingSoonProps {
     title?: string;
     description?: string;
     icon?: React.ElementType;
+    children?: React.ReactNode;
 }
 
 export function ComingSoon({
     title = "Coming Soon",
     description = "We are working hard to bring you this feature. Stay tuned!",
-    icon: Icon = Rocket
+    icon: Icon = Rocket,
+    children
 }: ComingSoonProps) {
     return (
         <div className="flex flex-col items-center justify-center h-full w-full p-4 relative overflow-hidden">
@@ -67,6 +69,17 @@ export function ComingSoon({
                 >
                     {description}
                 </motion.p>
+
+                {children && (
+                    <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.5, duration: 0.5 }}
+                        className="mt-6"
+                    >
+                        {children}
+                    </motion.div>
+                )}
 
                 {/* Decorative Line */}
                 <motion.div

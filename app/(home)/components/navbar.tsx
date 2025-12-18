@@ -10,6 +10,7 @@ import {
     Search,
     Mic,
     Menu,
+    Video,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -140,7 +141,7 @@ export function Navbar({ }: NavbarProps) {
                                         <Mic className="h-5 w-5" />
                                     </motion.button>
                                 </motion.div>
-                            ) : (
+                            ) : pathname === '/home' ? (
                                 <motion.div
                                     key="category-pills"
                                     initial={{ opacity: 0, y: 10 }}
@@ -167,7 +168,7 @@ export function Navbar({ }: NavbarProps) {
                                         );
                                     })}
                                 </motion.div>
-                            )}
+                            ) : null}
                         </AnimatePresence>
                     </div>
 
@@ -202,6 +203,17 @@ export function Navbar({ }: NavbarProps) {
                             )}
                         </AnimatePresence>
 
+                        {user && (
+                            <Button
+                                onClick={() => router.push("/schedules?action=create")}
+                                variant="outline"
+                                className="hidden md:flex items-center gap-2 rounded-full border-white/10 bg-white/5 hover:bg-white/10 text-foreground backdrop-blur-sm h-9 px-4 transition-all hover:scale-105 active:scale-95"
+                            >
+                                <Video className="h-4 w-4" />
+                                <span className="font-medium">Create</span>
+                            </Button>
+                        )}
+
                         {user && <NotiDropdown />}
 
                         <div className="scale-90">
@@ -232,27 +244,29 @@ export function Navbar({ }: NavbarProps) {
 
                     </div>
                 </div>
-                {/* Mobile Categories - Visible only on mobile */}
-                <div className="md:hidden flex items-center gap-2 overflow-x-auto px-4 py-2 no-scrollbar border-t border-border/50">
-                    {categories.map((category) => {
-                        const isSelected = selectedCategory === category;
-                        return (
-                            <Button
-                                key={category}
-                                variant={isSelected ? "default" : "secondary"}
-                                onClick={() => handleSelect(category)}
-                                className={cn(
-                                    "whitespace-nowrap rounded-full text-xs font-medium transition-all duration-300 h-7 px-3 shrink-0",
-                                    isSelected
-                                        ? "bg-foreground text-background hover:bg-foreground/90"
-                                        : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border"
-                                )}
-                            >
-                                {category}
-                            </Button>
-                        );
-                    })}
-                </div>
+                {/* Mobile Categories - Visible only on mobile and /home */}
+                {pathname === '/home' && (
+                    <div className="md:hidden flex items-center gap-2 overflow-x-auto px-4 py-2 no-scrollbar border-t border-border/50">
+                        {categories.map((category) => {
+                            const isSelected = selectedCategory === category;
+                            return (
+                                <Button
+                                    key={category}
+                                    variant={isSelected ? "default" : "secondary"}
+                                    onClick={() => handleSelect(category)}
+                                    className={cn(
+                                        "whitespace-nowrap rounded-full text-xs font-medium transition-all duration-300 h-7 px-3 shrink-0",
+                                        isSelected
+                                            ? "bg-foreground text-background hover:bg-foreground/90"
+                                            : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border"
+                                    )}
+                                >
+                                    {category}
+                                </Button>
+                            );
+                        })}
+                    </div>
+                )}
             </header>
 
             {/* Mobile Search - Visible only on mobile */}
