@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     description: "Turn your events into a live experience. Stream your celebration, connect with your audience, and receive gifts in real-time.",
     icons: {
         icon: "/logo.svg",
+        apple: "/app-icon.png",
     },
     openGraph: {
         type: "website",
