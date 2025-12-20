@@ -46,19 +46,7 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
 
         const init = async () => {
             try {
-                // Get devices
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                const vDevices = devices.filter(d => d.kind === 'videoinput');
-                const aDevices = devices.filter(d => d.kind === 'audioinput');
-
-                if (mounted) {
-                    setVideoDevices(vDevices);
-                    setAudioDevices(aDevices);
-                    if (vDevices.length > 0) setSelectedVideoDeviceId(vDevices[0].deviceId);
-                    if (aDevices.length > 0) setSelectedAudioDeviceId(aDevices[0].deviceId);
-                }
-
-                // Create initial tracks
+                // Create initial tracks first to trigger permissions
                 const tracks = await createLocalTracks({
                     audio: true,
                     video: true,
@@ -70,6 +58,32 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
                 if (mounted) {
                     setVideoTrack(vTrack);
                     setAudioTrack(aTrack);
+
+                    // Get devices after permissions are granted
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    const vDevices = devices.filter(d => d.kind === 'videoinput' && d.deviceId !== "");
+                    const aDevices = devices.filter(d => d.kind === 'audioinput' && d.deviceId !== "");
+
+                    setVideoDevices(vDevices);
+                    setAudioDevices(aDevices);
+
+                    // Set default selection to the track's current device or first available
+                    // Note: track.getDeviceId() might return the deviceId
+                    const currentVideoId = await vTrack.getDeviceId();
+                    const currentAudioId = await aTrack.getDeviceId();
+
+                    if (currentVideoId && vDevices.find(d => d.deviceId === currentVideoId)) {
+                        setSelectedVideoDeviceId(currentVideoId);
+                    } else if (vDevices.length > 0) {
+                        setSelectedVideoDeviceId(vDevices[0].deviceId);
+                    }
+
+                    if (currentAudioId && aDevices.find(d => d.deviceId === currentAudioId)) {
+                        setSelectedAudioDeviceId(currentAudioId);
+                    } else if (aDevices.length > 0) {
+                        setSelectedAudioDeviceId(aDevices[0].deviceId);
+                    }
+
                     setIsLoading(false);
                 } else {
                     tracks.forEach(t => t.stop());
@@ -77,7 +91,8 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
             } catch (error) {
                 console.error("Error initializing prejoin:", error);
                 if (mounted) {
-                    toast.error("Could not access camera or microphone");
+                    toast.error("Could not access camera or microphone. Please check your permissions.");
+                    // Still load the UI but maybe in a state without tracks
                     setIsLoading(false);
                 }
             }
@@ -100,7 +115,7 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
                 videoTrack.detach(videoRef.current);
             }
         };
-    }, [videoTrack]);
+    }, [videoTrack, isLoading]);
 
     // Cleanup tracks on unmount
     useEffect(() => {
@@ -182,18 +197,21 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
                 <div className="relative aspect-video w-full bg-muted rounded-2xl overflow-hidden border border-border shadow-2xl ring-1 ring-white/10 group">
                     <video
                         ref={videoRef}
-                        className={`w-full h-full object-cover transform scale-x-[-1] ${!videoEnabled ? 'hidden' : ''}`}
-                        muted
+                        className={`w-full h-full object-cover transform scale-x-[-1] ${!videoEnabled || !videoTrack ? 'hidden' : ''}`}
+                        autoPlay
                         playsInline
+                        muted
                     />
 
-                    {!videoEnabled && (
+                    {(!videoEnabled || !videoTrack) && (
                         <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-muted/50">
                             <div className="flex flex-col items-center gap-3 opacity-50">
                                 <div className="h-20 w-20 rounded-full bg-background flex items-center justify-center shadow-sm">
                                     <UserCircle2 className="h-10 w-10" />
                                 </div>
-                                <p className="text-sm font-medium">Camera is off</p>
+                                <p className="text-sm font-medium">
+                                    {!videoTrack ? "Camera unavailable" : "Camera is off"}
+                                </p>
                             </div>
                         </div>
                     )}
@@ -205,6 +223,7 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
                             size="icon"
                             className="h-10 w-10 rounded-xl transition-all duration-200"
                             onClick={toggleAudio}
+                            disabled={!audioTrack}
                         >
                             {audioEnabled ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
                         </Button>
@@ -213,6 +232,7 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
                             size="icon"
                             className="h-10 w-10 rounded-xl transition-all duration-200"
                             onClick={toggleVideo}
+                            disabled={!videoTrack}
                         >
                             {videoEnabled ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
                         </Button>
