@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { ConversationList } from "./conversation-list";
 import { ChatWindow } from "./chat-window";
 import { EmptyChatState } from "./empty-state";
@@ -29,10 +29,28 @@ export function ChatLayoutClient({ conversationId, userId }: ChatLayoutClientPro
         });
     }, []);
 
+    // Disable page scroll when this component is mounted
+    // This ensures that we only use inner scrolling for the chat and conversation list
+    useEffect(() => {
+        // Store original values
+        const originalOverflow = document.body.style.overflow;
+        const originalOverscroll = document.body.style.overscrollBehavior;
+
+        // Apply locks
+        document.body.style.overflow = "hidden";
+        document.body.style.overscrollBehavior = "none";
+
+        return () => {
+            // Restore proper cleanup
+            document.body.style.overflow = originalOverflow;
+            document.body.style.overscrollBehavior = originalOverscroll;
+        };
+    }, []);
+
     return (
         <div className={cn(
             "flex w-full overflow-hidden relative bg-background/50 transition-all duration-300",
-            "h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)]"
+            "h-[calc(100dvh-64px-80px)] md:h-[calc(100vh-64px)]" // Account for pb-20 (80px) on mobile main container
         )}>
             {/* Global Ambient Background */}
             <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-background/50 to-pink-500/5 -z-10" />

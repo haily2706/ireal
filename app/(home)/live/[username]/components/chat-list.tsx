@@ -117,7 +117,7 @@ export function ChatList({ className, onClose }: ChatListProps) {
     const totalCoins = messages.reduce((acc, message) => acc + (message.gift?.coins || 0), 0);
 
     return (
-        <div className={cn("flex flex-col h-[600px] lg:h-full bg-background/95 backdrop-blur-3xl border-t lg:border-t-0 border-l-0 lg:border-l border-border w-full lg:w-[400px] shrink-0 relative overflow-hidden", className)}>
+        <div className={cn("flex flex-col h-[600px] lg:h-full bg-background/95 backdrop-blur-3xl border-t lg:border-t-0 border-l-0 lg:border-l border-border w-full lg:w-[400px] shrink-0 relative overflow-hidden pb-20 md:pb-0", className)}>
             <div className="absolute inset-0 bg-linear-to-br from-violet-500/10 via-transparent to-fuchsia-500/10 pointer-events-none" />
 
             {/* Header */}

@@ -83,14 +83,14 @@ export function Sidebar() {
             </div>
 
             <div className={cn("h-12 mb-4 flex items-center relative z-20", isCollapsed ? "justify-center" : "justify-between px-2")}>
-                <Button
+                {/* <Button
                     variant="ghost"
                     size="icon"
                     className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-full shrink-0 transition-all duration-300 hover:rotate-180"
                     onClick={toggleSidebar}
                 >
                     <Menu className="h-6 w-6" />
-                </Button>
+                </Button> */}
                 {/* <Badge
                     variant="outline"
                     className={cn(
@@ -199,13 +199,7 @@ export function Sidebar() {
                         className="space-y-2"
                         onMouseLeave={() => setHoveredLink(null)}
                     >
-                        {[
-                            { icon: Compass, label: "Explore", href: "/home", color: "text-blue-400" },
-                            // { icon: Clapperboard, label: "Shorts", href: "/shorts", color: "text-red-400" },
-                            { icon: MessageCircle, label: "Messages", href: "/messages", color: "text-green-400" },
-                            { icon: Calendar, label: "Events", href: "/events", color: "text-purple-400" },
-                            { icon: Settings, label: "Settings", href: "/settings", color: "text-gray-400" }
-                        ].map((link) => (
+                        {NAV_LINKS.map((link) => (
                             <div key={link.href}>
                                 <SidebarLink
                                     link={link}
@@ -318,8 +312,101 @@ function SidebarLink({
     );
 }
 
+
 function isActive(pathname: string, href: string) {
     return pathname === href || pathname?.startsWith(`${href}/`);
 }
+
+const NAV_LINKS = [
+    { icon: Compass, label: "Explore", href: "/home", color: "text-blue-400" },
+    // { icon: Clapperboard, label: "Shorts", href: "/shorts", color: "text-red-400" },
+    { icon: MessageCircle, label: "Messages", href: "/messages", color: "text-green-400" },
+    { icon: Calendar, label: "Events", href: "/events", color: "text-purple-400" },
+    { icon: Settings, label: "Settings", href: "/settings", color: "text-gray-400" }
+];
+
+export function MobileBottomNav() {
+    const pathname = usePathname();
+    const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+
+    return (
+        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+            {/* Glassmorphic Container */}
+            <div className="bg-background/80 backdrop-blur-xl border-t border-border/50 pb-[env(safe-area-inset-bottom)]">
+                <nav
+                    className="flex items-center justify-around h-[70px] px-2 relative"
+                    onMouseLeave={() => setHoveredLink(null)}
+                >
+                    {NAV_LINKS.map((link) => {
+                        const active = isActive(pathname, link.href);
+                        const isHovered = hoveredLink === link.href;
+
+                        return (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className="relative flex flex-col items-center justify-center w-full h-full group"
+                                onMouseEnter={() => setHoveredLink(link.href)}
+                            >
+                                {/* Active Indicator Background Glow */}
+                                {active && (
+                                    <motion.div
+                                        layoutId="mobile-nav-indicator"
+                                        className="absolute inset-0 bg-linear-to-t from-[#FF3B5C]/10 to-transparent"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.3 }}
+                                    />
+                                )}
+
+                                {/* Hover Spotlight for non-active items */}
+                                {!active && isHovered && (
+                                    <motion.div
+                                        layoutId="mobile-nav-hover-bg"
+                                        className="absolute inset-1 bg-muted/50 rounded-2xl"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.2 }}
+                                    />
+                                )}
+
+                                {/* Top Active Line */}
+                                {active && (
+                                    <motion.div
+                                        layoutId="mobile-nav-top-line"
+                                        className="absolute top-0 h-[3px] w-12 bg-[#FF3B5C] shadow-[0_0_10px_#FF3B5C] rounded-b-md"
+                                        initial={{ scaleX: 0.5 }}
+                                        animate={{ scaleX: 1 }}
+                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                    />
+                                )}
+
+                                <div className={cn(
+                                    "flex flex-col items-center justify-center h-full w-full transition-all duration-300 relative z-10"
+                                )}>
+                                    <div className="relative">
+                                        <link.icon className={cn(
+                                            "h-6 w-6 transition-all duration-300",
+                                            active ? "text-[#FF3B5C] scale-110 drop-shadow-[0_0_8px_rgba(255,59,92,0.5)]" : "text-muted-foreground",
+                                            !active && isHovered ? link.color : ""
+                                        )} />
+                                        {link.label === "Messages" && (
+                                            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 border-2 border-background"></span>
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            </Link>
+                        );
+                    })}
+                </nav>
+            </div>
+        </div>
+    );
+}
+
 
 

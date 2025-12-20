@@ -235,12 +235,12 @@ export function ChatWindow({
                     : "relative flex-1 w-full translate-x-0"
             )}>
                 {/* Header */}
-                <div className="z-20 border-b border-border/40 flex items-center justify-between bg-background/80 backdrop-blur-xl sticky top-0">
+                <div className="z-40 border-b border-border/40 flex items-center justify-between bg-background/95 backdrop-blur-xl sticky top-0 shrink-0 px-4 py-2 lg:px-6">
                     <div className="flex items-center gap-3">
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="md:hidden -ml-2 text-muted-foreground hover:text-foreground hover:bg-accent/50 dark:hover:bg-white/5"
+                            className="md:hidden ml-1 text-muted-foreground hover:text-foreground hover:bg-accent/50 dark:hover:bg-white/5"
                             onClick={() => {
                                 if (isVideoCallActive && isChatOpen) {
                                     setIsChatOpen(false);
@@ -252,7 +252,7 @@ export function ChatWindow({
                             <ArrowLeft className="h-5 w-5" />
                         </Button>
 
-                        <div className="flex items-center gap-3.5 pl-1">
+                        <div className="flex items-center gap-3.5">
                             <AnimatePresence mode="wait">
                                 {loading ? (
                                     <motion.div
@@ -279,7 +279,7 @@ export function ChatWindow({
                                             <div className="relative">
                                                 <Avatar className="h-12 w-12 border-2 border-background shadow-lg transition-transform duration-300 group-hover/header:rotate-3 group-hover/header:scale-105">
                                                     <AvatarImage src={otherUser?.avatar || undefined} className="object-cover" />
-                                                    <AvatarFallback className="bg-linear-to-br from-pink-500 via-purple-500 to-blue-500 text-white font-bold text-lg">
+                                                    <AvatarFallback className="bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 text-white font-bold text-lg">
                                                         {otherUser?.name?.[0]?.toUpperCase() || "?"}
                                                     </AvatarFallback>
                                                 </Avatar>
@@ -300,24 +300,40 @@ export function ChatWindow({
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2">
                         {!isVideoCallActive && (
                             <>
 
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-full transition-all duration-300 shadow-sm"
-                                    onClick={() => setIsVideoCallActive(true)}
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="relative"
                                 >
-                                    <Video className="h-4.5 w-4.5" />
-                                </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-9 w-9 shrink-0 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border relative group overflow-hidden transition-all duration-300"
+                                        onClick={() => setIsVideoCallActive(true)}
+                                    >
+                                        <Video className="h-4.5 w-4.5 transition-all duration-300 group-hover:text-primary" />
+                                    </Button>
+                                </motion.div>
 
                             </>
                         )}
-                        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all duration-300">
-                            <MoreVertical className="h-4.5 w-4.5" />
-                        </Button>
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="relative"
+                        >
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-9 w-9 shrink-0 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border relative group overflow-hidden transition-all duration-300"
+                            >
+                                <MoreVertical className="h-4.5 w-4.5 transition-all duration-300 group-hover:text-primary" />
+                            </Button>
+                        </motion.div>
                     </div>
                 </div>
 

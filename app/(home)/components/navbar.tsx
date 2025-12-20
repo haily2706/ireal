@@ -80,7 +80,7 @@ export function Navbar({ }: NavbarProps) {
             >
                 <div className="flex h-16 items-center justify-between px-6 relative z-10 gap-4">
                     <div className="flex items-center gap-2">
-                        <div className="md:hidden">
+                        {/* <div className="md:hidden">
                             <Button
                                 variant="ghost"
                                 size="icon"
@@ -89,7 +89,7 @@ export function Navbar({ }: NavbarProps) {
                             >
                                 <Menu className="h-6 w-6" />
                             </Button>
-                        </div>
+                        </div> */}
                         <Link href="/">
                             <TextLogo />
                         </Link>

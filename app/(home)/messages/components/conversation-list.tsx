@@ -7,8 +7,9 @@ import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { Search, UserPlus, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { startConversation, getConversations, searchUsers } from "../actions";
 import { toast } from "sonner";
 
@@ -50,6 +51,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(true);
     const [isPending, startTransition] = useTransition();
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const fetchConversations = async () => {
         try {
@@ -116,47 +118,68 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
         <div className={cn("flex flex-col h-full bg-background/40 backdrop-blur-xl border-r border-border/40", className)}>
             {/* Header / Search */}
             <div className={cn(
-                "p-4 lg:p-6 space-y-4 transition-all duration-300 relative",
+                "p-4 lg:p-6 space-y-4 transition-all duration-300 relative shrink-0",
                 isCollapsed && "px-3 items-center"
             )}>
                 {!isCollapsed ? (
                     <>
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-pink-500 to-purple-500 w-fit">
+                        <div className="hidden md:flex items-center justify-between">
+                            <h2 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500 w-fit">
                                 Messages
                             </h2>
                             <div className="flex items-center gap-2">
-                                <button
-                                    onClick={() => {
-                                        const input = document.getElementById('conversation-search') as HTMLInputElement;
-                                        input?.focus();
-                                    }}
-                                    className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="relative"
                                 >
-                                    <UserPlus className="h-4 w-4" />
-                                </button>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => inputRef.current?.focus()}
+                                        className="h-9 w-9 shrink-0 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border relative group overflow-hidden transition-all duration-300"
+                                    >
+                                        <UserPlus className="h-4 w-4 transition-all duration-300 group-hover:text-primary" />
+                                    </Button>
+                                </motion.div>
                             </div>
                         </div>
 
-                        <div className="relative group">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                            <Input
-                                id="conversation-search"
-                                placeholder="Search people or messages..."
-                                className="pl-10 pr-10 bg-secondary/30 border-transparent focus:bg-secondary/50 focus:border-primary/20 rounded-2xl h-11 transition-all duration-300"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                            {searchQuery && (
-                                <button
-                                    onClick={() => setSearchQuery("")}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 rounded-full hover:bg-accent/50 dark:hover:bg-white/10 transition-all"
+                        <div className="flex items-center gap-2 w-full">
+                            <div className="relative group flex-1">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                                <Input
+                                    ref={inputRef}
+                                    placeholder="Search people or messages..."
+                                    className="pl-10 pr-10 bg-secondary/30 border-transparent focus:bg-secondary/50 focus:border-primary/20 rounded-2xl h-10 transition-all duration-300"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                                {searchQuery && (
+                                    <button
+                                        onClick={() => setSearchQuery("")}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-foreground p-1 rounded-full hover:bg-accent/50 dark:hover:bg-white/10 transition-all"
+                                    >
+                                        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                )}
+                            </div>
+                            <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="md:hidden relative"
+                            >
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => inputRef.current?.focus()}
+                                    className="h-10 w-10 shrink-0 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border relative group overflow-hidden transition-all duration-300"
                                 >
-                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            )}
+                                    <UserPlus className="h-4 w-4 transition-all duration-300 group-hover:text-primary" />
+                                </Button>
+                            </motion.div>
                         </div>
                     </>
                 ) : (
@@ -165,8 +188,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                             onClick={() => {
                                 onToggle?.();
                                 setTimeout(() => {
-                                    const input = document.getElementById('conversation-search') as HTMLInputElement;
-                                    input?.focus();
+                                    inputRef.current?.focus();
                                 }, 100);
                             }}
                             className="h-10 w-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-lg shadow-primary/5"
@@ -213,7 +235,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                     </div>
                                 </button>
                             ))}
-                            <div className="h-px bg-linear-to-r from-transparent via-border/50 to-transparent my-4" />
+                            <div className="h-px bg-gradient-to-r from-transparent via-border/50 to-transparent my-4" />
                         </div>
                     )}
 
@@ -245,7 +267,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="h-64 flex flex-col items-center justify-center text-center p-4"
                             >
-                                <div className="h-16 w-16 rounded-3xl bg-linear-to-br from-pink-500/10 via-purple-500/10 to-blue-500/10 flex items-center justify-center mb-4 ring-1 ring-border/50 dark:ring-white/10 shadow-xl backdrop-blur-sm">
+                                <div className="h-16 w-16 rounded-3xl bg-gradient-to-br from-pink-500/10 via-purple-500/10 to-blue-500/10 flex items-center justify-center mb-4 ring-1 ring-border/50 dark:ring-white/10 shadow-xl backdrop-blur-sm">
                                     <Search className="h-7 w-7 text-primary/70" />
                                 </div>
                                 <h3 className="font-semibold text-lg mb-1">No chats yet</h3>
@@ -284,7 +306,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                                         : "border-transparent group-hover:border-primary/20"
                                                 )}>
                                                     <AvatarImage src={conversation.otherUser.avatar || undefined} className="object-cover" />
-                                                    <AvatarFallback className="bg-linear-to-br from-pink-500 via-purple-500 to-blue-500 text-white font-bold text-sm">
+                                                    <AvatarFallback className="bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 text-white font-bold text-sm">
                                                         {conversation.otherUser.name?.[0]?.toUpperCase()}
                                                     </AvatarFallback>
                                                 </Avatar>
@@ -322,7 +344,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                             {selectedId === conversation.id && (
                                                 <motion.div
                                                     layoutId="active-bg"
-                                                    className="absolute inset-0 bg-linear-to-r from-primary/5 via-transparent to-transparent opacity-50"
+                                                    className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent opacity-50"
                                                 />
                                             )}
                                         </button>

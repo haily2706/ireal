@@ -37,6 +37,8 @@ import {
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
+    Plus,
+    Video
 } from "lucide-react";
 // import Link from "next/link"; 
 import { cn } from "@/lib/utils";
@@ -44,12 +46,14 @@ import { cn } from "@/lib/utils";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { useAuthStore } from "@/components/auth/use-auth-store";
 
 interface EventsViewProps {
     initialEvents: any[];
 }
 
 export function EventsView({ initialEvents }: EventsViewProps) {
+    const { user } = useAuthStore();
     const router = useRouter();
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [editingEvent, setEditingEvent] = useState<any | null>(null);
@@ -114,7 +118,7 @@ export function EventsView({ initialEvents }: EventsViewProps) {
 
             {/* Header Section - Only shown when there are events */}
             {initialEvents.length > 0 && (
-                <div className="space-y-4 pt-4 pb-4 px-4 md:px-6 relative z-10 max-w-[2000px] mx-auto">
+                <div className="hidden md:block space-y-4 pt-4 pb-4 px-4 md:px-6 relative z-10 max-w-[2000px] mx-auto">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div className="space-y-0.5">
                             <h2 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-pink-500 to-purple-500 w-fit">
@@ -131,7 +135,7 @@ export function EventsView({ initialEvents }: EventsViewProps) {
             )}
 
             {/* Content Section */}
-            <div className="px-4 md:px-6 max-w-[2000px] mx-auto relative z-10 pb-20">
+            <div className="px-4 md:px-6 max-w-[2000px] mx-auto relative z-10 pb-20 pt-4 md:pt-0">
                 {initialEvents.length === 0 ? (
                     <div className="h-[600px] w-full relative overflow-hidden flex items-center justify-center">
                         <ComingSoon
@@ -151,10 +155,10 @@ export function EventsView({ initialEvents }: EventsViewProps) {
 
                 ) : (
                     <div className="space-y-4">
-                        {/* Search, Filter & Pagination - Single Row */}
-                        <div className="flex flex-row gap-2 items-center justify-between">
+                        {/* Search, Filter & Pagination */}
+                        <div className="flex flex-row items-center justify-between gap-2">
                             {/* Left: Search & Filter */}
-                            <div className="flex items-center gap-2 shrink-0">
+                            <div className="flex items-center gap-2">
                                 <div className="relative h-8 flex items-center">
                                     <AnimatePresence initial={false} mode="wait">
                                         {isSearchOpen || searchQuery ? (
@@ -195,14 +199,20 @@ export function EventsView({ initialEvents }: EventsViewProps) {
                                                 exit={{ width: 320, opacity: 0 }}
                                                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                             >
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    className="h-8 w-8 text-muted-foreground hover:text-foreground border border-transparent hover:border-border/50 hover:bg-muted/50"
-                                                    onClick={() => setIsSearchOpen(true)}
+                                                <motion.div
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    className="relative"
                                                 >
-                                                    <Search className="h-4 w-4" />
-                                                </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-8 w-8 shrink-0 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border relative group overflow-hidden transition-all duration-300"
+                                                        onClick={() => setIsSearchOpen(true)}
+                                                    >
+                                                        <Search className="h-4 w-4 transition-all duration-300 group-hover:text-primary" />
+                                                    </Button>
+                                                </motion.div>
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
@@ -281,6 +291,22 @@ export function EventsView({ initialEvents }: EventsViewProps) {
                                         <span className="sr-only">Go to last page</span>
                                         <ChevronsRight className="h-3.5 w-3.5" />
                                     </Button>
+                                    {user && (
+                                        <motion.div
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="md:hidden relative ml-1"
+                                        >
+                                            <Button
+                                                onClick={() => setIsCreateOpen(true)}
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 shrink-0 rounded-full bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border relative group overflow-hidden transition-all duration-300"
+                                            >
+                                                <Video className="h-4 w-4 transition-all duration-300 group-hover:text-primary" />
+                                            </Button>
+                                        </motion.div>
+                                    )}
                                 </div>
                             </div>
                         </div>

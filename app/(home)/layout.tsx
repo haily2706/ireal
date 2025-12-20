@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/app/(home)/components/navbar";
-import { Sidebar } from "@/app/(home)/components/sidebar";
+import { Sidebar, MobileBottomNav } from "@/app/(home)/components/sidebar";
 import { HomeProvider } from "@/app/(home)/components/provider";
 import { Suspense } from "react";
 
@@ -24,11 +24,12 @@ export default async function HomeLayout({
             <BackgroundBlobs />
             <div className="flex min-h-screen">
                 <Sidebar />
+                <MobileBottomNav />
                 <div className="flex-1 flex flex-col min-w-0">
                     <Suspense fallback={<div className="h-16 border-b border-border/50" />}>
                         <Navbar />
                     </Suspense>
-                    <main className="flex-1">
+                    <main className="flex-1 pb-20 md:pb-0">
                         {children}
                     </main>
                 </div>
