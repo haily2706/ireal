@@ -131,7 +131,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                         const input = document.getElementById('conversation-search') as HTMLInputElement;
                                         input?.focus();
                                     }}
-                                    className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300"
+                                    className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300"
                                 >
                                     <UserPlus className="h-4 w-4" />
                                 </button>
@@ -150,7 +150,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                             {searchQuery && (
                                 <button
                                     onClick={() => setSearchQuery("")}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 rounded-full hover:bg-white/10 transition-all"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 rounded-full hover:bg-accent/50 dark:hover:bg-white/10 transition-all"
                                 >
                                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -169,7 +169,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                     input?.focus();
                                 }, 100);
                             }}
-                            className="h-10 w-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 shadow-lg shadow-primary/5"
+                            className="h-10 w-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-lg shadow-primary/5"
                         >
                             <UserPlus className="h-5 w-5" />
                         </button>
@@ -191,7 +191,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                     key={user.id}
                                     onClick={() => handleStartChat(user.id)}
                                     disabled={isPending}
-                                    className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-white/5 active:scale-[0.98] transition-all duration-200 text-left group border border-transparent hover:border-white/5"
+                                    className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-accent/50 dark:hover:bg-white/5 active:scale-[0.98] transition-all duration-200 text-left group border border-transparent hover:border-border/50 dark:hover:border-white/5"
                                 >
                                     <Avatar className="h-10 w-10 border-2 border-transparent group-hover:border-primary/30 transition-all duration-300">
                                         <AvatarImage src={user.avatar || undefined} className="object-cover" />
@@ -245,7 +245,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="h-64 flex flex-col items-center justify-center text-center p-4"
                             >
-                                <div className="h-16 w-16 rounded-3xl bg-linear-to-br from-pink-500/10 via-purple-500/10 to-blue-500/10 flex items-center justify-center mb-4 ring-1 ring-white/10 shadow-xl backdrop-blur-sm">
+                                <div className="h-16 w-16 rounded-3xl bg-linear-to-br from-pink-500/10 via-purple-500/10 to-blue-500/10 flex items-center justify-center mb-4 ring-1 ring-border/50 dark:ring-white/10 shadow-xl backdrop-blur-sm">
                                     <Search className="h-7 w-7 text-primary/70" />
                                 </div>
                                 <h3 className="font-semibold text-lg mb-1">No chats yet</h3>

@@ -19,12 +19,17 @@ import {
 import { Mic, MicOff, Video, VideoOff, UserCircle2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { LocalUserChoices } from "@livekit/components-react";
+import { Volume2 } from "lucide-react";
+
+export interface CustomLocalUserChoices extends LocalUserChoices {
+    audioOutputDeviceId?: string;
+}
 
 interface CustomPreJoinProps {
     room: string;
     username: string;
     userName: string;
-    onSubmit: (values: LocalUserChoices) => void;
+    onSubmit: (values: CustomLocalUserChoices) => void;
     onCancel: () => void;
 }
 
@@ -37,6 +42,9 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
     const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
     const [selectedVideoDeviceId, setSelectedVideoDeviceId] = useState<string>("");
     const [selectedAudioDeviceId, setSelectedAudioDeviceId] = useState<string>("");
+    const [selectedAudioOutputDeviceId, setSelectedAudioOutputDeviceId] = useState<string>("");
+    const [audioOutputDevices, setAudioOutputDevices] = useState<MediaDeviceInfo[]>([]);
+    const [canSelectAudioOutput, setCanSelectAudioOutput] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -66,6 +74,21 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
 
                     setVideoDevices(vDevices);
                     setAudioDevices(aDevices);
+
+                    // Check for audio output support and devices
+                    // @ts-ignore - setSinkId check
+                    const supportsSetSinkId = 'setSinkId' in HTMLMediaElement.prototype;
+                    if (supportsSetSinkId) {
+                        setCanSelectAudioOutput(true);
+                        const oDevices = devices.filter(d => d.kind === 'audiooutput');
+                        setAudioOutputDevices(oDevices);
+
+                        if (oDevices.length > 0) {
+                            // Try to find default
+                            const defaultOutput = oDevices.find(d => d.deviceId === 'default') || oDevices[0];
+                            setSelectedAudioOutputDeviceId(defaultOutput.deviceId);
+                        }
+                    }
 
                     // Set default selection to the track's current device or first available
                     // Note: track.getDeviceId() might return the deviceId
@@ -147,17 +170,17 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
         }
     };
 
-    const handleDeviceChange = async (kind: 'video' | 'audio', deviceId: string) => {
+    const handleDeviceChange = async (kind: 'video' | 'audio' | 'audiooutput', deviceId: string) => {
         if (kind === 'video') {
             setSelectedVideoDeviceId(deviceId);
             if (videoTrack) {
                 await videoTrack.setDeviceId(deviceId);
             }
-        } else {
-            setSelectedAudioDeviceId(deviceId);
             if (audioTrack) {
                 await audioTrack.setDeviceId(deviceId);
             }
+        } else if (kind === 'audiooutput') {
+            setSelectedAudioOutputDeviceId(deviceId);
         }
     };
 
@@ -171,6 +194,7 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
             audioEnabled,
             videoDeviceId: selectedVideoDeviceId,
             audioDeviceId: selectedAudioDeviceId,
+            audioOutputDeviceId: selectedAudioOutputDeviceId,
             username // This is display name passed as property 'username' to defaults in LiveKit
         });
     };
@@ -194,7 +218,7 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
                 </div>
 
                 {/* Video Preview */}
-                <div className="relative aspect-video w-full bg-muted rounded-2xl overflow-hidden border border-border shadow-2xl ring-1 ring-white/10 group">
+                <div className="relative aspect-video w-full bg-muted rounded-2xl overflow-hidden border border-border shadow-2xl ring-1 ring-border/50 dark:ring-white/10 group">
                     <video
                         ref={videoRef}
                         className={`w-full h-full object-cover transform scale-x-[-1] ${!videoEnabled || !videoTrack ? 'hidden' : ''}`}
@@ -277,13 +301,33 @@ export function CustomPreJoin({ room, username, userName, onSubmit, onCancel }: 
                     </div>
                 </div>
 
+                {/* Audio Output Selector - Only if supported */}
+                {canSelectAudioOutput && audioOutputDevices.length > 0 && (
+                    <div className="space-y-2">
+                        <Label className="text-xs text-muted-foreground ml-1">Speaker</Label>
+                        <Select
+                            value={selectedAudioOutputDeviceId}
+                            onValueChange={(val) => handleDeviceChange('audiooutput', val)}
+                        >
+                            <SelectTrigger className="h-9 text-xs bg-secondary/50 border-0">
+                                <SelectValue placeholder="Select speaker" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {audioOutputDevices.map(d => (
+                                    <SelectItem key={d.deviceId} value={d.deviceId}>{d.label || `Speaker ${d.deviceId.slice(0, 4)}`}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                )}
+
                 {/* Actions */}
                 <div className="flex items-center gap-3 pt-4">
                     <Button variant="ghost" className="flex-1 rounded-2xl" onClick={onCancel}>
                         Cancel
                     </Button>
                     <Button
-                        className="flex-[2] rounded-2xl text-white shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+                        className="flex-[2] rounded-2xl text-primary-foreground shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
                         onClick={handleSubmit}
                     >
                         Join Room

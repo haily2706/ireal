@@ -6,7 +6,15 @@ import { useEffect, useState } from "react";
 import { Loader2, X } from "lucide-react";
 import { getToken } from "@/app/actions/livekit";
 import { Button } from "@/components/ui/button";
-import { CustomPreJoin } from "./pre-join";
+import { CustomLocalUserChoices, CustomPreJoin } from "./pre-join";
+import { useRoomContext } from "@livekit/components-react";
+import { Volume2, ChevronDown } from "lucide-react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export interface VideoCallProps {
     room: string;
@@ -20,7 +28,7 @@ export interface VideoCallProps {
 export function VideoCall({ room, username, userName, onDisconnect, className, children }: VideoCallProps) {
     const [token, setToken] = useState("");
     const [error, setError] = useState("");
-    const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
+    const [preJoinChoices, setPreJoinChoices] = useState<CustomLocalUserChoices | undefined>(undefined);
 
     useEffect(() => {
         (async () => {
@@ -60,17 +68,36 @@ export function VideoCall({ room, username, userName, onDisconnect, className, c
             {/* Override styles for PreJoin and LiveKit components */}
             <style dangerouslySetInnerHTML={{
                 __html: `
-                .lk-chat-toggle { display: none !important; }
-                
-                /* Make all control buttons transparent and borderless, except the disconnect (Leave) button */
-                .lk-button:not(.lk-disconnect-button) {
+                /* Override LiveKit CSS Variables for Theme Support */
+                [data-lk-theme="default"] {
                     background-color: transparent !important;
-                    border-color: transparent !important;
+                    --lk-bg: transparent !important;
+                    --lk-control-bg: transparent !important;
+                    --lk-control-fg: hsl(var(--foreground)) !important;
+                    --lk-text-muted: hsl(var(--muted-foreground)) !important;
+                }
+
+                /* Container Backgrounds */
+                .lk-video-conference, 
+                .lk-video-conference-inner,
+                .lk-focus-layout-wrapper, 
+                .lk-grid-layout-wrapper,
+                .lk-control-bar {
+                    background-color: transparent !important;
+                }
+
+                /* Button Styling */
+                .lk-button {
+                    color: hsl(var(--foreground)) !important;
+                    background-color: transparent !important;
                 }
                 
-                .lk-button:not(.lk-disconnect-button):hover {
-                    background-color: rgba(255, 255, 255, 0.1) !important;
+                .lk-button:hover {
+                    background-color: hsl(var(--accent) / 0.5) !important;
                 }
+
+                /* Hide standard chat toggle since we have our own */
+                .lk-chat-toggle { display: none !important; }
             `}} />            {!preJoinChoices ? (
                 <CustomPreJoin
                     room={room}
@@ -94,21 +121,83 @@ export function VideoCall({ room, username, userName, onDisconnect, className, c
                     }}
                 >
                     <VideoConference />
+                    <AudioOutputController initialDeviceId={preJoinChoices.audioOutputDeviceId} />
                 </LiveKitRoom>
             )}
 
-            {/* Close / Disconnect Button */}
-            <Button
-                onClick={onDisconnect}
-                variant="ghost"
-                size="icon"
-                className="absolute top-4 right-4 z-50 bg-background/50 hover:bg-destructive/90 hover:text-white rounded-2xl backdrop-blur-sm transition-all duration-300 shadow-lg"
-            >
-                <X className="h-5 w-5" />
-            </Button>
+
 
             {/* Children typically contain overlays */}
             {children}
+        </div>
+    );
+}
+
+function AudioOutputController({ initialDeviceId }: { initialDeviceId?: string }) {
+    const room = useRoomContext();
+    const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+    const [selectedId, setSelectedId] = useState<string>(initialDeviceId || "default");
+    const [isSupported, setIsSupported] = useState(false);
+
+    useEffect(() => {
+        // @ts-ignore
+        if ('setSinkId' in HTMLMediaElement.prototype) {
+            setIsSupported(true);
+            navigator.mediaDevices.enumerateDevices().then(devs => {
+                setDevices(devs.filter(d => d.kind === 'audiooutput'));
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        if (initialDeviceId && room && isSupported) {
+            room.switchActiveDevice('audiooutput', initialDeviceId)
+                .catch(err => console.error("Failed to set audio output", err));
+        }
+    }, [initialDeviceId, room, isSupported]);
+
+    const handleSelect = async (deviceId: string) => {
+        if (room) {
+            try {
+                await room.switchActiveDevice('audiooutput', deviceId);
+                setSelectedId(deviceId);
+            } catch (err) {
+                console.error("Failed to switch audio output", err);
+            }
+        }
+    };
+
+    if (!isSupported || devices.length === 0) return null;
+
+    return (
+        <div className="absolute top-4 right-16 z-50">
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="bg-background/50 hover:bg-background/80 hover:text-foreground rounded-2xl backdrop-blur-sm transition-all duration-300 shadow-lg h-10 w-10 text-muted-foreground"
+                    >
+                        <Volume2 className="h-5 w-5" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[200px] z-[60]">
+                    {devices.map((device) => (
+                        <DropdownMenuItem
+                            key={device.deviceId}
+                            onClick={() => handleSelect(device.deviceId)}
+                            className="justify-between cursor-pointer"
+                        >
+                            <span className="truncate flex-1">
+                                {device.label || `Speaker ${device.deviceId.slice(0, 4)}`}
+                            </span>
+                            {selectedId === device.deviceId && (
+                                <div className="h-2 w-2 rounded-full bg-primary" />
+                            )}
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
     );
 }

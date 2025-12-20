@@ -185,7 +185,7 @@ export function ChatWindow({
                         initial={{ opacity: 0, width: 0 }}
                         animate={{ opacity: 1, width: "auto" }}
                         exit={{ opacity: 0, width: 0 }}
-                        className="flex-1 relative min-w-0 bg-black flex flex-col items-center justify-center"
+                        className="flex-1 relative min-w-0 bg-background flex flex-col items-center justify-center"
                     >
                         <VideoCall
                             room={conversationId}
@@ -216,7 +216,7 @@ export function ChatWindow({
                                     variant="secondary"
                                     size="icon"
                                     onClick={() => setIsChatOpen(!isChatOpen)}
-                                    className="absolute top-4 right-16 pointer-events-auto rounded-2xl bg-background/50 backdrop-blur-md hover:bg-background/80 shadow-lg transition-all duration-300"
+                                    className="absolute top-4 right-4 pointer-events-auto rounded-2xl bg-background/50 backdrop-blur-md hover:bg-background/80 shadow-lg transition-all duration-300"
                                 >
                                     {isChatOpen ? <MessageSquareOff className="h-5 w-5" /> : <MessageSquare className="h-5 w-5" />}
                                 </Button>
@@ -240,7 +240,7 @@ export function ChatWindow({
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="md:hidden -ml-2 text-muted-foreground hover:text-foreground hover:bg-white/5"
+                            className="md:hidden -ml-2 text-muted-foreground hover:text-foreground hover:bg-accent/50 dark:hover:bg-white/5"
                             onClick={() => {
                                 if (isVideoCallActive && isChatOpen) {
                                     setIsChatOpen(false);
@@ -260,11 +260,11 @@ export function ChatWindow({
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
-                                        className="flex items-center gap-3"
+                                        className="flex items-center gap-2 p-2"
                                     >
-                                        <div className="h-10 w-10 rounded-full bg-muted/40 animate-pulse" />
-                                        <div className="space-y-1.5">
-                                            <div className="h-4 w-24 bg-muted/40 rounded-md animate-pulse" />
+                                        <div className="h-12 w-12 rounded-full bg-muted/40 animate-pulse border-2 border-background/20" />
+                                        <div className="space-y-1.5 flex flex-col justify-center">
+                                            <div className="h-5 w-32 bg-muted/40 rounded-md animate-pulse" />
                                             <div className="h-3 w-16 bg-muted/30 rounded-md animate-pulse" />
                                         </div>
                                     </motion.div>
@@ -307,7 +307,7 @@ export function ChatWindow({
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-full transition-all duration-300 shadow-sm"
+                                    className="bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-full transition-all duration-300 shadow-sm"
                                     onClick={() => setIsVideoCallActive(true)}
                                 >
                                     <Video className="h-4.5 w-4.5" />
@@ -436,10 +436,10 @@ export function ChatWindow({
                 <div className="h-17 px-4 border-t border-border/40 bg-background/80 backdrop-blur-xl sticky bottom-0 z-20 flex items-center">
                     <form onSubmit={handleSend} className="w-full relative flex items-center gap-3">
                         <div className="flex items-center gap-1.5 bg-secondary/30 rounded-2xl p-1 border border-border/20 backdrop-blur-md">
-                            <Button type="button" variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-white/10 shrink-0 transition-all duration-300 border-0 focus-visible:ring-0 focus-visible:ring-offset-0">
+                            <Button type="button" variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent/50 dark:hover:bg-white/10 shrink-0 transition-all duration-300 border-0 focus-visible:ring-0 focus-visible:ring-offset-0">
                                 <Paperclip className="h-4.5 w-4.5" />
                             </Button>
-                            <Button type="button" variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-white/10 shrink-0 transition-all duration-300 border-0 focus-visible:ring-0 focus-visible:ring-offset-0">
+                            <Button type="button" variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent/50 dark:hover:bg-white/10 shrink-0 transition-all duration-300 border-0 focus-visible:ring-0 focus-visible:ring-offset-0">
                                 <ImageIcon className="h-4.5 w-4.5" />
                             </Button>
                         </div>
