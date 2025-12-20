@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CalendarDays, Search, Sparkles } from "lucide-react";
+import { CalendarDays, Search, Sparkles, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { EventTableRow } from "./event-table-row";
 import { EventCard } from "./event-card"; // Import EventCard
@@ -55,6 +56,7 @@ export function EventsView({ initialEvents }: EventsViewProps) {
     // View mode state removed, defaulting to list view
 
     const [searchQuery, setSearchQuery] = useState("");
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
 
@@ -150,17 +152,60 @@ export function EventsView({ initialEvents }: EventsViewProps) {
                 ) : (
                     <div className="space-y-4">
                         {/* Search, Filter & Pagination - Single Row */}
-                        <div className="flex flex-col lg:flex-row gap-3 items-center justify-between">
+                        <div className="flex flex-row gap-2 items-center justify-between">
                             {/* Left: Search & Filter */}
-                            <div className="flex items-center gap-2 w-full lg:w-auto">
-                                <div className="relative w-full lg:w-80">
-                                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                    <Input
-                                        placeholder="Search events..."
-                                        className="pl-9 bg-background/50 dark:bg-black/20 border-border dark:border-white/10 focus:border-brand-purple/50 transition-all text-sm h-8"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                    />
+                            <div className="flex items-center gap-2 shrink-0">
+                                <div className="relative h-8 flex items-center">
+                                    <AnimatePresence initial={false} mode="wait">
+                                        {isSearchOpen || searchQuery ? (
+                                            <motion.div
+                                                key="search-input"
+                                                initial={{ width: 32, opacity: 0 }}
+                                                animate={{ width: 220, opacity: 1 }}
+                                                exit={{ width: 32, opacity: 0 }}
+                                                className="relative w-full lg:w-80"
+                                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                            >
+                                                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                                                <Input
+                                                    autoFocus
+                                                    placeholder="Search events..."
+                                                    className="pl-9 pr-8 bg-background/50 dark:bg-black/20 border-border dark:border-white/10 focus:border-brand-purple/50 transition-all text-sm h-8 w-full"
+                                                    value={searchQuery}
+                                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                                    onBlur={() => {
+                                                        if (!searchQuery) setIsSearchOpen(false);
+                                                    }}
+                                                />
+                                                {searchQuery && (
+                                                    <button
+                                                        onClick={() => setSearchQuery("")}
+                                                        onMouseDown={(e) => e.preventDefault()}
+                                                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                                                    >
+                                                        <X className="h-3 w-3" />
+                                                    </button>
+                                                )}
+                                            </motion.div>
+                                        ) : (
+                                            <motion.div
+                                                key="search-icon"
+                                                initial={{ width: 320, opacity: 0 }}
+                                                animate={{ width: 32, opacity: 1 }}
+                                                exit={{ width: 320, opacity: 0 }}
+                                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                            >
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 text-muted-foreground hover:text-foreground border border-transparent hover:border-border/50 hover:bg-muted/50"
+                                                    onClick={() => setIsSearchOpen(true)}
+                                                >
+                                                    <Search className="h-4 w-4" />
+                                                </Button>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                                 <Button variant="outline" size="sm" className="h-8 gap-1.5 px-3 bg-background/50 dark:bg-black/20 border-border dark:border-white/10 text-muted-foreground hover:text-foreground shrink-0">
                                     <div className="flex flex-col gap-0.5 w-3">
@@ -173,8 +218,8 @@ export function EventsView({ initialEvents }: EventsViewProps) {
                             </div>
 
                             {/* Right: Pagination Controls */}
-                            <div className="flex items-center gap-3 sm:gap-4 w-full lg:w-auto justify-between lg:justify-end">
-                                <div className="flex items-center space-x-2">
+                            <div className="flex items-center gap-2 shrink-0">
+                                <div className="hidden md:flex items-center space-x-2">
                                     <p className="text-xs font-medium text-muted-foreground whitespace-nowrap">Rows per page</p>
                                     <Select
                                         value={`${pageSize}`}
@@ -195,7 +240,7 @@ export function EventsView({ initialEvents }: EventsViewProps) {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <div className="flex w-[90px] items-center justify-center text-xs font-medium text-muted-foreground">
+                                <div className="hidden md:flex w-[90px] items-center justify-center text-xs font-medium text-muted-foreground">
                                     {totalEvents > 0 ? (currentPage - 1) * pageSize + 1 : 0}-
                                     {Math.min(currentPage * pageSize, totalEvents)} of {totalEvents}
                                 </div>

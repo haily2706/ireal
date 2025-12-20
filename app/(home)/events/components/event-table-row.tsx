@@ -29,6 +29,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { deleteEvent, publishEvent } from "../actions";
 import { cn } from "@/lib/utils";
+import { EventDurationBadge } from "./event-duration-badge";
 
 interface EventTableRowProps {
     event: {
@@ -183,17 +184,10 @@ export function EventTableRow({
 
                         {/* Duration Overlay */}
                         <div className={cn(
-                            "absolute bg-black/80 backdrop-blur-sm px-1 py-0.5 rounded text-[8px] font-bold text-white tracking-wide flex items-center gap-0.5",
-                            isVertical ? "bottom-1 right-1" : "bottom-1 right-1"
+                            "absolute z-10",
+                            "bottom-1 right-1"
                         )}>
-                            {isVertical ? (
-                                <>
-                                    <Signal className="h-2 w-2 text-red-500" />
-                                    <span>2:18</span>
-                                </>
-                            ) : (
-                                <span>3:00</span>
-                            )}
+                            <EventDurationBadge startTime={event.startTime} endTime={event.endTime} />
                         </div>
                     </div>
 
@@ -261,7 +255,7 @@ export function EventTableRow({
                 <div className="flex items-start gap-2">
                     <div className="mt-0.5">{statusIcon}</div>
                     <div className="flex flex-col">
-                        <span className="text-sm font-medium text-foreground">{statusText}</span>
+                        <span className="text-sm text-foreground">{statusText}</span>
                         {/* <span className="text-xs text-muted-foreground">{statusSubtext}</span> */}
                     </div>
                 </div>
@@ -288,7 +282,7 @@ export function EventTableRow({
 
             {/* LREAL */}
             <TableCell className="align-top py-2">
-                <span className="text-sm font-semibold text-foreground">{formatNumber(lreal)}</span>
+                <span className="text-sm text-foreground">{formatNumber(lreal)}</span>
             </TableCell>
 
             {/* Likes (vs Dislikes) */}

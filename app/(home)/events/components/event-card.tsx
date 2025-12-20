@@ -15,7 +15,8 @@ import {
     CalendarClock,
     CheckCircle2,
     ThumbsUp,
-    ThumbsDown
+    ThumbsDown,
+    ChartNoAxesColumn
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -148,7 +149,7 @@ export function EventCard({
         >
             <Card className={cn(
                 "relative overflow-hidden border-0 shadow-lg transition-all duration-500 hover:-translate-y-1 ring-1 ring-border dark:ring-white/5 bg-transparent shrink-0",
-                isVertical ? "aspect-9/16" : "w-[40%] max-w-[160px] aspect-video md:w-full"
+                isVertical ? "aspect-9/16" : "w-[35%] max-w-[130px] aspect-video md:w-full"
             )}>
                 {/* Main Background Image - Absolute Cover */}
                 <div className="absolute inset-0 z-0">
@@ -248,7 +249,7 @@ export function EventCard({
                                 <h3 className="font-bold text-base text-white line-clamp-2 leading-tight drop-shadow-md">
                                     {event.title}
                                 </h3>
-                                <div className="flex items-center gap-1.5 text-[10px] font-medium text-white/80">
+                                <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
                                     <CalendarClock className="h-3 w-3" />
                                     <span>{format(startDate, "MMM d • h:mm")}{format(startDate, "aaaaa").toLowerCase()}</span>
                                 </div>
@@ -256,11 +257,11 @@ export function EventCard({
 
                             {/* Vertical Stats Pill */}
                             <div className="flex flex-col gap-2 items-end text-white">
-                                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-[10px] font-bold shadow-lg">
+                                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-[10px] shadow-lg">
+                                    <ChartNoAxesColumn className="h-3 w-3 opacity-70" />
                                     <span>{formatNumber(views)}</span>
-                                    <span className="opacity-70">views</span>
                                 </div>
-                                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-xs font-bold shadow-lg">
+                                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-xs shadow-lg">
                                     <ThumbsUp className="h-3.5 w-3.5 text-green-400" />
                                     <span>{formatNumber(likes)}</span>
                                 </div>
@@ -269,9 +270,8 @@ export function EventCard({
                     </div>
                 )}
 
-                {/* Horizontal Overlay Content (Minimal) */}
                 {!isVertical && (
-                    <div className="absolute bottom-2 right-2 z-10">
+                    <div className="absolute bottom-1 right-1 z-10">
                         <EventDurationBadge startTime={event.startTime} endTime={event.endTime} />
                     </div>
                 )}
@@ -313,7 +313,7 @@ export function EventCard({
 
                     {/* Mobile Date */}
                     <div className="flex flex-col gap-1 md:hidden">
-                        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs font-semibold text-primary/90">
+                        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs text-muted-foreground">
                             <CalendarClock className="h-3.5 w-3.5" />
                             <span>{format(startDate, "MMM d • h:mm")}{format(startDate, "aaaaa").toLowerCase()}</span>
                         </div>
@@ -322,17 +322,17 @@ export function EventCard({
                     <div className="flex items-center gap-2 mt-auto md:hidden">
                         {/* Mobile Actions/Stats */}
                         <div className="flex items-center gap-4 text-muted-foreground">
-                            <div className="flex items-center gap-1 text-[11px] font-bold">
+                            <div className="flex items-center gap-1 text-[11px]">
+                                <ChartNoAxesColumn className="h-3.5 w-3.5 opacity-70" />
                                 <span>{formatNumber(views)}</span>
-                                <span className="text-[10px] opacity-70">views</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <ThumbsUp className="h-3.5 w-3.5" />
-                                <span className="text-xs font-bold">{formatNumber(likes)}</span>
+                                <span className="text-xs">{formatNumber(likes)}</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <Image src="/coin.svg" alt="Coin" width={12} height={12} />
-                                <span className="text-xs font-bold">{formatNumber(lreal)}</span>
+                                <span className="text-xs">{formatNumber(lreal)}</span>
                             </div>
                         </div>
                     </div>
@@ -350,8 +350,8 @@ export function EventCard({
 
                         <div className="flex items-center gap-3 mt-1">
                             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/50 border border-border/50 text-xs font-bold text-muted-foreground shadow-sm hover:bg-secondary/80 transition-colors">
+                                <ChartNoAxesColumn className="h-3.5 w-3.5 opacity-70" />
                                 <span>{formatNumber(views)}</span>
-                                <span className="text-[10px] opacity-70">views</span>
                             </div>
 
                             <div className="flex items-center gap-0 rounded-full bg-secondary/50 border border-border/50 p-0.5 shadow-sm">
