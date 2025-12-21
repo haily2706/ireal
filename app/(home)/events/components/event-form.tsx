@@ -187,7 +187,7 @@ export function EventForm({ initialData, isEditing = false, onSuccess }: EventFo
                                                     disabled={isPending}
                                                     onClick={() => field.onChange(false)}
                                                     className={cn(
-                                                        "px-4 h-8 rounded-md text-[10px] font-bold transition-all duration-300",
+                                                        "px-4 h-8 rounded-md text-[10px] font-bold transition-all duration-300 cursor-pointer",
                                                         !field.value
                                                             ? "bg-linear-to-br from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20 scale-100"
                                                             : "text-muted-foreground hover:text-foreground hover:bg-white/5 scale-95"
@@ -200,7 +200,7 @@ export function EventForm({ initialData, isEditing = false, onSuccess }: EventFo
                                                     disabled={isPending}
                                                     onClick={() => field.onChange(true)}
                                                     className={cn(
-                                                        "px-4 h-8 rounded-md text-[10px] font-bold transition-all duration-300",
+                                                        "px-4 h-8 rounded-md text-[10px] font-bold transition-all duration-300 cursor-pointer",
                                                         field.value
                                                             ? "bg-linear-to-br from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20 scale-100"
                                                             : "text-muted-foreground hover:text-foreground hover:bg-white/5 scale-95"

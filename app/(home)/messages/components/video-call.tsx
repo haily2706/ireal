@@ -1,13 +1,23 @@
 "use client";
 
-import { LiveKitRoom, VideoConference, PreJoin, type LocalUserChoices } from "@livekit/components-react";
+import {
+    LiveKitRoom,
+    PreJoin,
+    type LocalUserChoices,
+    useRoomContext,
+    useTracks,
+    ParticipantTile,
+    RoomAudioRenderer,
+    ControlBar
+} from "@livekit/components-react";
+import { Track } from "livekit-client";
 import "@livekit/components-styles";
 import { useEffect, useState } from "react";
 import { Loader2, X } from "lucide-react";
 import { getToken } from "@/app/actions/livekit";
 import { Button } from "@/components/ui/button";
 import { CustomLocalUserChoices, CustomPreJoin } from "./pre-join";
-import { useRoomContext } from "@livekit/components-react";
+
 import { Volume2, ChevronDown } from "lucide-react";
 import {
     DropdownMenu,
@@ -69,35 +79,197 @@ export function VideoCall({ room, username, userName, onDisconnect, className, c
             <style dangerouslySetInnerHTML={{
                 __html: `
                 /* Override LiveKit CSS Variables for Theme Support */
+                /* Override LiveKit CSS Variables for Theme Support */
                 [data-lk-theme="default"] {
                     background-color: transparent !important;
                     --lk-bg: transparent !important;
                     --lk-control-bg: transparent !important;
                     --lk-control-fg: hsl(var(--foreground)) !important;
-                    --lk-text-muted: hsl(var(--muted-foreground)) !important;
                 }
 
-                /* Container Backgrounds */
-                .lk-video-conference, 
-                .lk-video-conference-inner,
-                .lk-focus-layout-wrapper, 
-                .lk-grid-layout-wrapper,
+                /* Unified Control Dock Container - Transparent */
+                .unified-control-dock {
+                    background-color: transparent !important;
+                    border: none !important;
+                    padding: 8px 0 !important;
+                    backdrop-filter: none !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 16px !important;
+                    box-shadow: none !important;
+                    pointer-events: auto !important;
+                }
+                
+                /* Reset standard control bar styles since they are now wrappers */
                 .lk-control-bar {
                     background-color: transparent !important;
+                    border: none !important;
+                    padding: 0 !important;
+                    box-shadow: none !important;
+                    margin: 0 !important;
+                    gap: 12px !important;
                 }
 
-                /* Button Styling */
-                .lk-button {
+                /* Button Styling - Consistent Glassmorphism & Theme Aware */
+                .lk-button, .custom-dock-button {
                     color: hsl(var(--foreground)) !important;
-                    background-color: transparent !important;
+                    background-color: hsl(var(--background) / 0.6) !important;
+                    backdrop-filter: blur(12px) !important;
+                    border: 1px solid hsl(var(--border) / 0.2) !important;
+                    border-radius: 50% !important; /* Fully circular */
+                    height: 48px !important;
+                    width: 48px !important;
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                    box-shadow: none !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
                 }
                 
                 .lk-button:hover {
-                    background-color: hsl(var(--accent) / 0.5) !important;
+                    background-color: hsl(var(--foreground) / 0.1) !important;
+                    transform: scale(1.1) !important;
+                    color: hsl(var(--primary)) !important;
+                    border-color: hsl(var(--primary) / 0.3) !important;
+                }
+
+                /* Active/Off states for cam/mic */
+                .lk-button[aria-pressed="false"] {
+                    // background-color: hsl(var(--destructive) / 0.15) !important;
+                    // color: hsl(var(--destructive)) !important;
+                    // border-color: hsl(var(--destructive) / 0.3) !important;
+                }
+
+                /* Disconnect Button specifically - Red Circle */
+                .lk-disconnect-button {
+                    background-color: #ef4444 !important; /* red-500 */
+                    color: white !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                    height: 48px !important;
+                    width: 48px !important;
+                    padding: 0 !important;
+                    border-radius: 50% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                }
+
+                .lk-disconnect-button:hover {
+                    background-color: hsl(var(--destructive) / 0.9) !important;
+                    transform: scale(1.05) !important;
                 }
 
                 /* Hide standard chat toggle since we have our own */
                 .lk-chat-toggle { display: none !important; }
+
+                /* Device Menu (Dropdown) - Theme Aware Popover */
+                .lk-device-menu {
+                    background-color: hsl(var(--popover) / 0.95) !important;
+                    border: 1px solid hsl(var(--border)) !important;
+                    box-shadow: none !important;
+                    border-radius: 12px !important;
+                    backdrop-filter: blur(16px) !important;
+                    color: hsl(var(--popover-foreground)) !important;
+                    padding: 0.5rem !important;
+                    width: max-content !important;
+                    min-width: 300px !important;
+                    max-width: 90vw !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    gap: 6px !important;
+                }
+                
+                /* Ensure list item text follows theme */
+                .lk-device-menu .lk-list-item,
+                .lk-device-menu li,
+                .lk-device-menu button {
+                     color: hsl(var(--popover-foreground)) !important;
+                }
+
+                /* Reset generic list items to prevent double-boxing */
+                .lk-device-menu li {
+                    background: transparent !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    list-style: none !important;
+                }
+
+                /* Style the interactive element (button) */
+                .lk-device-menu button,
+                .lk-device-menu .lk-list-item {
+                    border-radius: 8px !important;
+                    transition: all 0.2s !important;
+                    background-color: transparent !important;
+                    color: hsl(var(--popover-foreground)) !important;
+                    white-space: nowrap !important;
+                    padding: 0.75rem 1rem !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: flex-start !important;
+                    gap: 12px !important;
+                    font-size: 14px !important;
+                    border: none !important;
+                    cursor: pointer !important;
+                    width: 100% !important;
+                    text-align: left !important;
+                }
+
+                .lk-device-menu button:hover,
+                .lk-device-menu .lk-list-item:hover {
+                    background-color: hsl(var(--accent)) !important;
+                    color: hsl(var(--accent-foreground)) !important;
+                }
+                
+                /* Force transparency on all children to prevent nested background artifacts */
+                .lk-device-menu button *,
+                .lk-device-menu .lk-list-item * {
+                     background-color: transparent !important;
+                }
+                
+                /* Selection state */
+                .lk-device-menu button[aria-selected="true"],
+                .lk-device-menu .lk-list-item[aria-selected="true"] {
+                     background-color: hsl(var(--accent) / 0.5) !important;
+                     color: hsl(var(--accent-foreground)) !important;
+                }
+
+                /* Button Groups (Split buttons for Mic/Cam) */
+                .lk-button-group {
+                    background-color: transparent !important;
+                    border: none !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 4px !important; /* Visual separation for split btn */
+                }
+                
+                /* Force the arrow button (dropdown trigger) to be theme aware */
+                .lk-button-group-menu-trigger {
+                    border: none !important; /* Remove line, make separate bubble */
+                    border-left: none !important;
+                    color: hsl(var(--foreground)) !important;
+                    background-color: hsl(var(--foreground) / 0.05) !important;
+                    border-radius: 50% !important;
+                    height: 36px !important;
+                    width: 36px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    margin-left: -16px !important; /* Tuck it next to the main btn */
+                    z-index: 10 !important;
+                    transform: translateX(8px);
+                    box-shadow: none !important;
+                }
+                
+                .lk-button-group-menu-trigger:hover {
+                    background-color: hsl(var(--foreground) / 0.1) !important;
+                    color: hsl(var(--primary)) !important;
+                }
+
+                /* Global Shadow Reset */
+                .lk-participant-tile, .lk-list-item, .lk-grid-layout, .lk-focus-layout {
+                    box-shadow: none !important;
+                }
             `}} />            {!preJoinChoices ? (
                 <CustomPreJoin
                     room={room}
@@ -120,8 +292,8 @@ export function VideoCall({ room, username, userName, onDisconnect, className, c
                         setError("An error occurred with the video connection.");
                     }}
                 >
-                    <VideoConference />
-                    <AudioOutputController initialDeviceId={preJoinChoices.audioOutputDeviceId} />
+                    <CustomVideoConference />
+                    {/* AudioOutputController is now inside CustomVideoConference */}
                 </LiveKitRoom>
             )}
 
@@ -129,6 +301,71 @@ export function VideoCall({ room, username, userName, onDisconnect, className, c
 
             {/* Children typically contain overlays */}
             {children}
+        </div>
+    );
+}
+
+function CustomVideoConference() {
+    const tracks = useTracks(
+        [
+            { source: Track.Source.Camera, withPlaceholder: true },
+            { source: Track.Source.ScreenShare, withPlaceholder: false },
+        ],
+        { onlySubscribed: false },
+    );
+
+    // Remote
+    const remoteScreenShare = tracks.find(track => !track.participant.isLocal && track.source === Track.Source.ScreenShare);
+    const remoteCamera = tracks.find(track => !track.participant.isLocal && track.source === Track.Source.Camera);
+    const mainTrack = remoteScreenShare || remoteCamera;
+
+    // Local
+    const localTrack = tracks.find(track => track.participant.isLocal && track.source === Track.Source.Camera);
+
+    return (
+        <div className="relative h-full w-full bg-background transition-colors duration-300">
+            {/* Remote Video (Full Screen) */}
+            <div className="absolute inset-0 flex items-center justify-center z-0 p-2">
+                {mainTrack ? (
+                    <ParticipantTile
+                        trackRef={mainTrack}
+                        className="h-full w-full object-cover"
+                    />
+                ) : (
+                    <div className="flex flex-col items-center justify-center text-muted-foreground p-4">
+                        <Loader2 className="h-8 w-8 animate-spin mb-2" />
+                        <p>Waiting for connection...</p>
+                    </div>
+                )}
+            </div>
+
+            {/* Local Video (PIP) - Moved to Bottom Right to avoid overlap with Chat Toggle */}
+            {localTrack && (
+                <div className="absolute bottom-28 right-4 w-[240px] aspect-video rounded-xl overflow-hidden border border-border/40 z-30 transition-all hover:scale-105 group">
+                    {/* Mirror local video usually */}
+                    <ParticipantTile
+                        trackRef={localTrack}
+                        className="h-full w-full object-cover"
+                    />
+                </div>
+            )}
+
+
+            {/* Unified Controls Dock */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-fit px-4 pointer-events-none">
+                <div className="unified-control-dock">
+                    {/* Speaker Control (Left) */}
+                    <AudioOutputController />
+
+                    {/* Standard Controls (Center) */}
+                    <ControlBar
+                        variation="minimal"
+                        controls={{ microphone: true, camera: true, screenShare: true, chat: false, leave: true, settings: false }}
+                    />
+                </div>
+            </div>
+
+            <RoomAudioRenderer />
         </div>
     );
 }
@@ -170,18 +407,18 @@ function AudioOutputController({ initialDeviceId }: { initialDeviceId?: string }
     if (!isSupported || devices.length === 0) return null;
 
     return (
-        <div className="absolute top-4 right-16 z-50">
+
+        <div className="relative">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="bg-background/50 hover:bg-background/80 hover:text-foreground rounded-2xl backdrop-blur-sm transition-all duration-300 shadow-lg h-10 w-10 text-muted-foreground"
+                    <button
+                        className="lk-button" // Use standard LiveKit button class for consistency
+                        aria-label="Audio Output"
                     >
                         <Volume2 className="h-5 w-5" />
-                    </Button>
+                    </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-[200px] z-[60]">
+                <DropdownMenuContent align="end" side="top" className="w-[200px] z-[60] mb-4">
                     {devices.map((device) => (
                         <DropdownMenuItem
                             key={device.deviceId}

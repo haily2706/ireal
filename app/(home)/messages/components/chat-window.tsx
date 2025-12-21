@@ -9,20 +9,14 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { ArrowLeft, Image as ImageIcon, Info, Lock, MoreVertical, Paperclip, Send, Smile, Info as InfoIcon, Video } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { getMessages, sendMessage, getConversationDetails, getCurrentUser } from "../actions";
 import { toast } from "sonner";
 import { VideoCall } from "./video-call";
 import { ChevronRight, ChevronLeft, MessageSquare, MessageSquareOff, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { useMessageStore, Message } from "../message.store";
 
-interface Message {
-    id: string;
-    senderId: string;
-    content: string;
-    createdAt: Date;
-    type?: string;
-    status?: 'sending' | 'sent' | 'error';
-}
+
 
 interface ChatWindowProps {
     conversationId: string;
@@ -42,15 +36,50 @@ export function ChatWindow({
     onToggleSidebar
 }: ChatWindowProps) {
     const router = useRouter();
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [otherUser, setOtherUser] = useState<{ name: string; avatar: string | null } | null>(null);
+    // Integrated Store
+    const allMessages = useMessageStore(state => state.messages);
+    const conversationMsgIds = useMessageStore(state => state.conversationMessages[conversationId]);
+
+    const messages = useMemo(() => {
+        if (!conversationMsgIds) return [];
+        return conversationMsgIds
+            .map(id => allMessages[id])
+            .filter(Boolean)
+            .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    }, [allMessages, conversationMsgIds]);
+
+    const { addMessage, addMessages, removeMessage } = useMessageStore();
+
+    // Select the current conversation from the store to get user details instantly
+    const conversations = useMessageStore(state => state.conversations);
+    const persistedConversation = conversations.find(c => c.id === conversationId);
+
+    // const [messages, setMessages] = useState<Message[]>([]); // Removed local state
+    // Initialize otherUser with persisted data if available
+    const [otherUser, setOtherUser] = useState<{ name: string; avatar: string | null } | null>(
+        persistedConversation ? persistedConversation.otherUser : null
+    );
     const [currentUser, setCurrentUser] = useState<{ name: string; avatar: string | null } | null>(null);
     const [newMessage, setNewMessage] = useState("");
     const [sending, setSending] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(!messages || messages.length === 0);
     const [isVideoCallActive, setIsVideoCallActive] = useState(false);
     const [isChatOpen, setIsChatOpen] = useState(true);
     const scrollRef = useRef<HTMLDivElement>(null);
+
+    // Update loading state if messages are loaded from persistent store
+    useEffect(() => {
+        if (messages && messages.length > 0) {
+            setLoading(false);
+        }
+    }, [messages]);
+
+    // Update otherUser if/when persisted conversations change or load
+    useEffect(() => {
+        if (persistedConversation && !otherUser) {
+            setOtherUser(persistedConversation.otherUser);
+        }
+    }, [persistedConversation, otherUser]);
 
     // Effect to notify parent when video call starts
     useEffect(() => {
@@ -95,28 +124,15 @@ export function ChatWindow({
             const data = await getMessages(conversationId);
             const formattedData = data.map((m: any) => ({
                 ...m,
-                createdAt: new Date(m.createdAt)
+                conversationId, // Ensure conversationId is present for store
+                createdAt: new Date(m.createdAt),
+                status: 'sent' as const
             }));
 
-            // Merge server messages with local optimistic messages
-            setMessages(currentMessages => {
-                const incomingIds = new Set(formattedData.map((m: any) => m.id));
-                // Keep local messages that are sending OR sent but not yet in the incoming list
-                // (This handles the race condition where a stale poll overwrites a specialized local state)
-                const localKeep = currentMessages.filter(m =>
-                    m.status === 'sending' ||
-                    (m.status === 'sent' && !incomingIds.has(m.id))
-                );
-
-                // Combine and Deduplicate based on ID just in case
-                const combined = [...formattedData, ...localKeep];
-
-                // Sort by createdAt
-                return combined.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-            });
+            // Store handles merging and deduplication
+            addMessages(conversationId, formattedData);
         } catch (err) {
             console.error("Failed to load messages", err);
-            // toast.error("Failed to load messages"); // Suppress frequent error toasts on poll
         } finally {
             setLoading(false);
         }
@@ -147,22 +163,31 @@ export function ChatWindow({
             // Optimistic update
             const optimisticMessage: Message = {
                 id: tempId,
+                conversationId,
                 senderId: currentUserId,
                 content: newMessage,
                 createdAt: new Date(),
                 status: 'sending'
             };
-            setMessages(prev => [...prev, optimisticMessage]);
+
+            addMessage(optimisticMessage);
             setNewMessage("");
 
             const response = await sendMessage(conversationId, optimisticMessage.content);
 
-            // Update ID to the real one from server and mark as sent
-            // This ensures de-duplication works when merging with server data
             if (response && response.messageId) {
-                setMessages(prev => prev.map(m =>
-                    m.id === tempId ? { ...m, id: response.messageId, status: 'sent' } : m
-                ));
+                // Remove temp message and add real one
+                removeMessage(tempId);
+
+                // We add the real message. We might want to construct it fully or fetch it.
+                // For now, we construct it based on optimistic data but with real ID and 'sent' status.
+                // ideally we should fetch the message or have sendMessage return it, but simpler is:
+                const realMessage: Message = {
+                    ...optimisticMessage,
+                    id: response.messageId,
+                    status: 'sent', // Encryption handled by backend? Content is same.
+                };
+                addMessage(realMessage);
             }
 
             // Immediate fetch to ensure full sync
@@ -171,7 +196,15 @@ export function ChatWindow({
         } catch (err) {
             console.error("Failed to send message", err);
             toast.error("Failed to send message");
-            setMessages(prev => prev.map(m => m.id === tempId ? { ...m, status: 'error' } : m));
+            // Mark optimistic message as error
+            addMessage({
+                id: tempId,
+                conversationId,
+                senderId: currentUserId,
+                content: newMessage,
+                createdAt: new Date(),
+                status: 'error'
+            });
         } finally {
             setSending(false);
         }
@@ -198,27 +231,27 @@ export function ChatWindow({
                                 {/* Sidebar Toggle - Top Left */}
                                 {onToggleSidebar && (
                                     <Button
-                                        variant="secondary"
+                                        variant="ghost"
                                         size="icon"
                                         onClick={onToggleSidebar}
-                                        className="absolute top-4 left-4 pointer-events-auto rounded-2xl bg-background/50 backdrop-blur-md hover:bg-background/80 shadow-lg transition-all duration-300"
+                                        className="absolute top-4 left-4 pointer-events-auto rounded-full bg-transparent hover:bg-accent/20 hover:backdrop-blur-md text-foreground/70 hover:text-foreground transition-all duration-300 shadow-none border-none"
                                     >
                                         {isSidebarCollapsed ? (
-                                            <PanelLeftOpen className="h-5 w-5" />
+                                            <PanelLeftOpen className="h-6 w-6" />
                                         ) : (
-                                            <PanelLeftClose className="h-5 w-5" />
+                                            <PanelLeftClose className="h-6 w-6" />
                                         )}
                                     </Button>
                                 )}
 
                                 {/* Chat Toggle - Top Right */}
                                 <Button
-                                    variant="secondary"
+                                    variant="ghost"
                                     size="icon"
                                     onClick={() => setIsChatOpen(!isChatOpen)}
-                                    className="absolute top-4 right-4 pointer-events-auto rounded-2xl bg-background/50 backdrop-blur-md hover:bg-background/80 shadow-lg transition-all duration-300"
+                                    className="absolute top-4 right-4 pointer-events-auto rounded-full bg-transparent hover:bg-accent/20 hover:backdrop-blur-md text-foreground/70 hover:text-foreground transition-all duration-300 shadow-none border-none"
                                 >
-                                    {isChatOpen ? <MessageSquareOff className="h-5 w-5" /> : <MessageSquare className="h-5 w-5" />}
+                                    {isChatOpen ? <MessageSquareOff className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}
                                 </Button>
                             </div>
                         </VideoCall>
@@ -231,11 +264,11 @@ export function ChatWindow({
                 isVideoCallActive
                     ? (isChatOpen
                         ? "absolute inset-0 w-full h-full z-30 md:z-10 md:static md:w-[400px] md:inset-auto md:h-full border-l border-border/40 shadow-xl translate-x-0"
-                        : "w-0 overflow-hidden border-none translate-x-[400px]")
+                        : "w-0 overflow-hidden border-none shadow-none translate-x-[400px]")
                     : "relative flex-1 w-full translate-x-0"
             )}>
                 {/* Header */}
-                <div className="z-40 border-b border-border/40 flex items-center justify-between bg-background/95 backdrop-blur-xl sticky top-0 shrink-0 px-4 py-2 lg:px-6">
+                <div className="z-40 flex items-center justify-between bg-background/95 backdrop-blur-xl sticky top-0 shrink-0 py-2 pr-4">
                     <div className="flex items-center gap-3">
                         <Button
                             variant="ghost"
@@ -275,7 +308,7 @@ export function ChatWindow({
                                         animate={{ opacity: 1, x: 0 }}
                                         className="flex items-center gap-3.5"
                                     >
-                                        <button className="flex items-center gap-2 group/header p-2 rounded-2xl hover:bg-secondary/50 transition-all duration-300">
+                                        <button className="flex items-center gap-2 group/header p-2 rounded-2xl hover:bg-secondary/50 transition-all duration-300 cursor-pointer">
                                             <div className="relative">
                                                 <Avatar className="h-12 w-12 border-2 border-background shadow-lg transition-transform duration-300 group-hover/header:rotate-3 group-hover/header:scale-105">
                                                     <AvatarImage src={otherUser?.avatar || undefined} className="object-cover" />
@@ -431,10 +464,10 @@ export function ChatWindow({
                                                 </div>
                                             )}
                                             <div className={cn(
-                                                "px-3 py-1 rounded-xl leading-relaxed relative group shadow-xs transition-all duration-300",
+                                                "px-3 py-1 rounded-xl leading-relaxed relative group shadow-xs transition-all duration-300 text-[16px]",
                                                 isMe
-                                                    ? "bg-primary text-primary-foreground rounded-tr-md shadow-sm"
-                                                    : "bg-secondary text-secondary-foreground rounded-tl-md shadow-sm",
+                                                    ? "bg-secondary text-foreground rounded-tr-md shadow-sm"
+                                                    : "bg-muted/50 text-foreground rounded-tl-md shadow-sm",
                                                 message.status === 'sending' && "opacity-70 scale-[0.98]"
                                             )}>
                                                 <p className="font-normal">{message.content}</p>

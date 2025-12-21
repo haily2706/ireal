@@ -59,21 +59,21 @@ export function ChatLayoutClient({ conversationId, userId }: ChatLayoutClientPro
             <div className={cn(
                 "shrink-0 h-full border-r border-border/40 transition-all duration-300 relative bg-background/30 backdrop-blur-sm",
                 conversationId ? 'hidden md:block' : 'block w-full md:block md:w-auto',
-                // When video is active and collapsed (width 0), we hide overflow and borders to make it truly invisible
-                isVideoCallActive && isCollapsed ? "border-r-0" : ""
+                // When video is active and collapsed (width 0), we force the container to be 0 width and hidden
+                isVideoCallActive && isCollapsed ? "border-r-0 bg-transparent backdrop-blur-none w-0 overflow-hidden shadow-none" : ""
             )}>
                 <motion.div
                     initial={false}
                     animate={{
                         // Normal behavior: 88px (icons) when collapsed.
                         // Video behavior: 0px (hidden) when collapsed.
-                        width: isCollapsed ? (isVideoCallActive ? 0 : 88) : 350,
+                        width: isCollapsed ? (isVideoCallActive ? 0 : 88) : 320,
                         opacity: isCollapsed && isVideoCallActive ? 0 : 1
                     }}
                     transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                     className="h-full hidden md:block overflow-hidden"
                 >
-                    <div className="h-full w-[350px]">
+                    <div className="h-full w-[320px]">
                         <ConversationList
                             isCollapsed={isCollapsed}
                             onToggle={() => setIsCollapsed(!isCollapsed)}

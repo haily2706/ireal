@@ -12,21 +12,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { startConversation, getConversations, searchUsers } from "../actions";
 import { toast } from "sonner";
+import { useMessageStore, Conversation } from "../message.store";
 
-interface Conversation {
-    id: string;
-    lastMessageAt: Date | null;
-    otherUser: {
-        id: string;
-        name: string;
-        avatar: string | null;
-    };
-    lastMessage: {
-        content: string;
-        createdAt: Date;
-        senderId: string;
-    } | null;
-}
+
 
 interface SearchResult {
     id: string;
@@ -46,17 +34,31 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
     const searchParams = useSearchParams();
     const selectedId = searchParams.get("id");
 
-    const [conversations, setConversations] = useState<Conversation[]>([]);
+    const conversations = useMessageStore(state => state.conversations);
+    const setConversations = useMessageStore(state => state.setConversations);
+
+    // const [conversations, setConversations] = useState<Conversation[]>([]);
     const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(conversations.length === 0);
+
+    // Update loading state if conversations are loaded from persist (after hydration)
+    useEffect(() => {
+        if (conversations.length > 0) {
+            setLoading(false);
+        }
+    }, [conversations.length]);
     const [isPending, startTransition] = useTransition();
     const inputRef = useRef<HTMLInputElement>(null);
 
     const fetchConversations = async () => {
         try {
             const data = await getConversations();
-            setConversations(data);
+            // Map the data to match store interface if needed, or ensure getConversations returns compatible data.
+            // Action returns dates as objects, store allows strings or Dates, so it's compatible.
+            // We need to cast or map strictly if TS complains, but the structure is identical.
+            // Casting mainly because of potential Date vs String mismatches in 'lastMessageAt' if coming from JSON
+            setConversations(data as any);
         } catch (err) {
             console.error("Failed to load conversations", err);
         } finally {
@@ -158,7 +160,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                 {searchQuery && (
                                     <button
                                         onClick={() => setSearchQuery("")}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-foreground p-1 rounded-full hover:bg-accent/50 dark:hover:bg-white/10 transition-all"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-foreground p-1 rounded-full hover:bg-accent/50 dark:hover:bg-white/10 transition-all cursor-pointer"
                                     >
                                         <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -191,7 +193,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                     inputRef.current?.focus();
                                 }, 100);
                             }}
-                            className="h-10 w-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-lg shadow-primary/5"
+                            className="h-10 w-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-lg shadow-primary/5 cursor-pointer"
                         >
                             <UserPlus className="h-5 w-5" />
                         </button>
@@ -213,7 +215,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                     key={user.id}
                                     onClick={() => handleStartChat(user.id)}
                                     disabled={isPending}
-                                    className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-accent/50 dark:hover:bg-white/5 active:scale-[0.98] transition-all duration-200 text-left group border border-transparent hover:border-border/50 dark:hover:border-white/5"
+                                    className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-accent/50 dark:hover:bg-white/5 active:scale-[0.98] transition-all duration-200 text-left group border border-transparent hover:border-border/50 dark:hover:border-white/5 cursor-pointer"
                                 >
                                     <Avatar className="h-10 w-10 border-2 border-transparent group-hover:border-primary/30 transition-all duration-300">
                                         <AvatarImage src={user.avatar || undefined} className="object-cover" />
@@ -291,7 +293,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                             key={conversation.id}
                                             onClick={() => handleSelect(conversation.id)}
                                             className={cn(
-                                                "w-full flex items-center gap-2 p-3 rounded-2xl transition-all duration-300 text-left group relative overflow-hidden",
+                                                "w-full flex items-center gap-2 p-3 rounded-2xl transition-all duration-300 text-left group relative overflow-hidden cursor-pointer",
                                                 isCollapsed && "justify-center px-2",
                                                 selectedId === conversation.id
                                                     ? "bg-primary/10 border-primary/10" // Active state
@@ -316,7 +318,7 @@ export function ConversationList({ className, isCollapsed, onToggle, allowCollap
                                                 <div className="flex-1 min-w-0 flex flex-col gap-1 z-10">
                                                     <div className="flex items-center justify-between">
                                                         <span className={cn(
-                                                            "font-semibold text-sm truncate transition-colors duration-200",
+                                                            "font-semibold text-base truncate transition-colors duration-200",
                                                             selectedId === conversation.id ? "text-primary" : "text-foreground group-hover:text-foreground"
                                                         )}>
                                                             {conversation.otherUser.name}
